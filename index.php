@@ -66,7 +66,17 @@ $topics = $stmt->fetchAll();
                 <div class="col-md-6 col-lg-3">
                     <div class="benefit-card text-center p-4 h-100">
                         <div class="benefit-icon mb-3">
-                            <i class="<?php echo htmlspecialchars($benefit['icon']); ?> fa-3x"></i>
+                            <?php
+                                $iconValue = trim($benefit['icon'] ?? '');
+                                $iconPath = $iconValue !== '' ? (parse_url($iconValue, PHP_URL_PATH) ?? $iconValue) : '';
+                                $isImage = $iconValue !== '' && (strpos($iconValue, '/') !== false || preg_match('/\.(png|jpe?g|gif|svg|webp)$/i', $iconPath));
+                                $fallbackIcon = 'fa-solid fa-star';
+                            ?>
+                            <?php if ($isImage): ?>
+                                <img src="<?php echo htmlspecialchars($iconValue); ?>" alt="<?php echo htmlspecialchars($benefit['title_' . $lang] ?? 'Benefit'); ?>" class="img-fluid" style="max-height: 80px; width: auto;">
+                            <?php else: ?>
+                                <i class="<?php echo htmlspecialchars($iconValue !== '' ? $iconValue : $fallbackIcon); ?> fa-3x"></i>
+                            <?php endif; ?>
                         </div>
                         <h5 class="mb-3"><?php echo htmlspecialchars($benefit['title_' . $lang]); ?></h5>
                         <p class="text-muted"><?php echo htmlspecialchars($benefit['description_' . $lang]); ?></p>

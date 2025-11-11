@@ -106,20 +106,11 @@ checkSessionTimeout();
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>" href="dashboard.php">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'hero.php' ? 'active' : ''; ?>" href="hero.php">
-                <i class="fas fa-image"></i> Hero Section
+            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'home_page.php' ? 'active' : ''; ?>" href="home_page.php">
+                <i class="fas fa-home"></i> Home Page
             </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'about.php' ? 'active' : ''; ?>" href="about.php">
-                <i class="fas fa-info-circle"></i> About Course
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'benefits.php' ? 'active' : ''; ?>" href="benefits.php">
-                <i class="fas fa-star"></i> Key Benefits
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'course_details.php' ? 'active' : ''; ?>" href="course_details.php">
-                <i class="fas fa-book"></i> Course Details
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'testimonials.php' ? 'active' : ''; ?>" href="testimonials.php">
-                <i class="fas fa-quote-left"></i> Testimonials
+            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'about_page.php' ? 'active' : ''; ?>" href="about_page.php">
+                <i class="fas fa-info-circle"></i> About Page
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'faq.php' ? 'active' : ''; ?>" href="faq.php">
                 <i class="fas fa-question-circle"></i> FAQ
@@ -130,9 +121,6 @@ checkSessionTimeout();
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'content_items.php' ? 'active' : ''; ?>" href="content_items.php">
                 <i class="fas fa-file-alt"></i> Content Items
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'page_sections.php' ? 'active' : ''; ?>" href="page_sections.php">
-                <i class="fas fa-th-large"></i> Page Sections
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'course_rounds.php' ? 'active' : ''; ?>" href="course_rounds.php">
                 <i class="fas fa-calendar-alt"></i> Course Rounds

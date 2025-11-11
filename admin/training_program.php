@@ -682,8 +682,14 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label class="form-label">Icon Class or Image URL</label>
-                            <input type="text" class="form-control" id="add_learn_icon" name="icon_image" placeholder="fas fa-chart-line or image URL">
+                            <label class="form-label">Icon Class or Image</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="add_learn_icon" name="icon_image" placeholder="fa-solid fa-chart-line or image URL">
+                                <button class="btn btn-outline-secondary" type="button" onclick="openMediaPicker('add_learn_icon')">
+                                    <i class="fas fa-images"></i> Choose
+                                </button>
+                            </div>
+                            <div class="form-text">Enter a Font Awesome class or choose/upload an image.</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Sort Order *</label>
@@ -740,8 +746,14 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label class="form-label">Icon Class or Image URL</label>
-                            <input type="text" class="form-control" name="icon_image" id="edit_learn_icon">
+                            <label class="form-label">Icon Class or Image</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="icon_image" id="edit_learn_icon">
+                                <button class="btn btn-outline-secondary" type="button" onclick="openMediaPicker('edit_learn_icon')">
+                                    <i class="fas fa-images"></i> Choose
+                                </button>
+                            </div>
+                            <div class="form-text">Enter a Font Awesome class or choose/upload an image.</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Sort Order *</label>
@@ -807,8 +819,14 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label class="form-label">Image URL</label>
-                            <input type="text" class="form-control" id="add_bonus_image" name="image">
+                            <label class="form-label">Image</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="add_bonus_image" name="image" placeholder="Image URL or choose from media">
+                                <button class="btn btn-outline-secondary" type="button" onclick="openMediaPicker('add_bonus_image')">
+                                    <i class="fas fa-images"></i> Choose
+                                </button>
+                            </div>
+                            <div class="form-text">Leave empty to display text only.</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Sort Order *</label>
@@ -875,8 +893,14 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label class="form-label">Image URL</label>
-                            <input type="text" class="form-control" name="image" id="edit_bonus_image">
+                            <label class="form-label">Image</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="image" id="edit_bonus_image" placeholder="Image URL or choose from media">
+                                <button class="btn btn-outline-secondary" type="button" onclick="openMediaPicker('edit_bonus_image')">
+                                    <i class="fas fa-images"></i> Choose
+                                </button>
+                            </div>
+                            <div class="form-text">Leave empty to display text only.</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Sort Order *</label>
@@ -933,8 +957,14 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label class="form-label">Icon Class or Image URL</label>
-                            <input type="text" class="form-control" name="icon_image">
+                            <label class="form-label">Icon Class or Image</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="icon_image" id="add_outcome_icon" placeholder="fa-solid fa-star or image URL">
+                                <button class="btn btn-outline-secondary" type="button" onclick="openMediaPicker('add_outcome_icon')">
+                                    <i class="fas fa-images"></i> Choose
+                                </button>
+                            </div>
+                            <div class="form-text">Enter a Font Awesome class or choose/upload an image.</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Sort Order *</label>
@@ -991,8 +1021,14 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label class="form-label">Icon Class or Image URL</label>
-                            <input type="text" class="form-control" name="icon_image" id="edit_outcome_icon">
+                            <label class="form-label">Icon Class or Image</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="icon_image" id="edit_outcome_icon">
+                                <button class="btn btn-outline-secondary" type="button" onclick="openMediaPicker('edit_outcome_icon')">
+                                    <i class="fas fa-images"></i> Choose
+                                </button>
+                            </div>
+                            <div class="form-text">Enter a Font Awesome class or choose/upload an image.</div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Sort Order *</label>
@@ -1244,14 +1280,6 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-// Media Picker Integration
-function openMediaPicker(targetField) {
-    window.open('media_upload.php?picker=1&target=' + targetField, 'MediaPicker', 'width=900,height=600');
-}
-
-window.selectMedia = function(url, targetField) {
-    document.getElementById(targetField).value = url;
-};
 
 // Edit Functions
 function editLearnItem(item) {

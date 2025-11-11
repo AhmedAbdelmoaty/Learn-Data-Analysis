@@ -1,3 +1,9 @@
+<?php
+$footer_social_instagram = $footer_settings['social_instagram_url'] ?? ($settings['instagram_url'] ?? '');
+$footer_social_linkedin  = $footer_settings['social_linkedin_url'] ?? ($settings['linkedin_url'] ?? '');
+$footer_social_facebook  = $footer_settings['social_facebook_url'] ?? ($settings['facebook_url'] ?? '');
+$footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitter_url'] ?? '');
+?>
 <!-- Footer -->
 <footer class="footer text-white py-5 mt-5" style="background: linear-gradient(180deg, #a8324e 0%, #8b2a42 100%);">
     <div class="container">
@@ -18,26 +24,26 @@
                 
                 <!-- Social Media Icons -->
                 <div class="social-icons d-flex gap-2 mb-3">
-                    <?php if (!empty($settings['instagram_url'])): ?>
-                        <a href="<?php echo htmlspecialchars($settings['instagram_url']); ?>" 
+                    <?php if (!empty($footer_social_instagram)): ?>
+                        <a href="<?php echo htmlspecialchars($footer_social_instagram); ?>" 
                            class="social-icon-link" target="_blank" rel="noopener">
                             <i class="fab fa-instagram"></i>
                         </a>
                     <?php endif; ?>
-                    <?php if (!empty($settings['linkedin_url'])): ?>
-                        <a href="<?php echo htmlspecialchars($settings['linkedin_url']); ?>" 
+                    <?php if (!empty($footer_social_instagram)): ?>
+                        <a href="<?php echo htmlspecialchars($footer_social_instagram); ?>"
                            class="social-icon-link" target="_blank" rel="noopener">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                     <?php endif; ?>
-                    <?php if (!empty($settings['facebook_url'])): ?>
-                        <a href="<?php echo htmlspecialchars($settings['facebook_url']); ?>" 
+                    <?php if (!empty($footer_social_facebook)): ?>
+                        <a href="<?php echo htmlspecialchars($footer_social_facebook); ?>"
                            class="social-icon-link" target="_blank" rel="noopener">
                             <i class="fab fa-facebook-f"></i>
                         </a>
                     <?php endif; ?>
-                    <?php if (!empty($settings['twitter_url'])): ?>
-                        <a href="<?php echo htmlspecialchars($settings['twitter_url']); ?>" 
+                    <?php if (!empty($footer_social_facebook)): ?>
+                        <a href="<?php echo htmlspecialchars($footer_social_facebook); ?>"
                            class="social-icon-link" target="_blank" rel="noopener">
                             <i class="fab fa-x-twitter"></i>
                         </a>

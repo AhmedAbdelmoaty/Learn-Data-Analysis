@@ -44,7 +44,7 @@ try {
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS benefits (
             id SERIAL PRIMARY KEY,
-            icon VARCHAR(50),
+            icon TEXT,
             title_en VARCHAR(100),
             title_ar VARCHAR(100),
             description_en TEXT,
@@ -205,7 +205,8 @@ try {
         ['logo', 'https://via.placeholder.com/150x50?text=LOGO'],
         ['primary_color', '#a8324e'],
         ['contact_email', 'info@institute.com'],
-        ['contact_phone', '+971 50 418 0021'],
+      
+        ['admin_email', 'info@institute.com'],  ['contact_phone', '+971 50 418 0021'],
         ['contact_address_en', 'E311 Road, New Industrial Area, Sharjah, UAE'],
         ['contact_address_ar', 'طريق E311، المنطقة الصناعية الجديدة، الشارقة، الإمارات العربية المتحدة'],
         ['facebook_url', 'https://facebook.com'],
@@ -219,7 +220,30 @@ try {
         $stmt->execute($setting);
     }
 
-    file_put_contents('.installed', date('Y-m-d H:i:s'));
+    fi    $footerDefaults = [
+        ['footer_about_en', 'IMP (Institute of Management Professionals) was established in 2014 to be a leading training and development house in the MENA region.'],
+        ['footer_about_ar', 'تأسس معهد إدارة المحترفين عام 2014 ليكون رائدًا في التدريب والتطوير بمنطقة الشرق الأوسط وشمال أفريقيا.'],
+        ['contact_title_en', 'Get In Touch'],
+        ['contact_title_ar', 'تواصل معنا'],
+        ['contact_intro_en', 'We are always ready to help you and answer your questions.'],
+        ['contact_intro_ar', 'نحن دائمًا جاهزون لمساعدتك والإجابة على أسئلتك.'],
+        ['uae_address_en', 'Business Center, Sharjah Publishing City Free Zone, E311, Al Zahia, Sharjah, U.A.E.'],
+        ['uae_address_ar', 'مركز الأعمال، مدينة الشارقة للنشر، المنطقة الحرة، E311، الزاهية، الشارقة، الإمارات العربية المتحدة'],
+        ['uae_phone', '+971 50 418 0021'],
+        ['egypt_address_en', '37 Amman St, Fourth Floor, El Dokki, Giza, Egypt'],
+        ['egypt_address_ar', '٣٧ شارع عمان، الدور الرابع، الدقي، الجيزة، مصر'],
+        ['egypt_phone', '+20 10 32244125'],
+        ['contact_email', 'marketing@imanagementpro.com'],
+        ['social_facebook_url', 'https://facebook.com'],
+        ['social_linkedin_url', 'https://linkedin.com'],
+        ['social_instagram_url', 'https://instagram.com'],
+        ['social_x_url', 'https://twitter.com'],
+    ];
+
+    $footerStmt = $pdo->prepare("INSERT INTO footer_settings (setting_key, setting_value) VALUES (?, ?)");
+    foreach ($footerDefaults as $footerSetting) {
+        $footerStmt->execute($footerSetting);
+    }le_put_contents('.installed', date('Y-m-d H:i:s'));
 
     echo "<!DOCTYPE html>
 <html>

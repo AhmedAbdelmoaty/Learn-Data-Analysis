@@ -5,30 +5,51 @@ require_once __DIR__ . '/includes/header.php';
 $success = '';
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        foreach ($_POST as $key => $value) {
-            if ($key !== 'submit') {
-                $stmt = $pdo->prepare("UPDATE footer_settings SET setting_value = ? WHERE setting_key = ?");
-                $stmt->execute([$value, $key]);
-                
-                if ($stmt->rowCount() === 0) {
-                    $stmt = $pdo->prepare("INSERT INTO footer_settings (setting_key, setting_value) VALUES (?, ?)");
-                    $stmt->execute([$key, $value]);
-                }
-            }
-        }
-        $success = 'Footer settings updated successfully!';
-    } catch(PDOException $e) {
-        $error = 'Error updating footer settings: ' . $e->getMessage();
-    }
-}
-
 $stmt = $pdo->query("SELECT * FROM footer_settings");
 $settings_rows = $stmt->fetchAll();
 $footer_settings = [];
 foreach ($settings_rows as $row) {
     $footer_settings[$row['setting_key']] = $row['setting_value'];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        $allowed_keys = [
+            'footer_about_en',
+            'footer_about_ar',
+            'contact_title_en',
+            'contact_title_ar',
+            'contact_intro_en',
+            'contact_intro_ar',
+            'uae_address_en',
+            'uae_address_ar',
+            'uae_phone',
+            'egypt_address_en',
+            'egypt_address_ar',
+            'egypt_phone',
+            'contact_email',
+            'social_facebook_url',
+            'social_linkedin_url',
+            'social_instagram_url',
+            'social_x_url',
+        ];
+
+        $updateStmt = $pdo->prepare("UPDATE footer_settings SET setting_value = ? WHERE setting_key = ?");
+        $insertStmt = $pdo->prepare("INSERT INTO footer_settings (setting_key, setting_value) VALUES (?, ?)");
+
+        foreach ($allowed_keys as $key) {
+            $value = isset($_POST[$key]) ? trim($_POST[$key]) : '';
+            $updateStmt->execute([$value, $key]);
+
+            if ($updateStmt->rowCount() === 0) {
+                $insertStmt->execute([$key, $value]);
+            }
+            $footer_settings[$key] = $value;
+        }
+        $success = 'Footer settings updated successfully!';
+    } catch (PDOException $e) {
+        $error = 'Error updating footer settings: ' . $e->getMessage();
+    }
 }
 ?>
 
@@ -39,10 +60,10 @@ foreach ($settings_rows as $row) {
     <?php if ($error): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></div>
     <?php endif; ?>
-    
-    <h5 class="mb-4">Footer Settings</h5>
-    <p class="text-muted">Manage the content that appears in the website footer</p>
-    
+
+    <h5 class="mb-4">Footer & Contact Settings</h5>
+    <p class="text-muted">Control all footer content and the contact information card displayed next to the contact form.</p>
+
     <form method="POST">
         <!-- About Section -->
         <h6 class="mb-3 text-primary"><i class="fas fa-info-circle"></i> About IMP Section</h6>
@@ -56,7 +77,30 @@ foreach ($settings_rows as $row) {
                 <textarea class="form-control" name="footer_about_ar" rows="4" dir="rtl"><?php echo htmlspecialchars($footer_settings['footer_about_ar'] ?? ''); ?></textarea>
             </div>
         </div>
-        
+        <hr class="my-4">
+
+        <!-- Contact Info Card (next to form) -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-address-card"></i> Contact Card Content</h6>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Card Title (English)</label>
+                <input type="text" class="form-control" name="contact_title_en" value="<?php echo htmlspecialchars($footer_settings['contact_title_en'] ?? ''); ?>" placeholder="Get In Touch">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">عنوان البطاقة (عربي)</label>
+                <input type="text" class="form-control" name="contact_title_ar" value="<?php echo htmlspecialchars($footer_settings['contact_title_ar'] ?? ''); ?>" dir="rtl" placeholder="تواصل معنا">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Intro Paragraph (English)</label>
+                <textarea class="form-control" name="contact_intro_en" rows="3" placeholder="We are always ready to help you and answer your questions."><?php echo htmlspecialchars($footer_settings['contact_intro_en'] ?? ''); ?></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">الفقرة التعريفية (عربي)</label>
+                <textarea class="form-control" name="contact_intro_ar" rows="3" dir="rtl" placeholder="نحن دائمًا جاهزون لمساعدتك والإجابة على أسئلتك."><?php echo htmlspecialchars($footer_settings['contact_intro_ar'] ?? ''); ?></textarea>
+            </div>
+        </div>
         <hr class="my-4">
         
         <!-- U.A.E. Contact Information -->
@@ -109,7 +153,30 @@ foreach ($settings_rows as $row) {
                 <input type="email" class="form-control" name="contact_email" value="<?php echo htmlspecialchars($footer_settings['contact_email'] ?? ''); ?>" placeholder="marketing@imanagementpro.com">
             </div>
         </div>
-        
+        <hr class="my-4">
+
+        <!-- Social Media Links -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-share-alt"></i> Social Media Links</h6>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label"><i class="fab fa-facebook"></i> Facebook URL</label>
+                <input type="url" class="form-control" name="social_facebook_url" value="<?php echo htmlspecialchars($footer_settings['social_facebook_url'] ?? ''); ?>" placeholder="https://facebook.com/your-page">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label"><i class="fab fa-linkedin"></i> LinkedIn URL</label>
+                <input type="url" class="form-control" name="social_linkedin_url" value="<?php echo htmlspecialchars($footer_settings['social_linkedin_url'] ?? ''); ?>" placeholder="https://linkedin.com/company/your-company">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label"><i class="fab fa-instagram"></i> Instagram URL</label>
+                <input type="url" class="form-control" name="social_instagram_url" value="<?php echo htmlspecialchars($footer_settings['social_instagram_url'] ?? ''); ?>" placeholder="https://instagram.com/your-profile">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label"><i class="fab fa-x-twitter"></i> X (Twitter) URL</label>
+                <input type="url" class="form-control" name="social_x_url" value="<?php echo htmlspecialchars($footer_settings['social_x_url'] ?? ''); ?>" placeholder="https://x.com/your-handle">
+            </div>
+        </div>
         <div class="mt-4">
             <button type="submit" name="submit" class="btn btn-primary btn-lg">
                 <i class="fas fa-save"></i> Save Footer Settings

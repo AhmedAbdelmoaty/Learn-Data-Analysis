@@ -325,11 +325,21 @@ try {
     $footer_settings = [
         ['setting_key' => 'footer_about_en', 'setting_value' => 'Learn Data Analysis - Your gateway to mastering Excel, Power BI, Statistics, and SQL.'],
         ['setting_key' => 'footer_about_ar', 'setting_value' => 'تعلم تحليل البيانات - بوابتك لإتقان Excel و Power BI والإحصاء و SQL.'],
-        ['setting_key' => 'show_map', 'setting_value' => 'true'],
+        ['setting_key' => 'contact_title_en', 'setting_value' => 'Get In Touch'],
+        ['setting_key' => 'contact_title_ar', 'setting_value' => 'تواصل معنا'],
+        ['setting_key' => 'contact_intro_en', 'setting_value' => 'We are always ready to help you and answer your questions.'],
+        ['setting_key' => 'contact_intro_ar', 'setting_value' => 'نحن دائمًا جاهزون لمساعدتك والإجابة على أسئلتك.'],
+        ['setting_key' => 'uae_address_en', 'setting_value' => 'Business Center, Sharjah Publishing City Free Zone, Sharjah, U.A.E.'],
+        ['setting_key' => 'uae_address_ar', 'setting_value' => 'مركز الأعمال، مدينة الشارقة للنشر، المنطقة الحرة، الشارقة، الإمارات العربية المتحدة'],
+        ['setting_key' => 'uae_phone', 'setting_value' => '+971 50 418 0021'],
+        ['setting_key' => 'egypt_address_en', 'setting_value' => '37 Amman St, Fourth Floor, El Dokki, Giza, Egypt'],
+        ['setting_key' => 'egypt_address_ar', 'setting_value' => '٣٧ شارع عمان، الدور الرابع، الدقي، الجيزة، مصر'],
+        ['setting_key' => 'egypt_phone', 'setting_value' => '+20 10 32244125'],
         ['setting_key' => 'contact_email', 'setting_value' => 'info@learndata.com'],
-        ['setting_key' => 'contact_phone', 'setting_value' => '+1 (555) 123-4567'],
-        ['setting_key' => 'contact_address_en', 'setting_value' => '123 Data Street, Analytics City'],
-        ['setting_key' => 'contact_address_ar', 'setting_value' => '123 شارع البيانات، مدينة التحليلات']
+        ['setting_key' => 'social_facebook_url', 'setting_value' => 'https://facebook.com/learn-data'],
+        ['setting_key' => 'social_linkedin_url', 'setting_value' => 'https://linkedin.com/company/learn-data'],
+        ['setting_key' => 'social_instagram_url', 'setting_value' => 'https://instagram.com/learn-data'],
+        ['setting_key' => 'social_x_url', 'setting_value' => 'https://twitter.com/learn-data']
     ];
 
     foreach ($footer_settings as $setting) {

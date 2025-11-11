@@ -81,13 +81,13 @@ $recent_messages = $stmt->fetchAll();
     <h5 class="mb-3"><i class="fas fa-info-circle"></i> Quick Links</h5>
     <div class="row g-3">
         <div class="col-md-4">
-            <a href="hero.php" class="btn btn-outline-primary w-100">
-                <i class="fas fa-image"></i> Edit Hero Section
+                <a href="home_page.php" class="btn btn-outline-primary w-100">
+                <i class="fas fa-home"></i> Manage Home Page
             </a>
         </div>
         <div class="col-md-4">
-            <a href="course_details.php" class="btn btn-outline-primary w-100">
-                <i class="fas fa-book"></i> Edit Course Details
+                <a href="about_page.php" class="btn btn-outline-primary w-100">
+                <i class="fas fa-info-circle"></i> Manage About Page
             </a>
         </div>
         <div class="col-md-4">
