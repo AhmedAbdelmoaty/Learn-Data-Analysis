@@ -66,15 +66,24 @@ $currentPage = getCurrentPage();
                         <a class="nav-link <?php echo $currentPage === 'training-program' ? 'active' : ''; ?>"
                            href="<?php echo preserveLang('training-program.php', $lang); ?>"><?php echo t('training_program', $lang); ?></a>
                     </li>
-                    <?php $isToolsActive = in_array($currentPage, ['tools', 'tool']); ?>
-                    <li class="nav-item <?php echo count($nav_tools) > 0 ? 'dropdown' : ''; ?>">
-                        <a class="nav-link <?php echo count($nav_tools) > 0 ? 'dropdown-toggle ' : ''; ?><?php echo $isToolsActive ? 'active' : ''; ?>"
-                           href="<?php echo preserveLang('tools.php', $lang); ?>"
-                           <?php if (count($nav_tools) > 0): ?>role="button" data-bs-toggle="dropdown" aria-expanded="false"<?php endif; ?>>
-                            <?php echo t('tools', $lang); ?>
-                        </a>
-                        <?php if (count($nav_tools) > 0): ?>
-                            <ul class="dropdown-menu">
+                    <?php
+                    $isToolsActive = in_array($currentPage, ['tools', 'tool']);
+                    $hasNavTools = count($nav_tools) > 0;
+                    ?>
+                    <li class="nav-item <?php echo $hasNavTools ? 'dropdown tools-nav-item' : ''; ?>">
+                        <?php if ($hasNavTools): ?>
+                            <div class="nav-link-wrapper">
+                                <a class="nav-link <?php echo $isToolsActive ? 'active' : ''; ?>" href="<?php echo preserveLang('tools.php', $lang); ?>">
+                                    <?php echo t('tools', $lang); ?>
+                                    <span class="dropdown-arrow d-none d-lg-inline">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </a>
+                                <button class="nav-dropdown-toggle d-lg-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="<?php echo $lang === 'ar' ? 'فتح قائمة الأدوات' : 'Toggle tools menu'; ?>">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <ul class="dropdown-menu<?php echo $lang === 'ar' ? ' dropdown-menu-end text-end' : ''; ?>">
                                 <?php foreach ($nav_tools as $tool): ?>
                                     <li>
                                         <a class="dropdown-item" href="<?php echo preserveLang('tool.php?slug=' . urlencode($tool['slug']), $lang); ?>">
@@ -83,6 +92,10 @@ $currentPage = getCurrentPage();
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
+                        <?php else: ?>
+                            <a class="nav-link <?php echo $isToolsActive ? 'active' : ''; ?>" href="<?php echo preserveLang('tools.php', $lang); ?>">
+                                <?php echo t('tools', $lang); ?>
+                            </a>
                         <?php endif; ?>
                     </li>
                     <li class="nav-item">

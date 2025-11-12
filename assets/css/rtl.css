@@ -7,7 +7,14 @@ body {
     margin-right: auto !important;
     margin-left: 0 !important;
 }
+.tools-nav-item .nav-link-wrapper {
+    flex-direction: row-reverse;
+}
 
+.tools-nav-item .dropdown-arrow {
+    margin-right: 0.35rem;
+    margin-left: 0;
+}
 .navbar-brand {
     margin-right: 0;
     margin-left: auto;
