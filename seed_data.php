@@ -13,7 +13,8 @@ try {
             'intro_en' => 'Master data analysis and visualization with Microsoft Excel. Learn formulas, pivot tables, charts, and advanced data manipulation techniques.',
             'intro_ar' => 'أتقن تحليل البيانات والتصور باستخدام مايكروسوفت إكسل. تعلم الصيغ والجداول المحورية والمخططات وتقنيات معالجة البيانات المتقدمة.',
             'hero_image' => 'https://via.placeholder.com/1200x400/4CAF50/ffffff?text=Excel',
-            'display_order' => 1
+            'display_order' => 1,
+            'is_tool' => true
         ],
         [
             'slug' => 'power-bi',
@@ -22,7 +23,8 @@ try {
             'intro_en' => 'Create interactive dashboards and powerful visualizations with Microsoft Power BI. Transform raw data into actionable insights.',
             'intro_ar' => 'قم بإنشاء لوحات معلومات تفاعلية وتصورات قوية باستخدام مايكروسوفت باور بي آي. حول البيانات الأولية إلى رؤى قابلة للتنفيذ.',
             'hero_image' => 'https://via.placeholder.com/1200x400/FF9800/ffffff?text=Power+BI',
-            'display_order' => 2
+            'display_order' => 2,
+            'is_tool' => true
         ],
         [
             'slug' => 'statistics',
@@ -31,7 +33,8 @@ try {
             'intro_en' => 'Understand statistical concepts essential for data analysis. Learn hypothesis testing, probability distributions, and statistical inference.',
             'intro_ar' => 'فهم المفاهيم الإحصائية الأساسية لتحليل البيانات. تعلم اختبار الفرضيات وتوزيعات الاحتمالات والاستدلال الإحصائي.',
             'hero_image' => 'https://via.placeholder.com/1200x400/2196F3/ffffff?text=Statistics',
-            'display_order' => 3
+            'display_order' => 3,
+            'is_tool' => false
         ],
         [
             'slug' => 'sql',
@@ -40,20 +43,22 @@ try {
             'intro_en' => 'Query and manage databases with SQL. Learn to extract, filter, and analyze data from relational databases efficiently.',
             'intro_ar' => 'الاستعلام عن قواعد البيانات وإدارتها باستخدام SQL. تعلم استخراج البيانات وتصفيتها وتحليلها من قواعد البيانات العلائقية بكفاءة.',
             'hero_image' => 'https://via.placeholder.com/1200x400/9C27B0/ffffff?text=SQL',
-            'display_order' => 4
+            'display_order' => 4,
+            'is_tool' => true
         ]
     ];
 
     foreach ($topics as $topic) {
-        $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, display_order) 
-                               VALUES (?, ?, ?, ?, ?, ?, ?) 
-                               ON CONFLICT (slug) DO UPDATE SET 
-                               title_en = EXCLUDED.title_en, 
+        $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, display_order, is_tool)
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                               ON CONFLICT (slug) DO UPDATE SET
+                               title_en = EXCLUDED.title_en,
                                title_ar = EXCLUDED.title_ar,
                                intro_en = EXCLUDED.intro_en,
                                intro_ar = EXCLUDED.intro_ar,
                                hero_image = EXCLUDED.hero_image,
-                               display_order = EXCLUDED.display_order");
+                               display_order = EXCLUDED.display_order,
+                               is_tool = EXCLUDED.is_tool");
         $stmt->execute([
             $topic['slug'],
             $topic['title_en'],
@@ -61,7 +66,8 @@ try {
             $topic['intro_en'],
             $topic['intro_ar'],
             $topic['hero_image'],
-            $topic['display_order']
+            $topic['display_order'],
+            $topic['is_tool']
         ]);
     }
     echo "✓ Topics seeded (4 topics)\n";
@@ -320,6 +326,60 @@ try {
         ]);
     }
     echo "✓ Home page sections seeded (1 section)\n";
+
+    // Seed Tools page sections
+    $tools_sections = [
+        [
+            'page_name' => 'tools',
+            'section_key' => 'hero',
+            'title_en' => 'Discover the Tools You Need',
+            'title_ar' => 'اكتشف الأدوات التي تحتاجها',
+            'subtitle_en' => 'Browse the tools we teach and dive into in-depth guides, tutorials, and resources for each platform.',
+            'subtitle_ar' => 'تصفح الأدوات التي نقدمها واطلع على الأدلة والشروحات والموارد المتعمقة لكل منصة.',
+            'image' => 'https://via.placeholder.com/1600x600/A8324E/ffffff?text=Tools+Hero',
+            'is_enabled' => true,
+            'display_order' => 1
+        ],
+        [
+            'page_name' => 'tools',
+            'section_key' => 'intro',
+            'title_en' => 'Choose Your Learning Path',
+            'title_ar' => 'اختر مسار التعلم المناسب لك',
+            'body_en' => 'Each tool page includes structured lessons, practical tutorials, and curated content designed to help you master the platform from beginner to advanced levels.',
+            'body_ar' => 'تتضمن كل صفحة أداة دروسًا منظمة وشروحات عملية ومحتوى مختارًا بعناية لمساعدتك على إتقان المنصة من المستوى المبتدئ إلى المتقدم.',
+            'is_enabled' => true,
+            'display_order' => 2
+        ],
+    ];
+
+    foreach ($tools_sections as $section) {
+        $stmt = $pdo->prepare("INSERT INTO page_sections (page_name, section_key, title_en, title_ar, subtitle_en, subtitle_ar, body_en, body_ar, image, is_enabled, display_order)
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                               ON CONFLICT (page_name, section_key) DO UPDATE SET
+                               title_en = EXCLUDED.title_en,
+                               title_ar = EXCLUDED.title_ar,
+                               subtitle_en = EXCLUDED.subtitle_en,
+                               subtitle_ar = EXCLUDED.subtitle_ar,
+                               body_en = EXCLUDED.body_en,
+                               body_ar = EXCLUDED.body_ar,
+                               image = EXCLUDED.image,
+                               is_enabled = EXCLUDED.is_enabled,
+                               display_order = EXCLUDED.display_order");
+        $stmt->execute([
+            $section['page_name'],
+            $section['section_key'],
+            $section['title_en'],
+            $section['title_ar'],
+            $section['subtitle_en'] ?? null,
+            $section['subtitle_ar'] ?? null,
+            $section['body_en'] ?? null,
+            $section['body_ar'] ?? null,
+            $section['image'] ?? null,
+            $section['is_enabled'],
+            $section['display_order']
+        ]);
+    }
+    echo "✓ Tools page sections seeded (2 sections)\n";
 
     // Seed Footer settings
     $footer_settings = [

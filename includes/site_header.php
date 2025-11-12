@@ -19,6 +19,10 @@ foreach ($footer_rows as $row) {
     $footer_settings[$row['setting_key']] = $row['setting_value'];
 }
 
+// Get tools for navigation
+$stmt = $pdo->query("SELECT slug, title_en, title_ar FROM topics WHERE is_tool = true ORDER BY display_order, title_en");
+$nav_tools = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 $currentPage = getCurrentPage();
 ?>
 <!DOCTYPE html>
@@ -59,24 +63,31 @@ $currentPage = getCurrentPage();
                            href="<?php echo preserveLang('about.php', $lang); ?>"><?php echo t('about', $lang); ?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'training-program' ? 'active' : ''; ?>" 
+                        <a class="nav-link <?php echo $currentPage === 'training-program' ? 'active' : ''; ?>"
                            href="<?php echo preserveLang('training-program.php', $lang); ?>"><?php echo t('training_program', $lang); ?></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'excel' ? 'active' : ''; ?>" 
-                           href="<?php echo preserveLang('excel.php', $lang); ?>"><?php echo t('excel', $lang); ?></a>
+                    <?php $isToolsActive = in_array($currentPage, ['tools', 'tool']); ?>
+                    <li class="nav-item <?php echo count($nav_tools) > 0 ? 'dropdown' : ''; ?>">
+                        <a class="nav-link <?php echo count($nav_tools) > 0 ? 'dropdown-toggle ' : ''; ?><?php echo $isToolsActive ? 'active' : ''; ?>"
+                           href="<?php echo preserveLang('tools.php', $lang); ?>"
+                           <?php if (count($nav_tools) > 0): ?>role="button" data-bs-toggle="dropdown" aria-expanded="false"<?php endif; ?>>
+                            <?php echo t('tools', $lang); ?>
+                        </a>
+                        <?php if (count($nav_tools) > 0): ?>
+                            <ul class="dropdown-menu">
+                                <?php foreach ($nav_tools as $tool): ?>
+                                    <li>
+                                        <a class="dropdown-item" href="<?php echo preserveLang('tool.php?slug=' . urlencode($tool['slug']), $lang); ?>">
+                                            <?php echo htmlspecialchars($tool['title_' . $lang]); ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'power-bi' ? 'active' : ''; ?>" 
-                           href="<?php echo preserveLang('power-bi.php', $lang); ?>"><?php echo t('power_bi', $lang); ?></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'statistics' ? 'active' : ''; ?>" 
+                        <a class="nav-link <?php echo $currentPage === 'statistics' ? 'active' : ''; ?>"
                            href="<?php echo preserveLang('statistics.php', $lang); ?>"><?php echo t('statistics', $lang); ?></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'sql' ? 'active' : ''; ?>" 
-                           href="<?php echo preserveLang('sql.php', $lang); ?>"><?php echo t('sql', $lang); ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo $currentPage === 'faq' ? 'active' : ''; ?>" 

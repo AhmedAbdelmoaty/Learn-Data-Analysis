@@ -119,6 +119,9 @@ checkSessionTimeout();
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'topics.php' ? 'active' : ''; ?>" href="topics.php">
                 <i class="fas fa-graduation-cap"></i> Topics
             </a>
+            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'tools_page.php' ? 'active' : ''; ?>" href="tools_page.php">
+                <i class="fas fa-toolbox"></i> Tools Page
+            </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'content_items.php' ? 'active' : ''; ?>" href="content_items.php">
                 <i class="fas fa-file-alt"></i> Content Items
             </a>

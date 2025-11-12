@@ -94,8 +94,13 @@ $topics = $stmt->fetchAll();
         <h2 class="section-title text-center mb-5"><?php echo t('explore_topics', $lang); ?></h2>
         <div class="row g-4">
             <?php foreach ($topics as $topic): ?>
+                <?php
+                    $topicUrl = $topic['is_tool']
+                        ? 'tool.php?slug=' . urlencode($topic['slug'])
+                        : $topic['slug'] . '.php';
+                ?>
                 <div class="col-md-6 col-lg-3">
-                    <a href="<?php echo htmlspecialchars($topic['slug']); ?>.php?lang=<?php echo $lang; ?>" class="text-decoration-none">
+                    <a href="<?php echo preserveLang($topicUrl, $lang); ?>" class="text-decoration-none">
                         <div class="topic-card h-100 p-4 text-center">
                             <div class="topic-image mb-3" style="height: 150px; overflow: hidden; border-radius: 10px;">
                                 <img src="<?php echo htmlspecialchars($topic['hero_image']); ?>" 
