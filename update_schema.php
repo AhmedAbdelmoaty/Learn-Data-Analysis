@@ -18,6 +18,7 @@ try {
         intro_ar TEXT,
         hero_image VARCHAR(500),
         display_order INT DEFAULT 0,
+        is_tool BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
     echo "✓ Topics table created\n";

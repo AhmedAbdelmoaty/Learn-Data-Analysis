@@ -19,6 +19,10 @@ foreach ($footer_rows as $row) {
     $footer_settings[$row['setting_key']] = $row['setting_value'];
 }
 
+// Get tools for navigation
+$stmt = $pdo->query("SELECT slug, title_en, title_ar FROM topics WHERE is_tool = true ORDER BY display_order, title_en");
+$nav_tools = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 $currentPage = getCurrentPage();
 ?>
 <!DOCTYPE html>
@@ -59,24 +63,44 @@ $currentPage = getCurrentPage();
                            href="<?php echo preserveLang('about.php', $lang); ?>"><?php echo t('about', $lang); ?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'training-program' ? 'active' : ''; ?>" 
+                        <a class="nav-link <?php echo $currentPage === 'training-program' ? 'active' : ''; ?>"
                            href="<?php echo preserveLang('training-program.php', $lang); ?>"><?php echo t('training_program', $lang); ?></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'excel' ? 'active' : ''; ?>" 
-                           href="<?php echo preserveLang('excel.php', $lang); ?>"><?php echo t('excel', $lang); ?></a>
+                    <?php
+                    $isToolsActive = in_array($currentPage, ['tools', 'tool']);
+                    $hasNavTools = count($nav_tools) > 0;
+                    ?>
+                    <li class="nav-item <?php echo $hasNavTools ? 'dropdown tools-nav-item' : ''; ?>">
+                        <?php if ($hasNavTools): ?>
+                            <div class="nav-link-wrapper">
+                                <a class="nav-link <?php echo $isToolsActive ? 'active' : ''; ?>" href="<?php echo preserveLang('tools.php', $lang); ?>">
+                                    <?php echo t('tools', $lang); ?>
+                                    <span class="dropdown-arrow d-none d-lg-inline">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </a>
+                                <button class="nav-dropdown-toggle d-lg-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="<?php echo $lang === 'ar' ? 'فتح قائمة الأدوات' : 'Toggle tools menu'; ?>">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <ul class="dropdown-menu<?php echo $lang === 'ar' ? ' dropdown-menu-end text-end' : ''; ?>">
+                                <?php foreach ($nav_tools as $tool): ?>
+                                    <li>
+                                        <a class="dropdown-item" href="<?php echo preserveLang('tool.php?slug=' . urlencode($tool['slug']), $lang); ?>">
+                                            <?php echo htmlspecialchars($tool['title_' . $lang]); ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <a class="nav-link <?php echo $isToolsActive ? 'active' : ''; ?>" href="<?php echo preserveLang('tools.php', $lang); ?>">
+                                <?php echo t('tools', $lang); ?>
+                            </a>
+                        <?php endif; ?>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'power-bi' ? 'active' : ''; ?>" 
-                           href="<?php echo preserveLang('power-bi.php', $lang); ?>"><?php echo t('power_bi', $lang); ?></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'statistics' ? 'active' : ''; ?>" 
+                        <a class="nav-link <?php echo $currentPage === 'statistics' ? 'active' : ''; ?>"
                            href="<?php echo preserveLang('statistics.php', $lang); ?>"><?php echo t('statistics', $lang); ?></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $currentPage === 'sql' ? 'active' : ''; ?>" 
-                           href="<?php echo preserveLang('sql.php', $lang); ?>"><?php echo t('sql', $lang); ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo $currentPage === 'faq' ? 'active' : ''; ?>" 

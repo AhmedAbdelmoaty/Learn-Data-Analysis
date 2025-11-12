@@ -71,23 +71,25 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="<?php echo preserveLang('excel.php', $lang); ?>" class="text-white text-decoration-none">
-                            <?php echo t('excel', $lang); ?>
+                        <a href="<?php echo preserveLang('tools.php', $lang); ?>" class="text-white text-decoration-none">
+                            <?php echo t('tools', $lang); ?>
                         </a>
                     </li>
-                    <li class="mb-3">
-                        <a href="<?php echo preserveLang('power-bi.php', $lang); ?>" class="text-white text-decoration-none">
-                            <?php echo t('power_bi', $lang); ?>
-                        </a>
-                    </li>
+                    <?php if (!isset($nav_tools)) {
+                        $stmt = $pdo->query("SELECT slug, title_en, title_ar FROM topics WHERE is_tool = true ORDER BY display_order, title_en");
+                        $nav_tools = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    }
+                    ?>
+                    <?php foreach ($nav_tools as $tool): ?>
+                        <li class="mb-2 <?php echo $lang === 'ar' ? 'me-3' : 'ms-3'; ?>">
+                            <a href="<?php echo preserveLang('tool.php?slug=' . urlencode($tool['slug']), $lang); ?>" class="text-white-50 text-decoration-none">
+                                <?php echo htmlspecialchars($tool['title_' . $lang]); ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                     <li class="mb-3">
                         <a href="<?php echo preserveLang('statistics.php', $lang); ?>" class="text-white text-decoration-none">
                             <?php echo t('statistics', $lang); ?>
-                        </a>
-                    </li>
-                    <li class="mb-3">
-                        <a href="<?php echo preserveLang('sql.php', $lang); ?>" class="text-white text-decoration-none">
-                            <?php echo t('sql', $lang); ?>
                         </a>
                     </li>
                 </ul>
