@@ -43,4 +43,68 @@ document.addEventListener('DOMContentLoaded', function() {
             button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
         });
     }
+    const toolsNavItems = document.querySelectorAll('.tools-nav-item');
+
+    const closeAllToolMenus = () => {
+        toolsNavItems.forEach(item => {
+            const menu = item.querySelector('.dropdown-menu');
+            const toggle = item.querySelector('.nav-dropdown-toggle');
+
+            if (!menu) {
+                return;
+            }
+
+            item.classList.remove('show');
+            menu.classList.remove('show');
+            menu.removeAttribute('data-bs-popper');
+
+            if (toggle) {
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    };
+
+    toolsNavItems.forEach(item => {
+        const toggle = item.querySelector('.nav-dropdown-toggle');
+        const menu = item.querySelector('.dropdown-menu');
+
+        if (!toggle || !menu) {
+            return;
+        }
+
+        toggle.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isOpen = item.classList.contains('show');
+
+            closeAllToolMenus();
+
+            if (!isOpen) {
+                item.classList.add('show');
+                menu.classList.add('show');
+                menu.setAttribute('data-bs-popper', 'static');
+                toggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                closeAllToolMenus();
+            });
+        });
+    });
+
+    const navbarNav = document.getElementById('navbarNav');
+    if (navbarNav) {
+        navbarNav.addEventListener('hidden.bs.collapse', () => {
+            closeAllToolMenus();
+        });
+    }
+
+    document.addEventListener('click', event => {
+        if (!event.target.closest('.tools-nav-item')) {
+            closeAllToolMenus();
+        }
+    });
 });

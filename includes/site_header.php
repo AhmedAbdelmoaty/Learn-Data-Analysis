@@ -79,11 +79,17 @@ $currentPage = getCurrentPage();
                                         <i class="fa-solid fa-chevron-down"></i>
                                     </span>
                                 </a>
-                                <button class="nav-dropdown-toggle d-lg-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="<?php echo $lang === 'ar' ? 'فتح قائمة الأدوات' : 'Toggle tools menu'; ?>">
+                                <button
+                                    class="nav-dropdown-toggle d-lg-none"
+                                    type="button"
+                                    aria-expanded="false"
+                                    aria-haspopup="true"
+                                    aria-controls="toolsDropdownMenu"
+                                    aria-label="<?php echo $lang === 'ar' ? 'فتح قائمة الأدوات' : 'Toggle tools menu'; ?>">
                                     <i class="fa-solid fa-chevron-down"></i>
                                 </button>
                             </div>
-                            <ul class="dropdown-menu<?php echo $lang === 'ar' ? ' dropdown-menu-end text-end' : ''; ?>">
+                            <ul id="toolsDropdownMenu" class="dropdown-menu<?php echo $lang === 'ar' ? ' dropdown-menu-end text-end' : ''; ?>">
                                 <?php foreach ($nav_tools as $tool): ?>
                                     <li>
                                         <a class="dropdown-item" href="<?php echo preserveLang('tool.php?slug=' . urlencode($tool['slug']), $lang); ?>">
