@@ -1,4 +1,4 @@
-<?php
+    <?php
 require_once 'includes/db.php';
 
 $lang = isset($_GET['lang']) && $_GET['lang'] === 'ar' ? 'ar' : 'en';
@@ -126,7 +126,8 @@ require_once 'includes/site_header.php';
                                 <?php endif; ?>
                                 <div class="card-body">
                                     <h6 class="card-title"><?php echo htmlspecialchars($item['title_' . $lang]); ?></h6>
-                                    <p class="card-text text-muted small"><?php echo htmlspecialchars(substr($item['summary_' . $lang], 0, 80)); ?>...</p>
+                                    <?php $relatedSummary = getCardSummaryText($item, $lang, 80); ?>
+                                    <p class="card-text text-muted small card-text-limit"><?php echo htmlspecialchars($relatedSummary); ?></p>
                                     <span class="btn btn-sm btn-outline-primary"><?php echo t('read_more', $lang); ?> →</span>
                                 </div>
                             </div>

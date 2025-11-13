@@ -74,7 +74,7 @@ $tool_topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                      class="img-fluid w-100 h-100" style="object-fit: cover;">
                             </div>
                             <h5 class="mb-2"><?php echo htmlspecialchars($tool['title_' . $lang]); ?></h5>
-                            <p class="text-muted mb-4" style="min-height: 72px;">
+                            <p class="text-muted mb-4 card-text-limit">
                                 <?php
                                     $introText = $tool['intro_' . $lang] ?? '';
                                     if (function_exists('mb_strimwidth')) {

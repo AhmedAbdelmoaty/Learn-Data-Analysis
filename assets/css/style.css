@@ -406,6 +406,21 @@ html {
     display: flex;
     flex-direction: column;
 }
+.card-text-limit {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.6;
+    min-height: calc(1.6em * 3);
+}
+
+.card-text-limit.small,
+.small.card-text-limit {
+    line-height: 1.5;
+    min-height: calc(1.5em * 3);
+}
 
 .content-item-card:hover {
     transform: translateY(-8px);

@@ -79,7 +79,7 @@ $topics = $stmt->fetchAll();
                             <?php endif; ?>
                         </div>
                         <h5 class="mb-3"><?php echo htmlspecialchars($benefit['title_' . $lang]); ?></h5>
-                        <p class="text-muted"><?php echo htmlspecialchars($benefit['description_' . $lang]); ?></p>
+                        <p class="text-muted card-text-limit"><?php echo htmlspecialchars($benefit['description_' . $lang]); ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -108,7 +108,7 @@ $topics = $stmt->fetchAll();
                                      class="img-fluid w-100 h-100" style="object-fit: cover;">
                             </div>
                             <h5 class="mb-2"><?php echo htmlspecialchars($topic['title_' . $lang]); ?></h5>
-                            <p class="text-muted small mb-3"><?php echo htmlspecialchars(substr($topic['intro_' . $lang], 0, 100)); ?>...</p>
+                            <p class="text-muted small mb-3 card-text-limit"><?php echo htmlspecialchars(substr($topic['intro_' . $lang], 0, 100)); ?>...</p>
                             <span class="btn btn-primary btn-sm"><?php echo t('read_more', $lang); ?> →</span>
                         </div>
                     </a>

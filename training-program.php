@@ -91,7 +91,8 @@ $faqs = $stmt->fetchAll();
                         <?php endif; ?>
                         <h5 class="fw-bold mb-3"><?php echo htmlspecialchars($item['title_' . $lang]); ?></h5>
                         <?php if ($item['body_' . $lang]): ?>
-                            <p class="text-muted small"><?php echo nl2br(htmlspecialchars($item['body_' . $lang])); ?></p>
+                           <p class="text-muted small card-text-limit"><?php echo nl2br(htmlspecialchars($item['body_' . $lang])); ?></p>
+
                         <?php endif; ?>
                     </div>
                 </div>

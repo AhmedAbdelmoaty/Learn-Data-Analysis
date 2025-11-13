@@ -57,7 +57,8 @@ require_once 'includes/site_header.php';
                             <?php endif; ?>
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($item['title_' . $lang]); ?></h5>
-                                <p class="card-text text-muted"><?php echo htmlspecialchars($item['summary_' . $lang]); ?></p>
+                                <?php $summaryText = getCardSummaryText($item, $lang); ?>
+                                <p class="card-text text-muted card-text-limit"><?php echo htmlspecialchars($summaryText); ?></p>
                                 <span class="btn btn-primary btn-sm"><?php echo t('read_more', $lang); ?> →</span>
                             </div>
                         </div>

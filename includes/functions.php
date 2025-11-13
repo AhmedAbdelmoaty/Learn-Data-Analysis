@@ -95,4 +95,53 @@ function preserveLang($url, $lang) {
     $separator = (strpos($url, '?') !== false) ? '&' : '?';
     return $url . $separator . 'lang=' . $lang;
 }
+function getCardSummaryText(array $item, string $lang, ?int $maxChars = null): string {
+    $preferredOrder = [
+        'summary_' . $lang,
+        'summary_' . ($lang === 'ar' ? 'en' : 'ar'),
+        'body_' . $lang,
+        'body_' . ($lang === 'ar' ? 'en' : 'ar'),
+    ];
+
+    $text = '';
+    foreach ($preferredOrder as $field) {
+        if (!isset($item[$field])) {
+            continue;
+        }
+
+        $candidate = is_string($item[$field]) ? trim($item[$field]) : '';
+        if ($candidate === '') {
+            continue;
+        }
+
+        $candidate = strip_tags($candidate);
+        if ($candidate !== '') {
+            $text = $candidate;
+            break;
+        }
+    }
+
+    if ($text === '') {
+        return '';
+    }
+
+    $text = preg_replace('/\s+/u', ' ', $text);
+
+    if ($maxChars !== null && $maxChars > 0) {
+        $lengthFunc = function_exists('mb_strlen')
+            ? fn($str) => mb_strlen($str, 'UTF-8')
+            : fn($str) => strlen($str);
+        $substrFunc = function_exists('mb_substr')
+            ? fn($str, $start, $length) => mb_substr($str, $start, $length, 'UTF-8')
+            : fn($str, $start, $length) => substr($str, $start, $length);
+
+        if ($lengthFunc($text) > $maxChars) {
+            $text = $substrFunc($text, 0, $maxChars);
+            $text = rtrim($text, " \t\n\r\0\x0B,.;:!؟،");
+            $text .= '…';
+        }
+    }
+
+    return $text;
+}
 ?>
