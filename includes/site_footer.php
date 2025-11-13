@@ -25,27 +25,27 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                 <!-- Social Media Icons -->
                 <div class="social-icons d-flex gap-2 mb-3">
                     <?php if (!empty($footer_social_instagram)): ?>
-                        <a href="<?php echo htmlspecialchars($footer_social_instagram); ?>" 
-                           class="social-icon-link" target="_blank" rel="noopener">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    <?php endif; ?>
-                    <?php if (!empty($footer_social_instagram)): ?>
                         <a href="<?php echo htmlspecialchars($footer_social_instagram); ?>"
-                           class="social-icon-link" target="_blank" rel="noopener">
-                            <i class="fab fa-linkedin-in"></i>
+                           class="social-icon-link" target="_blank" rel="noopener" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                    <?php endif; ?>
+                        <?php if (!empty($footer_social_linkedin)): ?>
+                            <a href="<?php echo htmlspecialchars($footer_social_linkedin); ?>"
+                               class="social-icon-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in"></i>
                         </a>
                     <?php endif; ?>
                     <?php if (!empty($footer_social_facebook)): ?>
                         <a href="<?php echo htmlspecialchars($footer_social_facebook); ?>"
-                           class="social-icon-link" target="_blank" rel="noopener">
-                            <i class="fab fa-facebook-f"></i>
+                            class="social-icon-link" target="_blank" rel="noopener" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
                         </a>
                     <?php endif; ?>
-                    <?php if (!empty($footer_social_facebook)): ?>
-                        <a href="<?php echo htmlspecialchars($footer_social_facebook); ?>"
-                           class="social-icon-link" target="_blank" rel="noopener">
-                            <i class="fab fa-x-twitter"></i>
+                        <?php if (!empty($footer_social_x)): ?>
+                            <a href="<?php echo htmlspecialchars($footer_social_x); ?>"
+                               class="social-icon-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+                                <i class="fa-brands fa-x-twitter"></i>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -75,18 +75,11 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                             <?php echo t('tools', $lang); ?>
                         </a>
                     </li>
-                    <?php if (!isset($nav_tools)) {
-                        $stmt = $pdo->query("SELECT slug, title_en, title_ar FROM topics WHERE is_tool = true ORDER BY display_order, title_en");
-                        $nav_tools = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    }
-                    ?>
-                    <?php foreach ($nav_tools as $tool): ?>
-                        <li class="mb-2 <?php echo $lang === 'ar' ? 'me-3' : 'ms-3'; ?>">
-                            <a href="<?php echo preserveLang('tool.php?slug=' . urlencode($tool['slug']), $lang); ?>" class="text-white-50 text-decoration-none">
-                                <?php echo htmlspecialchars($tool['title_' . $lang]); ?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
+                    <li class="mb-3">
+                        <a href="<?php echo preserveLang('faq.php', $lang); ?>" class="text-white text-decoration-none">
+                            <?php echo t('faq', $lang); ?>
+                        </a>
+                    </li>    
                     <li class="mb-3">
                         <a href="<?php echo preserveLang('statistics.php', $lang); ?>" class="text-white text-decoration-none">
                             <?php echo t('statistics', $lang); ?>
@@ -101,25 +94,29 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                 
                 <!-- U.A.E. Address -->
                 <div class="contact-block mb-4">
-                    <div class="d-flex align-items-start mb-2">
-                        <i class="fas fa-map-marker-alt me-2 mt-1" style="font-size: 14px;"></i>
-                        <div>
+                    <div class="contact-item mb-2">
+                        <span class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                        <div class="contact-text">
                             <strong><?php echo $lang === 'ar' ? 'الإمارات العربية المتحدة' : 'U.A.E.'; ?></strong><br>
-                            <span style="font-size: 14px; line-height: 1.6;">
-                                <?php 
-                                echo htmlspecialchars($footer_settings['uae_address_' . $lang] ?? 
-                                    ($lang === 'ar' 
-                                        ? 'مركز الأعمال، نشر الشارقة، المنطقة الحرة، E311، الشيخ محمد بن زايد رود، الزاهية، الشارقة، الإمارات' 
+                             <span>
+                                 <?php
+                                 echo htmlspecialchars($footer_settings['uae_address_' . $lang] ??
+                                     ($lang === 'ar'
+                                         ? 'مركز الأعمال، نشر الشارقة، المنطقة الحرة، E311، الشيخ محمد بن زايد رود، الزاهية، الشارقة، الإمارات' 
                                         : 'Business Center, Sharjah Publishing City Free Zone, E311, Sheikh Mohammed Bin Zayed Rd, Al Zahia, Sharjah, U.A.E.'
                                     )
-                                ); 
+                                );
                                 ?>
                             </span>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="fas fa-phone me-2" style="font-size: 14px;"></i>
-                        <a href="tel:+97150418002" class="text-white text-decoration-none" style="font-size: 14px;">
+                    <div class="contact-item inline-align mb-2">
+                        <span class="contact-icon">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </span>
+                    <a href="tel:+97150418002" class="contact-link text-white text-decoration-none text-ltr" dir="ltr">
                             <?php echo htmlspecialchars($footer_settings['uae_phone'] ?? '+971 50 418 0021'); ?>
                         </a>
                     </div>
@@ -127,15 +124,17 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                 
                 <!-- Egypt Address -->
                 <div class="contact-block mb-4">
-                    <div class="d-flex align-items-start mb-2">
-                        <i class="fas fa-map-marker-alt me-2 mt-1" style="font-size: 14px;"></i>
-                        <div>
-                            <strong><?php echo $lang === 'ar' ? 'مصر' : 'Egypt'; ?></strong><br>
-                            <span style="font-size: 14px; line-height: 1.6;">
+                    <div class="contact-item mb-2">
+                        <span class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                    <div class="contact-text">
+                            <strong><?php echo $lang === 'ar' ? 'جمهورية مصر العربية' : 'Egypt'; ?></strong><br>
+                            <span >
                                 <?php 
                                 echo htmlspecialchars($footer_settings['egypt_address_' . $lang] ?? 
-                                    ($lang === 'ar' 
-                                        ? '37 عمان ش، الطابق الرابع، الدقي، الجيزة، مصر' 
+                                    ($lang === 'ar'
+                                        ? '37 عمان ش، الطابق الرابع، الدقي، الجيزة، مصر'
                                         : '37 Amman St, Fourth Floor, Eldokki, Giza, Egypt'
                                     )
                                 ); 
@@ -143,19 +142,23 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                             </span>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fas fa-phone me-2" style="font-size: 14px;"></i>
-                        <a href="tel:+201032244125" class="text-white text-decoration-none" style="font-size: 14px;">
+                    <div class="contact-item inline-align mb-3">
+                        <span class="contact-icon">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </span>
+                        <a href="tel:+201032244125" class="contact-link text-white text-decoration-none text-ltr" dir="ltr">
                             <?php echo htmlspecialchars($footer_settings['egypt_phone'] ?? '+20 10 32244125'); ?>
                         </a>
                     </div>
                 </div>
                 
                 <!-- Email -->
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-envelope me-2" style="font-size: 14px;"></i>
-                    <a href="mailto:<?php echo htmlspecialchars($footer_settings['contact_email'] ?? 'marketing@imanagementpro.com'); ?>" 
-                       class="text-white text-decoration-none" style="font-size: 14px;">
+                <div class="contact-item inline-align">
+                    <span class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                    <a href="mailto:<?php echo htmlspecialchars($footer_settings['contact_email'] ?? 'marketing@imanagementpro.com'); ?>"
+                       class="contact-link text-white text-decoration-none">
                         <?php echo htmlspecialchars($footer_settings['contact_email'] ?? 'marketing@imanagementpro.com'); ?>
                     </a>
                 </div>
@@ -224,12 +227,13 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
             justify-content: center;
         }
         
-        .footer .d-flex.align-items-start,
-        .footer .d-flex.align-items-center {
+        .footer .contact-item {
             justify-content: center;
             text-align: center;
         }
-        
+        .footer .contact-item .contact-text {
+            text-align: center;
+        }
         .footer-links {
             text-align: center;
         }

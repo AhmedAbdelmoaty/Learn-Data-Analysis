@@ -31,6 +31,36 @@ body {
 .nav-link:hover {
     color: var(--primary-color) !important;
 }
+.footer .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.footer .contact-item.inline-align {
+    align-items: center;
+}
+
+.footer .contact-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    font-size: 14px;
+    line-height: 1;
+    position: relative;
+    top: 2px;
+}
+
+.footer .contact-item.inline-align .contact-icon {
+    top: 0;
+}
+
+.footer .contact-text,
+.footer .contact-link {
+    font-size: 14px;
+    line-height: 1.6;
+}
 .tools-nav-item .nav-link-wrapper {
     display: flex;
     align-items: center;

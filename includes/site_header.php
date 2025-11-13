@@ -112,10 +112,11 @@ $currentPage = getCurrentPage();
                         <a class="nav-link <?php echo $currentPage === 'faq' ? 'active' : ''; ?>" 
                            href="<?php echo preserveLang('faq.php', $lang); ?>"><?php echo t('faq', $lang); ?></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-sm btn-outline-primary ms-2" 
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="nav-link language-switch text-nowrap"
                            href="<?php echo basename($_SERVER['PHP_SELF']) . '?lang=' . ($lang === 'en' ? 'ar' : 'en'); ?>">
-                            <?php echo $lang === 'en' ? 'العربية' : 'English'; ?>
+                            <i class="fa-solid fa-globe"></i>
+                            <span><?php echo $lang === 'en' ? 'العربية' : 'English'; ?></span>
                         </a>
                     </li>
                 </ul>

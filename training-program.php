@@ -44,7 +44,7 @@ $faqs = $stmt->fetchAll();
 ?>
 <section class="py-5">
     <div class="container">
-        <div class="row align-items-center <?php echo $is_rtl ? 'flex-row-reverse' : ''; ?>">
+         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <h1 class="display-4 fw-bold mb-4" style="color: #a8324e;"><?php echo htmlspecialchars($hero['title_' . $lang]); ?></h1>
                 <?php if ($hero['subtitle_' . $lang]): ?>
@@ -188,7 +188,7 @@ $faqs = $stmt->fetchAll();
         <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;">
             <?php echo $lang === 'en' ? 'Hear From Our Graduates' : 'استمع إلى خريجينا'; ?>
         </h2>
-        <div class="row align-items-center g-4 <?php echo $lang === 'ar' ? 'flex-row-reverse' : ''; ?>">
+        <div class="row align-items-center g-4">
             <!-- Video Block -->
             <?php if ($journey_video && !empty($journey_video['video_url'])): ?>
                 <div class="col-lg-6 mb-4 mb-lg-0">

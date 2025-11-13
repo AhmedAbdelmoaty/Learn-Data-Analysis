@@ -46,8 +46,8 @@ $social_instagram = get_footer_setting('social_instagram_url', '');
 $uae_title = ($lang === 'ar') ? 'الإمارات العربية المتحدة' : 'U.A.E.';
 $egy_title = ($lang === 'ar') ? 'جمهورية مصر العربية' : 'Egypt';
 
-$infoOrder = ($lang === 'ar') ? 'order-lg-2' : 'order-lg-1';
-$formOrder = ($lang === 'ar') ? 'order-lg-1' : 'order-lg-2';
+$infoOrder = 'order-lg-1';
+$formOrder = 'order-lg-2';
 ?>
 
 <!-- Contact Form Section (appears at bottom of every page) -->
@@ -75,7 +75,8 @@ $formOrder = ($lang === 'ar') ? 'order-lg-1' : 'order-lg-2';
                                 <?php if ($uae_phone): ?>
                                     <div class="d-flex gap-3">
                                         <i class="fab fa-whatsapp fs-4 mt-1"></i>
-                                        <div class="text-muted"><?php echo htmlspecialchars($uae_phone); ?></div>
+                                        <div class="text-muted text-ltr" dir="ltr"><?php echo htmlspecialchars($uae_phone); ?></div>
+
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -94,7 +95,7 @@ $formOrder = ($lang === 'ar') ? 'order-lg-1' : 'order-lg-2';
                                 <?php if ($egy_phone): ?>
                                     <div class="d-flex gap-3">
                                         <i class="fab fa-whatsapp fs-4 mt-1"></i>
-                                        <div class="text-muted"><?php echo htmlspecialchars($egy_phone); ?></div>
+                                        <div class="text-muted text-ltr" dir="ltr"><?php echo htmlspecialchars($egy_phone); ?></div>
                                     </div>
                                 <?php endif; ?>
                             </div>
