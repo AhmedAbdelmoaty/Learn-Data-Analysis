@@ -94,29 +94,29 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                 
                 <!-- U.A.E. Address -->
                 <div class="contact-block mb-4">
-                    <div class="contact-item mb-2">
-                        <span class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                        </span>
-                        <div class="contact-text">
-                            <strong><?php echo $lang === 'ar' ? 'الإمارات العربية المتحدة' : 'U.A.E.'; ?></strong><br>
-                             <span>
+                     <div class="contact-item address-item mb-2">
+                         <div class="address-heading">
+                             <span class="contact-icon">
+                                 <i class="fas fa-map-marker-alt"></i>
+                            </span>
+                             <strong><?php echo $lang === 'ar' ? 'الإمارات العربية المتحدة' : 'U.A.E.'; ?></strong>
+                             </div>
+                             <div class="contact-address">
                                  <?php
                                  echo htmlspecialchars($footer_settings['uae_address_' . $lang] ??
                                      ($lang === 'ar'
-                                         ? 'مركز الأعمال، نشر الشارقة، المنطقة الحرة، E311، الشيخ محمد بن زايد رود، الزاهية، الشارقة، الإمارات' 
-                                        : 'Business Center, Sharjah Publishing City Free Zone, E311, Sheikh Mohammed Bin Zayed Rd, Al Zahia, Sharjah, U.A.E.'
-                                    )
-                                );
-                                ?>
-                            </span>
+                                         ? 'مركز الأعمال، نشر الشارقة، المنطقة الحرة، E311، الشيخ محمد بن زايد رود، الزاهية، الشارقة، الإمارات'
+                                         : 'Business Center, Sharjah Publishing City Free Zone, E311, Sheikh Mohammed Bin Zayed Rd, Al Zahia, Sharjah, U.A.E.'
+                                     )
+                                 );
+                                 ?>
                         </div>
                     </div>
                     <div class="contact-item inline-align mb-2">
                         <span class="contact-icon">
                             <i class="fa-brands fa-whatsapp"></i>
                         </span>
-                    <a href="tel:+97150418002" class="contact-link text-white text-decoration-none text-ltr" dir="ltr">
+                        <a href="tel:+97150418002" class="contact-link text-white text-decoration-none text-ltr" dir="ltr">
                             <?php echo htmlspecialchars($footer_settings['uae_phone'] ?? '+971 50 418 0021'); ?>
                         </a>
                     </div>
@@ -124,22 +124,22 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
                 
                 <!-- Egypt Address -->
                 <div class="contact-block mb-4">
-                    <div class="contact-item mb-2">
-                        <span class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </span>
-                    <div class="contact-text">
-                            <strong><?php echo $lang === 'ar' ? 'جمهورية مصر العربية' : 'Egypt'; ?></strong><br>
-                            <span >
-                                <?php 
-                                echo htmlspecialchars($footer_settings['egypt_address_' . $lang] ?? 
+                    <div class="contact-item address-item mb-2">
+                        <div class="address-heading">
+                            <span class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </span>
+                            <strong><?php echo $lang === 'ar' ? 'جمهورية مصر العربية' : 'Egypt'; ?></strong>
+                            </div>
+                            <div class="contact-address">
+                                <?php
+                                echo htmlspecialchars($footer_settings['egypt_address_' . $lang] ??
                                     ($lang === 'ar'
                                         ? '37 عمان ش، الطابق الرابع، الدقي، الجيزة، مصر'
                                         : '37 Amman St, Fourth Floor, Eldokki, Giza, Egypt'
                                     )
-                                ); 
+                                );
                                 ?>
-                            </span>
                         </div>
                     </div>
                     <div class="contact-item inline-align mb-3">
@@ -231,7 +231,7 @@ $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitt
             justify-content: center;
             text-align: center;
         }
-        .footer .contact-item .contact-text {
+        .footer .contact-item.address-item .contact-address {
             text-align: center;
         }
         .footer-links {
