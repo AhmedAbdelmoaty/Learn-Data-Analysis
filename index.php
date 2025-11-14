@@ -30,7 +30,7 @@ $topics = $stmt->fetchAll();
 <!-- Hero Section -->
 <section class="hero-section" style="background-image: linear-gradient(rgba(168, 50, 78, 0.7), rgba(108, 30, 53, 0.7)), url('<?php echo htmlspecialchars($hero['background_image'] ?? 'https://via.placeholder.com/1920x600'); ?>');">
     <div class="container">
-        <div class="row align-items-center min-vh-70">
+        <div class="row align-items-center min-vh-60">
             <div class="col-lg-8 text-white">
                 <h1 class="display-3 fw-bold mb-4"><?php echo htmlspecialchars($hero['title_' . $lang] ?? ''); ?></h1>
                 <p class="lead mb-4 fs-4"><?php echo htmlspecialchars($hero['subtitle_' . $lang] ?? ''); ?></p>
