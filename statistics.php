@@ -23,10 +23,11 @@ $page_title = $topic['title_' . $lang] . ' - Learn Data Analysis';
 $stmt = $pdo->prepare("SELECT * FROM content_items WHERE topic_id = ? AND status = 'published' ORDER BY display_order");
 $stmt->execute([$topic['id']]);
 $content_items = $stmt->fetchAll();
+$heroGradient = getTopicHeroGradient($topic['slug']);
 ?>
 
 <!-- Topic Hero -->
-<section class="topic-hero py-5" style="background: linear-gradient(rgba(33, 150, 243, 0.8), rgba(21, 101, 192, 0.8)), url('<?php echo htmlspecialchars($topic['hero_image']); ?>'); background-size: cover; background-position: center;">
+<section class="topic-hero py-5" style="background: <?php echo $heroGradient; ?>, url('<?php echo htmlspecialchars($topic['hero_image']); ?>'); background-size: cover; background-position: center;">
     <div class="container">
         <div class="row justify-content-center text-center text-white">
             <div class="col-lg-8">
@@ -44,8 +45,8 @@ $content_items = $stmt->fetchAll();
         <h2 class="section-title text-center mb-5"><?php echo $lang === 'en' ? 'Learn More' : 'تعلم المزيد'; ?></h2>
         <div class="row g-4">
             <?php foreach ($content_items as $item): ?>
-                <div class="col-md-6">
-                    <a href="content.php?topic=<?php echo urlencode($topic_slug); ?>&slug=<?php echo urlencode($item['slug']); ?>&lang=<?php echo $lang; ?>" 
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="content.php?topic=<?php echo urlencode($topic_slug); ?>&slug=<?php echo urlencode($item['slug']); ?>&lang=<?php echo $lang; ?>"
                        class="text-decoration-none">
                         <div class="content-item-card h-100">
                             <?php if ($item['hero_image']): ?>

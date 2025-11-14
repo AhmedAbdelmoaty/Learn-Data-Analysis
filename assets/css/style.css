@@ -461,18 +461,18 @@ html {
 }
 .card-text-limit {
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.6;
-    min-height: calc(1.6em * 3);
+    min-height: calc(1.6em * 2);
 }
 
 .card-text-limit.small,
 .small.card-text-limit {
     line-height: 1.5;
-    min-height: calc(1.5em * 3);
+    min-height: calc(1.5em * 2);
 }
 
 .content-item-card:hover {

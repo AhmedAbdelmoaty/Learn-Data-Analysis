@@ -144,4 +144,18 @@ function getCardSummaryText(array $item, string $lang, ?int $maxChars = null): s
 
     return $text;
 }
+function getTopicHeroGradient(string $slug): string {
+    $overlays = [
+        'excel' => ['rgba(46, 125, 50, 0.85)', 'rgba(27, 94, 32, 0.85)'],
+        'power-bi' => ['rgba(255, 196, 0, 0.85)', 'rgba(204, 120, 0, 0.85)'],
+        'sql' => ['rgba(63, 81, 181, 0.85)', 'rgba(33, 53, 140, 0.85)'],
+        'statistics' => ['rgba(0, 150, 136, 0.85)', 'rgba(0, 105, 92, 0.85)'],
+    ];
+
+    if (isset($overlays[$slug])) {
+        return 'linear-gradient(' . $overlays[$slug][0] . ', ' . $overlays[$slug][1] . ')';
+    }
+
+    return 'linear-gradient(rgba(168, 50, 78, 0.85), rgba(108, 30, 53, 0.85))';
+}
 ?>
