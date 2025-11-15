@@ -44,7 +44,7 @@
     .media-picker-item:hover {
         border-color: var(--primary-color);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(168, 50, 78, 0.3);
+        box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
     }
     
     .media-picker-item img {

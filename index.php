@@ -28,7 +28,7 @@ $topics = $stmt->fetchAll();
 ?>
 
 <!-- Hero Section -->
-<section class="hero-section" style="background-image: linear-gradient(rgba(168, 50, 78, 0.9), rgba(108, 30, 53, 0.9)), url('<?php echo htmlspecialchars($hero['background_image'] ?? 'https://via.placeholder.com/1920x600'); ?>');">
+<section class="hero-section" style="background-image: var(--primary-hero-gradient), url('<?php echo htmlspecialchars($hero['background_image'] ?? 'https://via.placeholder.com/1920x600'); ?>');">
     <div class="container">
         <div class="row align-items-center min-vh-60">
             <div class="col-lg-8 text-white">

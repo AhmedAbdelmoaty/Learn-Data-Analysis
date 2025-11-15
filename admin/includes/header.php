@@ -1,8 +1,13 @@
 <?php
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/functions.php';
 requireLogin();
 checkSessionTimeout();
+
+$settings = loadSiteSettings($pdo);
+$themeConfig = getThemeConfiguration($settings);
+$themeCssVariables = buildThemeCssVariables($themeConfig);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,23 +17,45 @@ checkSessionTimeout();
     <title><?php echo $page_title ?? 'Admin Dashboard'; ?> - CMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <?php
+    $adminFontLinks = [];
+    if (!empty($themeConfig['font_link_en'])) {
+        $adminFontLinks[] = $themeConfig['font_link_en'];
+    }
+    if (!empty($themeConfig['font_link_ar']) && $themeConfig['font_link_ar'] !== ($themeConfig['font_link_en'] ?? '')) {
+        $adminFontLinks[] = $themeConfig['font_link_ar'];
+    }
+    foreach ($adminFontLinks as $fontLink):
+    ?>
+        <link rel="stylesheet" href="<?php echo htmlspecialchars($fontLink); ?>">
+    <?php endforeach; ?>
     <style>
         :root {
             --sidebar-width: 250px;
-            --primary-color: #a8324e;
+            --primary-color: <?php echo $themeCssVariables['--primary-color']; ?>;
+            --secondary-color: <?php echo $themeCssVariables['--secondary-color']; ?>;
+            --primary-color-rgb: <?php echo $themeCssVariables['--primary-color-rgb']; ?>;
+            --primary-gradient-start: <?php echo $themeCssVariables['--primary-gradient-start']; ?>;
+            --primary-gradient-end: <?php echo $themeCssVariables['--primary-gradient-end']; ?>;
+            --primary-hero-gradient: <?php echo $themeCssVariables['--primary-hero-gradient']; ?>;
+            --font-family-en: <?php echo $themeCssVariables['--font-family-en']; ?>;
+            --font-family-ar: <?php echo $themeCssVariables['--font-family-ar']; ?>;
+            --bs-primary: var(--primary-color);
+            --bs-primary-rgb: <?php echo $themeCssVariables['--primary-color-rgb']; ?>;
         }
-        
+
         body {
             background-color: #f8f9fa;
+            font-family: <?php echo $themeCssVariables['--font-family-en']; ?>;
         }
-        
+
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
             height: 100vh;
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--primary-color) 0%, #6c1e35 100%);
+            background: linear-gradient(180deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
             overflow-y: auto;
             transition: all 0.3s;
             z-index: 1000;

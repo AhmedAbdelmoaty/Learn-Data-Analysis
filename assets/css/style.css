@@ -1,12 +1,25 @@
 :root {
     --primary-color: #a8324e;
     --secondary-color: #6c1e35;
-    --text-dark: #333;
-    --text-light: #666;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --primary-color-rgb: 168, 50, 78;
+    --secondary-color-rgb: 108, 30, 53;
+    --primary-opacity: 0.9;
+    --primary-gradient-start: rgba(168, 50, 78, 0.9);
+    --primary-gradient-end: rgba(108, 30, 53, 0.9);
+    --primary-hero-gradient: linear-gradient(rgba(168, 50, 78, 0.9), rgba(108, 30, 53, 0.9));
+    --font-family-en: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-family-ar: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-family-base: var(--font-family-en);
+}
+
+html[lang="ar"] {
+    --font-family-base: var(--font-family-ar);
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-family-base, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
     color: var(--text-dark);
     line-height: 1.6;
 }
@@ -179,7 +192,7 @@ body {
 
 .training-hero-section {
     position: relative;
-    background: linear-gradient(135deg, rgba(168, 50, 78, 0.88), rgba(108, 30, 53, 0.88));
+    background: var(--primary-hero-gradient);
     color: #fff;
     overflow: hidden;
 }
@@ -324,10 +337,6 @@ body {
     border-color: var(--primary-color) !important;
 }
 
-footer {
-    background-color: var(--primary-color) !important;
-}
-
 .btn-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
@@ -341,7 +350,7 @@ footer {
     background-color: var(--secondary-color);
     border-color: var(--secondary-color);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(168, 50, 78, 0.3);
+    box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.3);
 }
 
 .btn-outline-primary {
@@ -379,16 +388,17 @@ footer {
 
 .form-control:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(168, 50, 78, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
 }
 
 .accordion-button:not(.collapsed) {
-    background-color: rgba(168, 50, 78, 0.1);
+    background-color: rgba(var(--primary-color-rgb), 0.1);
     color: var(--primary-color);
 }
-
-.accordion-button::after {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23a8324e'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+.accordion-button {
+    --accordion-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-icon: var(--accordion-icon);
+    --bs-accordion-btn-active-icon: var(--accordion-icon);
 }
 
 .card {
@@ -525,7 +535,7 @@ html {
 
 .content-item-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(168, 50, 78, 0.15);
+    box-shadow: 0 8px 25px rgba(var(--primary-color-rgb), 0.15);
 }
 
 .content-item-card .card-body {
@@ -584,7 +594,7 @@ html {
 .contact-form-section .form-control:focus,
 .contact-form-section .form-select:focus {
   border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 .2rem rgba(168, 50, 78, 0.25) !important;
+  box-shadow: 0 0 0 .2rem rgba(var(--primary-color-rgb), 0.25) !important;
   outline: 0;
 }
 /* ===== Contact section brand colors (target current HTML, no .contact-info needed) ===== */
