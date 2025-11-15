@@ -25,7 +25,7 @@ $stmt = $pdo->prepare("SELECT * FROM content_items WHERE topic_id = ? AND status
 $stmt->execute([$topic['id']]);
 $content_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 require_once 'includes/site_header.php';
-$heroGradient = getTopicHeroGradient($topic['slug']);
+$heroGradient = getTopicHeroGradient($topic);
 ?>
 
 <section class="topic-hero py-5" style="background: <?php echo $heroGradient; ?>, url('<?php echo htmlspecialchars($topic['hero_image'] ?: 'https://via.placeholder.com/1200x400'); ?>'); background-size: cover; background-position: center;">

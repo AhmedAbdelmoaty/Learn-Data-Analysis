@@ -144,18 +144,67 @@ function getCardSummaryText(array $item, string $lang, ?int $maxChars = null): s
 
     return $text;
 }
-function getTopicHeroGradient(string $slug): string {
-    $overlays = [
-        'excel' => ['rgba(46, 125, 50, 0.9)', 'rgba(27, 94, 32, 0.9)'],
-        'power-bi' => ['rgba(255, 196, 0, 0.92)', 'rgba(204, 120, 0, 0.9)'],
-        'sql' => ['rgba(63, 81, 181, 0.9)', 'rgba(33, 53, 140, 0.9)'],
-        'statistics' => ['rgba(0, 150, 136, 0.9)', 'rgba(0, 105, 92, 0.9)'],
-    ];
 
-    if (isset($overlays[$slug])) {
-        return 'linear-gradient(' . $overlays[$slug][0] . ', ' . $overlays[$slug][1] . ')';
+function normalizeHexColor(?string $color, string $fallback): string {
+    if (is_string($color) && preg_match('/^#([0-9a-fA-F]{6})$/', trim($color))) {
+        return strtoupper(trim($color));
     }
 
-    return 'linear-gradient(rgba(168, 50, 78, 0.9), rgba(108, 30, 53, 0.9))';
+    return strtoupper($fallback);
+}
+
+function hexColorToRgb(string $color): array {
+    $normalized = ltrim($color, '#');
+
+    return [
+        'r' => hexdec(substr($normalized, 0, 2)),
+        'g' => hexdec(substr($normalized, 2, 2)),
+        'b' => hexdec(substr($normalized, 4, 2)),
+    ];
+}
+
+function clampOpacityValue($value, int $fallback): int {
+    if (!is_numeric($value)) {
+        return $fallback;
+    }
+
+    $intVal = (int)$value;
+    if ($intVal < 0) {
+        return 0;
+    }
+    if ($intVal > 100) {
+        return 100;
+    }
+
+    return $intVal;
+}
+
+function rgbaFromHex(string $hexColor, int $opacityPercent): string {
+    $rgb = hexColorToRgb($hexColor);
+    $alpha = max(0, min(100, $opacityPercent)) / 100;
+    $alphaFormatted = rtrim(rtrim(number_format($alpha, 2, '.', ''), '0'), '.');
+
+    return sprintf('rgba(%d, %d, %d, %s)', $rgb['r'], $rgb['g'], $rgb['b'], $alphaFormatted === '' ? '0' : $alphaFormatted);
+}
+
+function getTopicHeroGradient(array $topic): string {
+    $slug = $topic['slug'] ?? '';
+
+    $defaults = [
+        'excel' => ['start' => '#2E7D32', 'end' => '#1B5E20', 'start_opacity' => 90, 'end_opacity' => 90],
+        'power-bi' => ['start' => '#FFC400', 'end' => '#CC7800', 'start_opacity' => 92, 'end_opacity' => 90],
+        'sql' => ['start' => '#3F51B5', 'end' => '#21358C', 'start_opacity' => 90, 'end_opacity' => 90],
+        'statistics' => ['start' => '#009688', 'end' => '#00695C', 'start_opacity' => 90, 'end_opacity' => 90],
+        'default' => ['start' => '#A8324E', 'end' => '#6C1E35', 'start_opacity' => 90, 'end_opacity' => 90],
+    ];
+
+    $config = $defaults[$slug] ?? $defaults['default'];
+
+    $colorStart = normalizeHexColor($topic['hero_overlay_color_start'] ?? null, $config['start']);
+    $colorEnd = normalizeHexColor($topic['hero_overlay_color_end'] ?? null, $config['end']);
+    $opacityStart = clampOpacityValue($topic['hero_overlay_opacity_start'] ?? $config['start_opacity'], $config['start_opacity']);
+    $opacityEnd = clampOpacityValue($topic['hero_overlay_opacity_end'] ?? $config['end_opacity'], $config['end_opacity']);
+
+    return 'linear-gradient(' . rgbaFromHex($colorStart, $opacityStart) . ', ' . rgbaFromHex($colorEnd, $opacityEnd) . ')';
 }
 ?>

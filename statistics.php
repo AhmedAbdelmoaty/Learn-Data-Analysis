@@ -23,7 +23,7 @@ $page_title = $topic['title_' . $lang] . ' - Learn Data Analysis';
 $stmt = $pdo->prepare("SELECT * FROM content_items WHERE topic_id = ? AND status = 'published' ORDER BY display_order");
 $stmt->execute([$topic['id']]);
 $content_items = $stmt->fetchAll();
-$heroGradient = getTopicHeroGradient($topic['slug']);
+$heroGradient = getTopicHeroGradient($topic);
 ?>
 
 <!-- Topic Hero -->

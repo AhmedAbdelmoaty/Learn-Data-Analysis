@@ -13,6 +13,10 @@ try {
             'intro_en' => 'Master data analysis and visualization with Microsoft Excel. Learn formulas, pivot tables, charts, and advanced data manipulation techniques.',
             'intro_ar' => 'أتقن تحليل البيانات والتصور باستخدام مايكروسوفت إكسل. تعلم الصيغ والجداول المحورية والمخططات وتقنيات معالجة البيانات المتقدمة.',
             'hero_image' => 'https://via.placeholder.com/1200x400/4CAF50/ffffff?text=Excel',
+            'hero_overlay_color_start' => '#2E7D32',
+            'hero_overlay_color_end' => '#1B5E20',
+            'hero_overlay_opacity_start' => 90,
+            'hero_overlay_opacity_end' => 90,
             'display_order' => 1,
             'is_tool' => true
         ],
@@ -23,6 +27,10 @@ try {
             'intro_en' => 'Create interactive dashboards and powerful visualizations with Microsoft Power BI. Transform raw data into actionable insights.',
             'intro_ar' => 'قم بإنشاء لوحات معلومات تفاعلية وتصورات قوية باستخدام مايكروسوفت باور بي آي. حول البيانات الأولية إلى رؤى قابلة للتنفيذ.',
             'hero_image' => 'https://via.placeholder.com/1200x400/FF9800/ffffff?text=Power+BI',
+            'hero_overlay_color_start' => '#FFC400',
+            'hero_overlay_color_end' => '#CC7800',
+            'hero_overlay_opacity_start' => 92,
+            'hero_overlay_opacity_end' => 90,
             'display_order' => 2,
             'is_tool' => true
         ],
@@ -33,6 +41,10 @@ try {
             'intro_en' => 'Understand statistical concepts essential for data analysis. Learn hypothesis testing, probability distributions, and statistical inference.',
             'intro_ar' => 'فهم المفاهيم الإحصائية الأساسية لتحليل البيانات. تعلم اختبار الفرضيات وتوزيعات الاحتمالات والاستدلال الإحصائي.',
             'hero_image' => 'https://via.placeholder.com/1200x400/2196F3/ffffff?text=Statistics',
+            'hero_overlay_color_start' => '#009688',
+            'hero_overlay_color_end' => '#00695C',
+            'hero_overlay_opacity_start' => 90,
+            'hero_overlay_opacity_end' => 90,
             'display_order' => 3,
             'is_tool' => false
         ],
@@ -43,20 +55,28 @@ try {
             'intro_en' => 'Query and manage databases with SQL. Learn to extract, filter, and analyze data from relational databases efficiently.',
             'intro_ar' => 'الاستعلام عن قواعد البيانات وإدارتها باستخدام SQL. تعلم استخراج البيانات وتصفيتها وتحليلها من قواعد البيانات العلائقية بكفاءة.',
             'hero_image' => 'https://via.placeholder.com/1200x400/9C27B0/ffffff?text=SQL',
+            'hero_overlay_color_start' => '#3F51B5',
+            'hero_overlay_color_end' => '#21358C',
+            'hero_overlay_opacity_start' => 90,
+            'hero_overlay_opacity_end' => 90,
             'display_order' => 4,
             'is_tool' => true
         ]
     ];
 
     foreach ($topics as $topic) {
-        $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, display_order, is_tool)
-                               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, hero_overlay_color_start, hero_overlay_color_end, hero_overlay_opacity_start, hero_overlay_opacity_end, display_order, is_tool)
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                                ON CONFLICT (slug) DO UPDATE SET
                                title_en = EXCLUDED.title_en,
                                title_ar = EXCLUDED.title_ar,
                                intro_en = EXCLUDED.intro_en,
                                intro_ar = EXCLUDED.intro_ar,
                                hero_image = EXCLUDED.hero_image,
+                               hero_overlay_color_start = EXCLUDED.hero_overlay_color_start,
+                               hero_overlay_color_end = EXCLUDED.hero_overlay_color_end,
+                               hero_overlay_opacity_start = EXCLUDED.hero_overlay_opacity_start,
+                               hero_overlay_opacity_end = EXCLUDED.hero_overlay_opacity_end,
                                display_order = EXCLUDED.display_order,
                                is_tool = EXCLUDED.is_tool");
         $stmt->execute([
@@ -66,6 +86,10 @@ try {
             $topic['intro_en'],
             $topic['intro_ar'],
             $topic['hero_image'],
+            $topic['hero_overlay_color_start'],
+            $topic['hero_overlay_color_end'],
+            $topic['hero_overlay_opacity_start'],
+            $topic['hero_overlay_opacity_end'],
             $topic['display_order'],
             $topic['is_tool']
         ]);

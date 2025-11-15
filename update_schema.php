@@ -17,6 +17,10 @@ try {
         intro_en TEXT,
         intro_ar TEXT,
         hero_image VARCHAR(500),
+        hero_overlay_color_start VARCHAR(9),
+        hero_overlay_color_end VARCHAR(9),
+        hero_overlay_opacity_start INT DEFAULT 90,
+        hero_overlay_opacity_end INT DEFAULT 90,
         display_order INT DEFAULT 0,
         is_tool BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
