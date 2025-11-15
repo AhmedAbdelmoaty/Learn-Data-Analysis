@@ -160,12 +160,34 @@ body {
     background-color: var(--primary-color);
 }
 
+.hero-split-section {
+    position: relative;
+    background-color: var(--hero-background-solid, #f8f9fa);
+    color: var(--hero-body-color, inherit);
+    overflow: hidden;
+}
+
+.hero-split-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--hero-background-color, transparent);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero-split-section > .container,
+.hero-split-section > .container-fluid {
+    position: relative;
+    z-index: 1;
+}
+
 .hero-split-section .hero-title {
-    color: var(--primary-color);
+    color: var(--hero-title-color, var(--primary-color));
 }
 
 .hero-split-section .hero-subtitle {
-    color: #6c757d;
+    color: var(--hero-subtitle-color, #6c757d);
 }
 
 .hero-split-section .hero-image-wrapper {

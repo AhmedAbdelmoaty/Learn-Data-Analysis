@@ -13,6 +13,9 @@ try {
             'intro_en' => 'Master data analysis and visualization with Microsoft Excel. Learn formulas, pivot tables, charts, and advanced data manipulation techniques.',
             'intro_ar' => 'أتقن تحليل البيانات والتصور باستخدام مايكروسوفت إكسل. تعلم الصيغ والجداول المحورية والمخططات وتقنيات معالجة البيانات المتقدمة.',
             'hero_image' => 'https://via.placeholder.com/1200x400/4CAF50/ffffff?text=Excel',
+            'hero_background_color' => '#e8f5e9',
+            'hero_background_opacity' => 90,
+            'hero_text_color' => '#0f5132',
             'display_order' => 1,
             'is_tool' => true
         ],
@@ -23,6 +26,9 @@ try {
             'intro_en' => 'Create interactive dashboards and powerful visualizations with Microsoft Power BI. Transform raw data into actionable insights.',
             'intro_ar' => 'قم بإنشاء لوحات معلومات تفاعلية وتصورات قوية باستخدام مايكروسوفت باور بي آي. حول البيانات الأولية إلى رؤى قابلة للتنفيذ.',
             'hero_image' => 'https://via.placeholder.com/1200x400/FF9800/ffffff?text=Power+BI',
+            'hero_background_color' => '#fff3e0',
+            'hero_background_opacity' => 90,
+            'hero_text_color' => '#b25e09',
             'display_order' => 2,
             'is_tool' => true
         ],
@@ -33,6 +39,9 @@ try {
             'intro_en' => 'Understand statistical concepts essential for data analysis. Learn hypothesis testing, probability distributions, and statistical inference.',
             'intro_ar' => 'فهم المفاهيم الإحصائية الأساسية لتحليل البيانات. تعلم اختبار الفرضيات وتوزيعات الاحتمالات والاستدلال الإحصائي.',
             'hero_image' => 'https://via.placeholder.com/1200x400/2196F3/ffffff?text=Statistics',
+            'hero_background_color' => '#e3f2fd',
+            'hero_background_opacity' => 88,
+            'hero_text_color' => '#0d47a1',
             'display_order' => 3,
             'is_tool' => false
         ],
@@ -43,20 +52,26 @@ try {
             'intro_en' => 'Query and manage databases with SQL. Learn to extract, filter, and analyze data from relational databases efficiently.',
             'intro_ar' => 'الاستعلام عن قواعد البيانات وإدارتها باستخدام SQL. تعلم استخراج البيانات وتصفيتها وتحليلها من قواعد البيانات العلائقية بكفاءة.',
             'hero_image' => 'https://via.placeholder.com/1200x400/9C27B0/ffffff?text=SQL',
+            'hero_background_color' => '#f3e5f5',
+            'hero_background_opacity' => 92,
+            'hero_text_color' => '#4a148c',
             'display_order' => 4,
             'is_tool' => true
         ]
     ];
 
     foreach ($topics as $topic) {
-        $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, display_order, is_tool)
-                               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, hero_background_color, hero_background_opacity, hero_text_color, display_order, is_tool)
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                                ON CONFLICT (slug) DO UPDATE SET
                                title_en = EXCLUDED.title_en,
                                title_ar = EXCLUDED.title_ar,
                                intro_en = EXCLUDED.intro_en,
                                intro_ar = EXCLUDED.intro_ar,
                                hero_image = EXCLUDED.hero_image,
+                               hero_background_color = EXCLUDED.hero_background_color,
+                               hero_background_opacity = EXCLUDED.hero_background_opacity,
+                               hero_text_color = EXCLUDED.hero_text_color,
                                display_order = EXCLUDED.display_order,
                                is_tool = EXCLUDED.is_tool");
         $stmt->execute([
@@ -66,6 +81,9 @@ try {
             $topic['intro_en'],
             $topic['intro_ar'],
             $topic['hero_image'],
+            $topic['hero_background_color'],
+            $topic['hero_background_opacity'],
+            $topic['hero_text_color'],
             $topic['display_order'],
             $topic['is_tool']
         ]);

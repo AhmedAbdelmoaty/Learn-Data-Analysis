@@ -17,6 +17,9 @@ try {
         intro_en TEXT,
         intro_ar TEXT,
         hero_image VARCHAR(500),
+        hero_background_color VARCHAR(20),
+        hero_background_opacity INT DEFAULT 85,
+        hero_text_color VARCHAR(20),
         display_order INT DEFAULT 0,
         is_tool BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

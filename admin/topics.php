@@ -5,12 +5,46 @@ require_once __DIR__ . '/includes/header.php';
 $success = '';
 $error = '';
 
+if (!function_exists('lda_sanitize_hex_color')) {
+    function lda_sanitize_hex_color(?string $value): ?string
+    {
+        $value = trim($value ?? '');
+        if ($value === '') {
+            return null;
+        }
+
+        if (!preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $value)) {
+            return null;
+        }
+
+        return strtolower($value);
+    }
+}
+
+if (!function_exists('lda_normalize_opacity')) {
+    function lda_normalize_opacity($value): int
+    {
+        $value = (int)$value;
+        if ($value < 0) {
+            $value = 0;
+        } elseif ($value > 100) {
+            $value = 100;
+        }
+
+        return $value;
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'add') {
         try {
-            $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, display_order, is_tool) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $hero_background_color = lda_sanitize_hex_color($_POST['hero_background_color'] ?? '');
+            $hero_background_opacity = lda_normalize_opacity($_POST['hero_background_opacity'] ?? 85);
+            $hero_text_color = lda_sanitize_hex_color($_POST['hero_text_color'] ?? '');
+
+            $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, hero_background_color, hero_background_opacity, hero_text_color, display_order, is_tool) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([
                 trim($_POST['slug'] ?? ''),
                 trim($_POST['title_en'] ?? ''),
@@ -18,6 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 trim($_POST['intro_en'] ?? ''),
                 trim($_POST['intro_ar'] ?? ''),
                 trim($_POST['hero_image'] ?? ''),
+                $hero_background_color,
+                $hero_background_opacity,
+                $hero_text_color,
                 (int)($_POST['display_order'] ?? 0),
                 isset($_POST['is_tool']) ? 1 : 0,
             ]);
@@ -27,7 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'update') {
         try {
-            $stmt = $pdo->prepare("UPDATE topics SET slug = ?, title_en = ?, title_ar = ?, intro_en = ?, intro_ar = ?, hero_image = ?, display_order = ?, is_tool = ? WHERE id = ?");
+            $hero_background_color = lda_sanitize_hex_color($_POST['hero_background_color'] ?? '');
+            $hero_background_opacity = lda_normalize_opacity($_POST['hero_background_opacity'] ?? 85);
+            $hero_text_color = lda_sanitize_hex_color($_POST['hero_text_color'] ?? '');
+
+            $stmt = $pdo->prepare("UPDATE topics SET slug = ?, title_en = ?, title_ar = ?, intro_en = ?, intro_ar = ?, hero_image = ?, hero_background_color = ?, hero_background_opacity = ?, hero_text_color = ?, display_order = ?, is_tool = ? WHERE id = ?");
             $stmt->execute([
                 trim($_POST['slug'] ?? ''),
                 trim($_POST['title_en'] ?? ''),
@@ -35,6 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 trim($_POST['intro_en'] ?? ''),
                 trim($_POST['intro_ar'] ?? ''),
                 trim($_POST['hero_image'] ?? ''),
+                $hero_background_color,
+                $hero_background_opacity,
+                $hero_text_color,
                 (int)($_POST['display_order'] ?? 0),
                 isset($_POST['is_tool']) ? 1 : 0,
                 (int)($_POST['id'] ?? 0),
@@ -132,10 +176,29 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <img src="" alt="Preview">
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Hero Background Color</label>
+                        <input type="color" class="form-control form-control-color w-100" name="hero_background_color" value="#f8f9fa">
+                        <div class="form-text">Choose the accent color that sits behind the hero content.</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Background Intensity</label>
+                        <input type="range" class="form-range hero-opacity-input" name="hero_background_opacity" id="add_hero_background_opacity" min="0" max="100" value="85" data-target="add_hero_background_opacity_value">
+                        <div class="form-text">Strength: <span id="add_hero_background_opacity_value">85%</span></div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Hero Text Color</label>
+                        <input type="color" class="form-control form-control-color w-100" name="hero_text_color" value="#212529">
+                        <div class="form-text">Controls the color of the hero title and subtitle.</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">Display Order</label>
                         <input type="number" class="form-control" name="display_order" value="1" min="0">
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-3 mb-3 d-flex align-items-end">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="is_tool" id="add_is_tool" checked>
@@ -178,6 +241,11 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <form method="POST">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="id" value="<?php echo $topic['id']; ?>">
+                    <?php
+                        $currentBackgroundColor = !empty($topic['hero_background_color']) ? $topic['hero_background_color'] : '#f8f9fa';
+                        $currentBackgroundOpacity = isset($topic['hero_background_opacity']) ? (int)$topic['hero_background_opacity'] : 85;
+                        $currentTextColor = !empty($topic['hero_text_color']) ? $topic['hero_text_color'] : '#212529';
+                    ?>
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
@@ -218,10 +286,29 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <img src="<?php echo !empty($topic['hero_image']) ? htmlspecialchars($topic['hero_image']) : ''; ?>" alt="Preview">
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hero Background Color</label>
+                            <input type="color" class="form-control form-control-color w-100" name="hero_background_color" value="<?php echo htmlspecialchars($currentBackgroundColor); ?>">
+                            <div class="form-text">Choose the accent color that sits behind the hero content.</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Background Intensity</label>
+                            <input type="range" class="form-range hero-opacity-input" name="hero_background_opacity" id="hero_background_opacity_<?php echo $topic['id']; ?>" min="0" max="100" value="<?php echo $currentBackgroundOpacity; ?>" data-target="hero_background_opacity_value_<?php echo $topic['id']; ?>">
+                            <div class="form-text">Strength: <span id="hero_background_opacity_value_<?php echo $topic['id']; ?>"><?php echo $currentBackgroundOpacity; ?>%</span></div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Hero Text Color</label>
+                            <input type="color" class="form-control form-control-color w-100" name="hero_text_color" value="<?php echo htmlspecialchars($currentTextColor); ?>">
+                            <div class="form-text">Controls the color of the hero title and subtitle.</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">Display Order</label>
                             <input type="number" class="form-control" name="display_order" value="<?php echo (int)$topic['display_order']; ?>" required>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-3 mb-3 d-flex align-items-end">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="is_tool" id="is_tool_<?php echo $topic['id']; ?>" <?php echo $topic['is_tool'] ? 'checked' : ''; ?>>
@@ -243,6 +330,20 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
     const mediaFiles = <?php echo json_encode($media_files); ?>;
+
+    document.querySelectorAll('.hero-opacity-input').forEach((range) => {
+        const targetId = range.getAttribute('data-target');
+        const displayEl = targetId ? document.getElementById(targetId) : null;
+
+        const updateValue = () => {
+            if (displayEl) {
+                displayEl.textContent = `${range.value}%`;
+            }
+        };
+
+        range.addEventListener('input', updateValue);
+        updateValue();
+    });
 </script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

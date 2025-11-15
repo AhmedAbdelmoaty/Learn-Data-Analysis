@@ -18,6 +18,63 @@ if (!$topic) {
     exit;
 }
 
+$hero_style = '';
+
+if (!function_exists('lda_hex_to_rgba')) {
+    function lda_hex_to_rgba(?string $hex, $opacity = 100): ?string
+    {
+        if (!$hex) {
+            return null;
+        }
+
+        $hex = ltrim($hex, '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+
+        if (strlen($hex) !== 6) {
+            return null;
+        }
+
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+        $opacity = max(0, min(100, (int)$opacity)) / 100;
+
+        return sprintf('rgba(%d, %d, %d, %.2f)', $r, $g, $b, $opacity);
+    }
+}
+
+if (!function_exists('lda_build_topic_hero_style')) {
+    function lda_build_topic_hero_style(array $topic): string
+    {
+        $styles = [];
+
+        $backgroundColor = $topic['hero_background_color'] ?? '';
+        $backgroundOpacity = $topic['hero_background_opacity'] ?? null;
+
+        if (is_string($backgroundColor) && preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $backgroundColor)) {
+            $rgba = lda_hex_to_rgba($backgroundColor, $backgroundOpacity ?? 85);
+            if ($rgba) {
+                $styles[] = '--hero-background-color: ' . $rgba;
+            }
+            $styles[] = '--hero-background-solid: ' . strtolower($backgroundColor);
+        }
+
+        $textColor = $topic['hero_text_color'] ?? '';
+        if (is_string($textColor) && preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $textColor)) {
+            $color = strtolower($textColor);
+            $styles[] = '--hero-title-color: ' . $color;
+            $styles[] = '--hero-subtitle-color: ' . $color;
+            $styles[] = '--hero-body-color: ' . $color;
+        }
+
+        return $styles ? htmlspecialchars(implode('; ', $styles), ENT_QUOTES, 'UTF-8') : '';
+    }
+}
+
+$hero_style = lda_build_topic_hero_style($topic);
+
 $page_title = $topic['title_' . $lang] . ' - Learn Data Analysis';
 
 // Get content items for this topic
@@ -32,7 +89,7 @@ $image_column_classes = $is_rtl ? 'order-lg-1' : 'order-lg-2';
 ?>
 
 <!-- Topic Hero -->
-<section class="py-5 hero-split-section">
+<section class="py-5 hero-split-section"<?php echo $hero_style ? ' style="' . $hero_style . '"' : ''; ?>>
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0 <?php echo $text_column_classes; ?> text-center">
