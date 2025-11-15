@@ -39,9 +39,9 @@ $is_rtl = ($lang === 'ar');
             </div>
             <?php if ($img): ?>
                 <div class="col-lg-6">
-                    <img src="<?php echo htmlspecialchars($img); ?>" 
-                         alt="<?php echo htmlspecialchars($alt ?: $hero['title_' . $lang]); ?>" 
-                         class="img-fluid" 
+                    <img src="<?php echo htmlspecialchars($img); ?>"
+                         alt="<?php echo htmlspecialchars($alt ?: $hero['title_' . $lang]); ?>"
+                         class="img-fluid section-image-frame"
                          style="object-fit: contain; max-height: 420px; width: 100%;">
                 </div>
             <?php endif; ?>
