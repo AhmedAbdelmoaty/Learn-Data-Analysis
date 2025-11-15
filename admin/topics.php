@@ -5,19 +5,77 @@ require_once __DIR__ . '/includes/header.php';
 $success = '';
 $error = '';
 
+function sanitizeColorInput(?string $value): ?string {
+    if ($value === null) {
+        return null;
+    }
+
+    $value = trim($value);
+
+    if ($value === '') {
+        return null;
+    }
+
+    if (preg_match('/^#([0-9a-fA-F]{6})$/', $value)) {
+        return strtoupper($value);
+    }
+
+    return null;
+}
+
+function normalizeOpacityValue($value, int $default = 90): int {
+    if (!is_numeric($value)) {
+        return $default;
+    }
+
+    $intVal = (int)$value;
+
+    if ($intVal < 0) {
+        return 0;
+    }
+
+    if ($intVal > 100) {
+        return 100;
+    }
+
+    return $intVal;
+}
+
+function getDefaultTopicOverlayConfig(?string $slug): array {
+    $defaults = [
+        'excel' => ['start' => '#2E7D32', 'end' => '#1B5E20', 'start_opacity' => 90, 'end_opacity' => 90],
+        'power-bi' => ['start' => '#FFC400', 'end' => '#CC7800', 'start_opacity' => 92, 'end_opacity' => 90],
+        'sql' => ['start' => '#3F51B5', 'end' => '#21358C', 'start_opacity' => 90, 'end_opacity' => 90],
+        'statistics' => ['start' => '#009688', 'end' => '#00695C', 'start_opacity' => 90, 'end_opacity' => 90],
+    ];
+
+    return $defaults[$slug] ?? ['start' => '#A8324E', 'end' => '#6C1E35', 'start_opacity' => 90, 'end_opacity' => 90];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'add') {
         try {
-            $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, display_order, is_tool) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $slug = trim($_POST['slug'] ?? '');
+            $overlayDefaults = getDefaultTopicOverlayConfig($slug);
+            $colorStart = sanitizeColorInput($_POST['hero_overlay_color_start'] ?? null) ?? $overlayDefaults['start'];
+            $colorEnd = sanitizeColorInput($_POST['hero_overlay_color_end'] ?? null) ?? $overlayDefaults['end'];
+            $opacityStart = normalizeOpacityValue($_POST['hero_overlay_opacity_start'] ?? $overlayDefaults['start_opacity'], $overlayDefaults['start_opacity']);
+            $opacityEnd = normalizeOpacityValue($_POST['hero_overlay_opacity_end'] ?? $overlayDefaults['end_opacity'], $overlayDefaults['end_opacity']);
+
+            $stmt = $pdo->prepare("INSERT INTO topics (slug, title_en, title_ar, intro_en, intro_ar, hero_image, hero_overlay_color_start, hero_overlay_color_end, hero_overlay_opacity_start, hero_overlay_opacity_end, display_order, is_tool) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([
-                trim($_POST['slug'] ?? ''),
+                $slug,
                 trim($_POST['title_en'] ?? ''),
                 trim($_POST['title_ar'] ?? ''),
                 trim($_POST['intro_en'] ?? ''),
                 trim($_POST['intro_ar'] ?? ''),
                 trim($_POST['hero_image'] ?? ''),
+                $colorStart,
+                $colorEnd,
+                $opacityStart,
+                $opacityEnd,
                 (int)($_POST['display_order'] ?? 0),
                 isset($_POST['is_tool']) ? 1 : 0,
             ]);
@@ -27,14 +85,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'update') {
         try {
-            $stmt = $pdo->prepare("UPDATE topics SET slug = ?, title_en = ?, title_ar = ?, intro_en = ?, intro_ar = ?, hero_image = ?, display_order = ?, is_tool = ? WHERE id = ?");
+            $slug = trim($_POST['slug'] ?? '');
+            $overlayDefaults = getDefaultTopicOverlayConfig($slug);
+            $colorStart = sanitizeColorInput($_POST['hero_overlay_color_start'] ?? null) ?? $overlayDefaults['start'];
+            $colorEnd = sanitizeColorInput($_POST['hero_overlay_color_end'] ?? null) ?? $overlayDefaults['end'];
+            $opacityStart = normalizeOpacityValue($_POST['hero_overlay_opacity_start'] ?? $overlayDefaults['start_opacity'], $overlayDefaults['start_opacity']);
+            $opacityEnd = normalizeOpacityValue($_POST['hero_overlay_opacity_end'] ?? $overlayDefaults['end_opacity'], $overlayDefaults['end_opacity']);
+
+            $stmt = $pdo->prepare("UPDATE topics SET slug = ?, title_en = ?, title_ar = ?, intro_en = ?, intro_ar = ?, hero_image = ?, hero_overlay_color_start = ?, hero_overlay_color_end = ?, hero_overlay_opacity_start = ?, hero_overlay_opacity_end = ?, display_order = ?, is_tool = ? WHERE id = ?");
             $stmt->execute([
-                trim($_POST['slug'] ?? ''),
+                $slug,
                 trim($_POST['title_en'] ?? ''),
                 trim($_POST['title_ar'] ?? ''),
                 trim($_POST['intro_en'] ?? ''),
                 trim($_POST['intro_ar'] ?? ''),
                 trim($_POST['hero_image'] ?? ''),
+                $colorStart,
+                $colorEnd,
+                $opacityStart,
+                $opacityEnd,
                 (int)($_POST['display_order'] ?? 0),
                 isset($_POST['is_tool']) ? 1 : 0,
                 (int)($_POST['id'] ?? 0),
@@ -145,6 +214,28 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </div>
+                <?php $newTopicOverlayDefaults = getDefaultTopicOverlayConfig(null); ?>
+                <div class="row align-items-end">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Overlay Color (Top)</label>
+                        <input type="color" class="form-control form-control-color w-100" name="hero_overlay_color_start" value="<?php echo htmlspecialchars($newTopicOverlayDefaults['start']); ?>">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Overlay Opacity (Top)</label>
+                        <input type="range" class="form-range overlay-opacity-input" min="0" max="100" name="hero_overlay_opacity_start" value="<?php echo (int)$newTopicOverlayDefaults['start_opacity']; ?>" data-target="add_overlay_opacity_start_value">
+                        <div class="form-text">Opacity: <span id="add_overlay_opacity_start_value"></span></div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Overlay Color (Bottom)</label>
+                        <input type="color" class="form-control form-control-color w-100" name="hero_overlay_color_end" value="<?php echo htmlspecialchars($newTopicOverlayDefaults['end']); ?>">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Overlay Opacity (Bottom)</label>
+                        <input type="range" class="form-range overlay-opacity-input" min="0" max="100" name="hero_overlay_opacity_end" value="<?php echo (int)$newTopicOverlayDefaults['end_opacity']; ?>" data-target="add_overlay_opacity_end_value">
+                        <div class="form-text">Opacity: <span id="add_overlay_opacity_end_value"></span></div>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Create Topic
                 </button>
@@ -205,6 +296,13 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
 
+                    <?php
+                        $overlayDefaults = getDefaultTopicOverlayConfig($topic['slug']);
+                        $colorStartValue = $topic['hero_overlay_color_start'] ?: $overlayDefaults['start'];
+                        $colorEndValue = $topic['hero_overlay_color_end'] ?: $overlayDefaults['end'];
+                        $opacityStartValue = isset($topic['hero_overlay_opacity_start']) ? (int)$topic['hero_overlay_opacity_start'] : (int)$overlayDefaults['start_opacity'];
+                        $opacityEndValue = isset($topic['hero_overlay_opacity_end']) ? (int)$topic['hero_overlay_opacity_end'] : (int)$overlayDefaults['end_opacity'];
+                    ?>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Hero Image URL</label>
@@ -232,6 +330,27 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
 
+                    <div class="row align-items-end">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Overlay Color (Top)</label>
+                            <input type="color" class="form-control form-control-color w-100" name="hero_overlay_color_start" value="<?php echo htmlspecialchars($colorStartValue); ?>">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Overlay Opacity (Top)</label>
+                            <input type="range" class="form-range overlay-opacity-input" min="0" max="100" name="hero_overlay_opacity_start" value="<?php echo $opacityStartValue; ?>" data-target="overlay_opacity_start_<?php echo $topic['id']; ?>">
+                            <div class="form-text">Opacity: <span id="overlay_opacity_start_<?php echo $topic['id']; ?>"></span></div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Overlay Color (Bottom)</label>
+                            <input type="color" class="form-control form-control-color w-100" name="hero_overlay_color_end" value="<?php echo htmlspecialchars($colorEndValue); ?>">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Overlay Opacity (Bottom)</label>
+                            <input type="range" class="form-range overlay-opacity-input" min="0" max="100" name="hero_overlay_opacity_end" value="<?php echo $opacityEndValue; ?>" data-target="overlay_opacity_end_<?php echo $topic['id']; ?>">
+                            <div class="form-text">Opacity: <span id="overlay_opacity_end_<?php echo $topic['id']; ?>"></span></div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Update Topic
                     </button>
@@ -243,6 +362,25 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
     const mediaFiles = <?php echo json_encode($media_files); ?>;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const updateOpacityOutput = (input) => {
+            const targetId = input.dataset.target;
+            if (!targetId) {
+                return;
+            }
+
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.textContent = `${input.value}%`;
+            }
+        };
+
+        document.querySelectorAll('.overlay-opacity-input').forEach((input) => {
+            updateOpacityOutput(input);
+            input.addEventListener('input', () => updateOpacityOutput(input));
+        });
+    });
 </script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
