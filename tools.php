@@ -44,7 +44,7 @@ $tool_topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="hero-image-wrapper">
                         <img src="<?php echo htmlspecialchars($hero_image); ?>"
                              alt="<?php echo htmlspecialchars($hero_alt); ?>"
-                             class="img-fluid rounded shadow">
+                             class="img-fluid section-image-frame">
                     </div>
                 </div>
             <?php endif; ?>

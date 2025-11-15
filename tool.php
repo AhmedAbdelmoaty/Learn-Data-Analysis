@@ -47,7 +47,7 @@ $image_column_classes = $is_rtl ? 'order-lg-1' : 'order-lg-2';
                     <div class="hero-image-wrapper">
                         <img src="<?php echo htmlspecialchars($hero_image); ?>"
                              alt="<?php echo htmlspecialchars($hero_alt); ?>"
-                             class="img-fluid rounded shadow">
+                             class="img-fluid section-image-frame">
                     </div>
                 </div>
             <?php endif; ?>
