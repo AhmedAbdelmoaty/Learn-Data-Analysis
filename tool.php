@@ -2,6 +2,7 @@
 require_once 'includes/db.php';
 
 $lang = isset($_GET['lang']) && $_GET['lang'] === 'ar' ? 'ar' : 'en';
+$is_rtl = ($lang === 'ar');
 $slug = $_GET['slug'] ?? '';
 $tools_url = 'tools.php' . ($lang === 'ar' ? '?lang=ar' : '');
 
@@ -25,16 +26,31 @@ $stmt = $pdo->prepare("SELECT * FROM content_items WHERE topic_id = ? AND status
 $stmt->execute([$topic['id']]);
 $content_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 require_once 'includes/site_header.php';
-$heroGradient = getTopicHeroGradient($topic['slug']);
+
+$hero_image = $topic['hero_image'] ?? '';
+$hero_alt = $topic['title_' . $lang] ?? ($lang === 'en' ? 'Tool hero image' : 'صورة الأداة');
+$text_column_classes = $is_rtl ? 'order-lg-2 text-lg-end' : 'order-lg-1 text-lg-start';
+$image_column_classes = $is_rtl ? 'order-lg-1' : 'order-lg-2';
 ?>
 
-<section class="topic-hero py-5" style="background: <?php echo $heroGradient; ?>, url('<?php echo htmlspecialchars($topic['hero_image'] ?: 'https://via.placeholder.com/1200x400'); ?>'); background-size: cover; background-position: center;">
+<section class="py-5 hero-split-section">
     <div class="container">
-        <div class="row justify-content-center text-center text-white">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-4"><?php echo htmlspecialchars($topic['title_' . $lang]); ?></h1>
-                <p class="lead fs-4"><?php echo htmlspecialchars($topic['intro_' . $lang]); ?></p>
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0 <?php echo $text_column_classes; ?> text-center">
+                <h1 class="display-4 fw-bold mb-4 hero-title"><?php echo htmlspecialchars($topic['title_' . $lang]); ?></h1>
+                <?php if (!empty($topic['intro_' . $lang])): ?>
+                    <p class="lead mb-0 hero-subtitle"><?php echo nl2br(htmlspecialchars($topic['intro_' . $lang])); ?></p>
+                <?php endif; ?>
             </div>
+            <?php if (!empty($hero_image)): ?>
+                <div class="col-lg-6 <?php echo $image_column_classes; ?> text-center">
+                    <div class="hero-image-wrapper">
+                        <img src="<?php echo htmlspecialchars($hero_image); ?>"
+                             alt="<?php echo htmlspecialchars($hero_alt); ?>"
+                             class="img-fluid">
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

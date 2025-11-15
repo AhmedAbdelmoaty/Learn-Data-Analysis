@@ -2,6 +2,7 @@
 require_once 'includes/db.php';
 
 $lang = isset($_GET['lang']) && $_GET['lang'] === 'ar' ? 'ar' : 'en';
+$is_rtl = ($lang === 'ar');
 $page_title = ($lang === 'en' ? 'Tools' : 'الأدوات') . ' - Learn Data Analysis';
 
 require_once 'includes/site_header.php';
@@ -23,16 +24,30 @@ $stmt->execute();
 $tool_topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<?php if ($hero_section && (!isset($hero_section['is_enabled']) || $hero_section['is_enabled'])): ?>
-<section class="topic-hero py-5" style="background-image: linear-gradient(rgba(168, 50, 78, 0.9), rgba(108, 30, 53, 0.9)), url('<?php echo htmlspecialchars($hero_section['image'] ?: ($settings['hero_background'] ?? 'https://via.placeholder.com/1920x600')); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<?php if ($hero_section && (!isset($hero_section['is_enabled']) || $hero_section['is_enabled'])):
+    $hero_image = $hero_section['image'] ?? '';
+    $hero_alt = $hero_section['title_' . $lang] ?? ($lang === 'en' ? 'Tools overview' : 'نظرة عامة على الأدوات');
+    $text_column_classes = $is_rtl ? 'order-lg-2 text-lg-end' : 'order-lg-1 text-lg-start';
+    $image_column_classes = $is_rtl ? 'order-lg-1' : 'order-lg-2';
+?>
+<section class="py-5 hero-split-section">
     <div class="container">
-        <div class="row justify-content-center text-center text-white">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-4"><?php echo htmlspecialchars($hero_section['title_' . $lang] ?? ($lang === 'en' ? 'Explore Our Tools' : 'استكشف الأدوات المتاحة')); ?></h1>
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0 <?php echo $text_column_classes; ?> text-center">
+                <h1 class="display-4 fw-bold mb-4 hero-title"><?php echo htmlspecialchars($hero_section['title_' . $lang] ?? ($lang === 'en' ? 'Explore Our Tools' : 'استكشف الأدوات المتاحة')); ?></h1>
                 <?php if (!empty($hero_section['subtitle_' . $lang])): ?>
-                    <p class="lead fs-4"><?php echo nl2br(htmlspecialchars($hero_section['subtitle_' . $lang])); ?></p>
+                    <p class="lead mb-0 hero-subtitle"><?php echo nl2br(htmlspecialchars($hero_section['subtitle_' . $lang])); ?></p>
                 <?php endif; ?>
             </div>
+            <?php if (!empty($hero_image)): ?>
+                <div class="col-lg-6 <?php echo $image_column_classes; ?> text-center">
+                    <div class="hero-image-wrapper">
+                        <img src="<?php echo htmlspecialchars($hero_image); ?>"
+                             alt="<?php echo htmlspecialchars($hero_alt); ?>"
+                             class="img-fluid">
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
