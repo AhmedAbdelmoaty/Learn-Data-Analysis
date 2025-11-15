@@ -32,7 +32,7 @@ $is_rtl = ($lang === 'ar');
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <h1 class="display-4 fw-bold mb-4" style="color: #a8324e;"><?php echo htmlspecialchars($hero['title_' . $lang]); ?></h1>
+                <h1 class="display-4 fw-bold mb-4 text-primary"><?php echo htmlspecialchars($hero['title_' . $lang]); ?></h1>
                 <?php if ($hero['subtitle_' . $lang]): ?>
                     <p class="lead mb-4 text-muted"><?php echo htmlspecialchars($hero['subtitle_' . $lang]); ?></p>
                 <?php endif; ?>
@@ -54,7 +54,7 @@ $is_rtl = ($lang === 'ar');
 <?php if (count($top_questions) > 0): ?>
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;"><?php echo t('top_questions', $lang); ?></h2>
+        <h2 class="text-center mb-5 fw-bold text-primary"><?php echo t('top_questions', $lang); ?></h2>
         <div class="row g-4">
             <?php foreach ($top_questions as $index => $q): ?>
                 <div class="col-md-6">
@@ -62,13 +62,13 @@ $is_rtl = ($lang === 'ar');
                         <div class="card-body p-4">
                             <div class="d-flex align-items-start mb-3">
                                 <div class="flex-shrink-0 me-3">
-                                    <div class="d-flex align-items-center justify-content-center" 
-                                         style="width: 40px; height: 40px; background-color: rgba(168, 50, 78, 0.1); border-radius: 50%;">
-                                        <i class="fas fa-question" style="color: #a8324e;"></i>
+                                    <div class="d-flex align-items-center justify-content-center"
+                                         style="width: 40px; height: 40px; background-color: rgba(var(--primary-color-rgb), 0.1); border-radius: 50%;">
+                                        <i class="fas fa-question text-primary"></i>
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fw-bold mb-3" style="color: #a8324e; text-align: <?php echo $is_rtl ? 'right' : 'left'; ?>;">
+                                    <h5 class="fw-bold mb-3 text-primary" style="text-align: <?php echo $is_rtl ? 'right' : 'left'; ?>;">
                                         <?php echo htmlspecialchars($q['question_' . $lang]); ?>
                                     </h5>
                                     <p class="mb-0 text-muted" style="line-height: 1.7; text-align: <?php echo $is_rtl ? 'right' : 'left'; ?>;">
@@ -89,7 +89,7 @@ $is_rtl = ($lang === 'ar');
 <?php if (count($all_questions) > 0): ?>
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;"><?php echo t('all_questions', $lang); ?></h2>
+        <h2 class="text-center mb-5 fw-bold text-primary"><?php echo t('all_questions', $lang); ?></h2>
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="accordion" id="allQuestionsAccordion">
@@ -137,21 +137,17 @@ $is_rtl = ($lang === 'ar');
 
 .top-question-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 .75rem 1.5rem rgba(168, 50, 78, 0.15) !important;
+    box-shadow: 0 .75rem 1.5rem rgba(var(--primary-color-rgb), 0.15) !important;
 }
 
 /* All Questions Accordion */
 .accordion-button:not(.collapsed) {
-    background-color: #a8324e !important;
-    color: white !important;
-}
-
-.accordion-button:not(.collapsed)::after {
-    filter: brightness(0) invert(1);
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
 }
 
 .accordion-button:hover {
-    background-color: #f8f9fa;
+    background-color: rgba(var(--primary-color-rgb), 0.1);
 }
 
 .accordion-button:focus {

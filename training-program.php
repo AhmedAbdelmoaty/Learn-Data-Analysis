@@ -46,7 +46,7 @@ $faqs = $stmt->fetchAll();
     <div class="container">
          <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <h1 class="display-4 fw-bold mb-4" style="color: #a8324e;"><?php echo htmlspecialchars($hero['title_' . $lang]); ?></h1>
+                <h1 class="display-4 fw-bold mb-4 text-primary"><?php echo htmlspecialchars($hero['title_' . $lang]); ?></h1>
                 <?php if ($hero['subtitle_' . $lang]): ?>
                     <p class="lead mb-4 text-muted"><?php echo htmlspecialchars($hero['subtitle_' . $lang]); ?></p>
                 <?php endif; ?>
@@ -73,7 +73,7 @@ $faqs = $stmt->fetchAll();
 <?php if (count($learn_items) > 0): ?>
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;"><?php echo t('what_you_learn', $lang); ?></h2>
+        <h2 class="text-center mb-5 fw-bold text-primary"><?php echo t('what_you_learn', $lang); ?></h2>
         <div class="row g-4">
             <?php foreach ($learn_items as $item): ?>
                 <div class="col-md-6 col-lg-3">
@@ -86,7 +86,7 @@ $faqs = $stmt->fetchAll();
                             </div>
                         <?php else: ?>
                             <div class="mb-3">
-                                <i class="fas fa-check-circle fa-3x" style="color: #a8324e;"></i>
+                                <i class="fas fa-check-circle fa-3x text-primary"></i>
                             </div>
                         <?php endif; ?>
                         <h5 class="fw-bold mb-3"><?php echo htmlspecialchars($item['title_' . $lang]); ?></h5>
@@ -106,7 +106,7 @@ $faqs = $stmt->fetchAll();
 <?php if (count($bonuses) > 0): ?>
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;"><?php echo t('value_bonuses', $lang); ?></h2>
+        <h2 class="text-center mb-5 fw-bold text-primary"><?php echo t('value_bonuses', $lang); ?></h2>
         <div class="row g-4">
             <?php foreach ($bonuses as $index => $bonus): ?>
                 <div class="col-lg-6">
@@ -123,7 +123,7 @@ $faqs = $stmt->fetchAll();
                                 <?php else: ?>
                                     <div class="col-12">
                                 <?php endif; ?>
-                                        <h5 class="fw-bold mb-2" style="color: #a8324e;">
+                                        <h5 class="fw-bold mb-2 text-primary">
                                             <?php echo htmlspecialchars($bonus['title_' . $lang]); ?>
                                         </h5>
                                         <?php if ($bonus['subtitle_' . $lang]): ?>
@@ -147,7 +147,7 @@ $faqs = $stmt->fetchAll();
 <?php if (count($outcomes) > 0): ?>
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;"><?php echo t('student_outcomes', $lang); ?></h2>
+        <h2 class="text-center mb-5 fw-bold text-primary"><?php echo t('student_outcomes', $lang); ?></h2>
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="row g-4">
@@ -162,7 +162,7 @@ $faqs = $stmt->fetchAll();
                                     </div>
                                 <?php else: ?>
                                     <div class="flex-shrink-0 me-3">
-                                        <i class="fas fa-star fa-2x" style="color: #a8324e;"></i>
+                                        <i class="fas fa-star fa-2x text-primary"></i>
                                     </div>
                                 <?php endif; ?>
                                 <div>
@@ -185,7 +185,7 @@ $faqs = $stmt->fetchAll();
 <?php if ($journey_video || count($journey_cards) > 0): ?>
 <section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;">
+        <h2 class="text-center mb-5 fw-bold text-primary">
             <?php echo $lang === 'en' ? 'Hear From Our Graduates' : 'استمع إلى خريجينا'; ?>
         </h2>
         <div class="row align-items-center g-4">
@@ -238,10 +238,10 @@ $faqs = $stmt->fetchAll();
                                             </div>
                                         <?php else: ?>
                                             <div class="mb-2 text-center">
-                                                <i class="fas fa-user-graduate fa-2x" style="color: #a8324e;"></i>
+                                                <i class="fas fa-user-graduate fa-2x text-primary"></i>
                                             </div>
                                         <?php endif; ?>
-                                        <h6 class="fw-bold text-center mb-2" style="color: #a8324e;">
+                                        <h6 class="fw-bold text-center mb-2 text-primary">
                                             <?php echo htmlspecialchars($card['name_' . $lang]); ?>
                                         </h6>
                                         <p class="text-muted small mb-0 text-center">
@@ -263,7 +263,7 @@ $faqs = $stmt->fetchAll();
 <?php if (count($faqs) > 0): ?>
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #a8324e;"><?php echo t('faq', $lang); ?></h2>
+        <h2 class="text-center mb-5 fw-bold text-primary"><?php echo t('faq', $lang); ?></h2>
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="accordion" id="trainingFaqAccordion">

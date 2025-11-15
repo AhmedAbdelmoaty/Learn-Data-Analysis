@@ -84,6 +84,28 @@ function t($key, $lang, $settings = []) {
     return $translations[$lang][$key] ?? $key;
 }
 
+function loadSiteSettings(PDO $pdo): array {
+    $stmt = $pdo->query("SELECT setting_key, setting_value FROM site_settings");
+    $settings = [];
+
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $settings[$row['setting_key']] = $row['setting_value'];
+    }
+
+    return $settings;
+}
+
+function loadFooterSettings(PDO $pdo): array {
+    $stmt = $pdo->query("SELECT setting_key, setting_value FROM footer_settings");
+    $settings = [];
+
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $settings[$row['setting_key']] = $row['setting_value'];
+    }
+
+    return $settings;
+}
+
 // Get current page name from URL
 function getCurrentPage() {
     $page = basename($_SERVER['PHP_SELF'], '.php');
@@ -185,6 +207,76 @@ function rgbaFromHex(string $hexColor, int $opacityPercent): string {
     $alphaFormatted = rtrim(rtrim(number_format($alpha, 2, '.', ''), '0'), '.');
 
     return sprintf('rgba(%d, %d, %d, %s)', $rgb['r'], $rgb['g'], $rgb['b'], $alphaFormatted === '' ? '0' : $alphaFormatted);
+}
+
+function sanitizeFontStack(?string $value, string $fallback): string {
+    if (!is_string($value)) {
+        return $fallback;
+    }
+
+    $value = trim($value);
+    if ($value === '') {
+        return $fallback;
+    }
+
+    $value = preg_replace('/[^\\w\s,\-"\'\.]/u', '', $value);
+    $value = trim($value);
+
+    return $value === '' ? $fallback : $value;
+}
+
+function getThemeConfiguration(array $settings): array {
+    $defaults = [
+        'primary_color' => '#A8324E',
+        'secondary_color' => '#6C1E35',
+        'primary_opacity' => 90,
+        'text_dark' => '#333333',
+        'text_light' => '#666666',
+        'font_family_en' => "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        'font_family_ar' => "'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        'font_link_en' => '',
+        'font_link_ar' => '',
+    ];
+
+    $theme = [];
+
+    $theme['primary_color'] = normalizeHexColor($settings['primary_color'] ?? null, $defaults['primary_color']);
+    $theme['secondary_color'] = normalizeHexColor($settings['secondary_color'] ?? null, $defaults['secondary_color']);
+    $theme['text_dark'] = normalizeHexColor($settings['text_dark'] ?? null, $defaults['text_dark']);
+    $theme['text_light'] = normalizeHexColor($settings['text_light'] ?? null, $defaults['text_light']);
+    $theme['primary_opacity'] = clampOpacityValue($settings['primary_opacity'] ?? $defaults['primary_opacity'], $defaults['primary_opacity']);
+    $theme['font_family_en'] = sanitizeFontStack($settings['font_family_en'] ?? null, $defaults['font_family_en']);
+    $theme['font_family_ar'] = sanitizeFontStack($settings['font_family_ar'] ?? null, $defaults['font_family_ar']);
+    $theme['font_link_en'] = filter_var($settings['font_link_en'] ?? '', FILTER_VALIDATE_URL) ?: '';
+    $theme['font_link_ar'] = filter_var($settings['font_link_ar'] ?? '', FILTER_VALIDATE_URL) ?: '';
+
+    return $theme;
+}
+
+function buildThemeCssVariables(array $themeConfig): array {
+    $primaryRgb = hexColorToRgb($themeConfig['primary_color']);
+    $secondaryRgb = hexColorToRgb($themeConfig['secondary_color']);
+
+    $primaryOpacityDecimal = max(0, min(100, $themeConfig['primary_opacity'])) / 100;
+    $opacityFormatted = rtrim(rtrim(number_format($primaryOpacityDecimal, 2, '.', ''), '0'), '.');
+
+    $gradientStart = rgbaFromHex($themeConfig['primary_color'], $themeConfig['primary_opacity']);
+    $gradientEnd = rgbaFromHex($themeConfig['secondary_color'], $themeConfig['primary_opacity']);
+
+    return [
+        '--primary-color' => $themeConfig['primary_color'],
+        '--secondary-color' => $themeConfig['secondary_color'],
+        '--text-dark' => $themeConfig['text_dark'],
+        '--text-light' => $themeConfig['text_light'],
+        '--primary-color-rgb' => sprintf('%d, %d, %d', $primaryRgb['r'], $primaryRgb['g'], $primaryRgb['b']),
+        '--secondary-color-rgb' => sprintf('%d, %d, %d', $secondaryRgb['r'], $secondaryRgb['g'], $secondaryRgb['b']),
+        '--primary-opacity' => $opacityFormatted === '' ? '0' : $opacityFormatted,
+        '--primary-gradient-start' => $gradientStart,
+        '--primary-gradient-end' => $gradientEnd,
+        '--primary-hero-gradient' => 'linear-gradient(' . $gradientStart . ', ' . $gradientEnd . ')',
+        '--font-family-en' => $themeConfig['font_family_en'],
+        '--font-family-ar' => $themeConfig['font_family_ar'],
+    ];
 }
 
 function getTopicHeroGradient(array $topic): string {

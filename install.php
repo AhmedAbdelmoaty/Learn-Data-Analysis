@@ -203,10 +203,18 @@ try {
         ['site_name_en', 'Professional Training Institute'],
         ['site_name_ar', 'معهد التدريب المهني'],
         ['logo', 'https://via.placeholder.com/150x50?text=LOGO'],
-        ['primary_color', '#a8324e'],
+        ['primary_color', '#A8324E'],
+        ['secondary_color', '#6C1E35'],
+        ['primary_opacity', '90'],
+        ['text_dark', '#333333'],
+        ['text_light', '#666666'],
+        ['font_family_en', "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"],
+        ['font_family_ar', "'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"],
+        ['font_link_en', ''],
+        ['font_link_ar', ''],
         ['contact_email', 'info@institute.com'],
-      
-        ['admin_email', 'info@institute.com'],  ['contact_phone', '+971 50 418 0021'],
+        ['admin_email', 'info@institute.com'],
+        ['contact_phone', '+971 50 418 0021'],
         ['contact_address_en', 'E311 Road, New Industrial Area, Sharjah, UAE'],
         ['contact_address_ar', 'طريق E311، المنطقة الصناعية الجديدة، الشارقة، الإمارات العربية المتحدة'],
         ['facebook_url', 'https://facebook.com'],
@@ -220,7 +228,7 @@ try {
         $stmt->execute($setting);
     }
 
-    fi    $footerDefaults = [
+    $footerDefaults = [
         ['footer_about_en', 'IMP (Institute of Management Professionals) was established in 2014 to be a leading training and development house in the MENA region.'],
         ['footer_about_ar', 'تأسس معهد إدارة المحترفين عام 2014 ليكون رائدًا في التدريب والتطوير بمنطقة الشرق الأوسط وشمال أفريقيا.'],
         ['contact_title_en', 'Get In Touch'],
@@ -243,7 +251,9 @@ try {
     $footerStmt = $pdo->prepare("INSERT INTO footer_settings (setting_key, setting_value) VALUES (?, ?)");
     foreach ($footerDefaults as $footerSetting) {
         $footerStmt->execute($footerSetting);
-    }le_put_contents('.installed', date('Y-m-d H:i:s'));
+    }
+
+    file_put_contents('.installed', date('Y-m-d H:i:s'));
 
     echo "<!DOCTYPE html>
 <html>

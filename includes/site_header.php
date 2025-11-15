@@ -3,21 +3,10 @@
 // Assumes $lang and $pdo are already set by the calling page
 require_once __DIR__ . '/functions.php';
 
-// Get settings
-$stmt = $pdo->query("SELECT * FROM site_settings");
-$settings_rows = $stmt->fetchAll();
-$settings = [];
-foreach ($settings_rows as $row) {
-    $settings[$row['setting_key']] = $row['setting_value'];
-}
-
-// Get footer settings
-$stmt = $pdo->query("SELECT * FROM footer_settings");
-$footer_rows = $stmt->fetchAll();
-$footer_settings = [];
-foreach ($footer_rows as $row) {
-    $footer_settings[$row['setting_key']] = $row['setting_value'];
-}
+$settings = loadSiteSettings($pdo);
+$themeConfig = getThemeConfiguration($settings);
+$themeCssVariables = buildThemeCssVariables($themeConfig);
+$footer_settings = loadFooterSettings($pdo);
 
 // Get tools for navigation
 $stmt = $pdo->query("SELECT slug, title_en, title_ar FROM topics WHERE is_tool = true ORDER BY display_order, title_en");
@@ -33,10 +22,41 @@ $currentPage = getCurrentPage();
     <title><?php echo isset($page_title) ? $page_title : 'Learn Data Analysis'; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <?php
+    $fontLinks = [];
+    if (!empty($themeConfig['font_link_en'])) {
+        $fontLinks[] = $themeConfig['font_link_en'];
+    }
+    if (!empty($themeConfig['font_link_ar']) && $themeConfig['font_link_ar'] !== ($themeConfig['font_link_en'] ?? '')) {
+        $fontLinks[] = $themeConfig['font_link_ar'];
+    }
+    foreach ($fontLinks as $fontLink):
+    ?>
+        <link rel="stylesheet" href="<?php echo htmlspecialchars($fontLink); ?>">
+    <?php endforeach; ?>
     <link rel="stylesheet" href="assets/css/style.css">
     <?php if ($lang === 'ar'): ?>
         <link rel="stylesheet" href="assets/css/rtl.css">
     <?php endif; ?>
+    <style>
+        :root {
+            <?php foreach ($themeCssVariables as $variable => $value): ?>
+            <?php echo $variable; ?>: <?php echo $value; ?>;
+            <?php endforeach; ?>
+            --bs-primary: <?php echo $themeCssVariables['--primary-color']; ?>;
+            --bs-primary-rgb: <?php echo $themeCssVariables['--primary-color-rgb']; ?>;
+            --bs-link-color: var(--primary-color);
+            --bs-link-hover-color: var(--secondary-color);
+            --bs-body-font-family: var(--font-family-base, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+            --bs-body-color: var(--text-dark);
+        }
+        html[lang="en"] {
+            --font-family-base: var(--font-family-en);
+        }
+        html[lang="ar"] {
+            --font-family-base: var(--font-family-ar);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->

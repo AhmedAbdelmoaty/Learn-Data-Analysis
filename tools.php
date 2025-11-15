@@ -24,7 +24,7 @@ $tool_topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <?php if ($hero_section && (!isset($hero_section['is_enabled']) || $hero_section['is_enabled'])): ?>
-<section class="topic-hero py-5" style="background-image: linear-gradient(rgba(168, 50, 78, 0.9), rgba(108, 30, 53, 0.9)), url('<?php echo htmlspecialchars($hero_section['image'] ?: ($settings['hero_background'] ?? 'https://via.placeholder.com/1920x600')); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<section class="topic-hero py-5" style="background-image: var(--primary-hero-gradient), url('<?php echo htmlspecialchars($hero_section['image'] ?: ($settings['hero_background'] ?? 'https://via.placeholder.com/1920x600')); ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;">
     <div class="container">
         <div class="row justify-content-center text-center text-white">
             <div class="col-lg-8">

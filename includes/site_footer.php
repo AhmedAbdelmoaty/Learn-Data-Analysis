@@ -5,7 +5,7 @@ $footer_social_facebook  = $footer_settings['social_facebook_url'] ?? ($settings
 $footer_social_x         = $footer_settings['social_x_url'] ?? ($settings['twitter_url'] ?? '');
 ?>
 <!-- Footer -->
-<footer class="footer text-white py-5 mt-5" style="background: linear-gradient(180deg, #a8324e 0%, #8b2a42 100%);">
+<footer class="footer text-white py-5 mt-5" style="background: linear-gradient(180deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);">
     <div class="container">
         <div class="row">
             <!-- Column 1: About IMP -->
