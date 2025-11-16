@@ -204,8 +204,6 @@ try {
         ['site_name_ar', 'معهد التدريب المهني'],
         ['logo', 'https://via.placeholder.com/150x50?text=LOGO'],
         ['primary_color', '#A8324E'],
-        ['secondary_color', '#6C1E35'],
-        ['primary_opacity', '90'],
         ['text_dark', '#333333'],
         ['text_light', '#666666'],
         ['font_family_en', "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"],
