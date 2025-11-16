@@ -33,8 +33,9 @@ $themeCssVariables = buildThemeCssVariables($themeConfig);
         :root {
             --sidebar-width: 250px;
             --primary-color: <?php echo $themeCssVariables['--primary-color']; ?>;
-            --secondary-color: <?php echo $themeCssVariables['--secondary-color']; ?>;
             --primary-color-rgb: <?php echo $themeCssVariables['--primary-color-rgb']; ?>;
+            --primary-color-light: <?php echo $themeCssVariables['--primary-color-light']; ?>;
+            --primary-color-dark: <?php echo $themeCssVariables['--primary-color-dark']; ?>;
             --primary-gradient-start: <?php echo $themeCssVariables['--primary-gradient-start']; ?>;
             --primary-gradient-end: <?php echo $themeCssVariables['--primary-gradient-end']; ?>;
             --primary-hero-gradient: <?php echo $themeCssVariables['--primary-hero-gradient']; ?>;

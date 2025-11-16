@@ -14,14 +14,50 @@ foreach ($settings_rows as $row) {
 
 $themeDefaults = [
     'primary_color' => '#A8324E',
-    'secondary_color' => '#6C1E35',
-    'primary_opacity' => '90',
     'text_dark' => '#333333',
     'text_light' => '#666666',
     'font_family_en' => "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     'font_family_ar' => "'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     'font_link_en' => '',
     'font_link_ar' => '',
+];
+
+$fontOptionsEn = [
+    'segoe' => [
+        'label' => 'Segoe UI (Default)',
+        'stack' => "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
+    'poppins' => [
+        'label' => 'Poppins',
+        'stack' => "'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
+    'inter' => [
+        'label' => 'Inter',
+        'stack' => "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
+    'roboto' => [
+        'label' => 'Roboto',
+        'stack' => "'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
+];
+
+$fontOptionsAr = [
+    'tajawal' => [
+        'label' => 'Tajawal (Default)',
+        'stack' => "'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
+    'cairo' => [
+        'label' => 'Cairo',
+        'stack' => "'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
+    'ibm-plex' => [
+        'label' => 'IBM Plex Sans Arabic',
+        'stack' => "'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
+    'almarai' => [
+        'label' => 'Almarai',
+        'stack' => "'Almarai', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    ],
 ];
 
 if (!array_key_exists('admin_email', $settings)) {
@@ -43,12 +79,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         $fields['primary_color'] = normalizeHexColor($_POST['primary_color'] ?? null, $themeDefaults['primary_color']);
-        $fields['secondary_color'] = normalizeHexColor($_POST['secondary_color'] ?? null, $themeDefaults['secondary_color']);
         $fields['text_dark'] = normalizeHexColor($_POST['text_dark'] ?? null, $themeDefaults['text_dark']);
         $fields['text_light'] = normalizeHexColor($_POST['text_light'] ?? null, $themeDefaults['text_light']);
-        $fields['primary_opacity'] = (string)clampOpacityValue($_POST['primary_opacity'] ?? $themeDefaults['primary_opacity'], (int)$themeDefaults['primary_opacity']);
-        $fields['font_family_en'] = sanitizeFontStack($_POST['font_family_en'] ?? null, $themeDefaults['font_family_en']);
-        $fields['font_family_ar'] = sanitizeFontStack($_POST['font_family_ar'] ?? null, $themeDefaults['font_family_ar']);
+
+        $fontChoiceEn = $_POST['font_family_en_choice'] ?? 'custom';
+        if ($fontChoiceEn !== 'custom' && isset($fontOptionsEn[$fontChoiceEn])) {
+            $fields['font_family_en'] = $fontOptionsEn[$fontChoiceEn]['stack'];
+        } else {
+            $fields['font_family_en'] = sanitizeFontStack($_POST['font_family_en_custom'] ?? null, $themeDefaults['font_family_en']);
+        }
+
+        $fontChoiceAr = $_POST['font_family_ar_choice'] ?? 'custom';
+        if ($fontChoiceAr !== 'custom' && isset($fontOptionsAr[$fontChoiceAr])) {
+            $fields['font_family_ar'] = $fontOptionsAr[$fontChoiceAr]['stack'];
+        } else {
+            $fields['font_family_ar'] = sanitizeFontStack($_POST['font_family_ar_custom'] ?? null, $themeDefaults['font_family_ar']);
+        }
         $fields['font_link_en'] = filter_var(trim($_POST['font_link_en'] ?? ''), FILTER_VALIDATE_URL) ?: '';
         $fields['font_link_ar'] = filter_var(trim($_POST['font_link_ar'] ?? ''), FILTER_VALIDATE_URL) ?: '';
 
@@ -69,6 +115,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$selectedFontChoiceEn = 'custom';
+foreach ($fontOptionsEn as $key => $option) {
+    if (isset($settings['font_family_en']) && strcasecmp($settings['font_family_en'], $option['stack']) === 0) {
+        $selectedFontChoiceEn = $key;
+        break;
+    }
+}
+
+$selectedFontChoiceAr = 'custom';
+foreach ($fontOptionsAr as $key => $option) {
+    if (isset($settings['font_family_ar']) && strcasecmp($settings['font_family_ar'], $option['stack']) === 0) {
+        $selectedFontChoiceAr = $key;
+        break;
+    }
+}
+
+$fontFamilyEnCustomValue = $selectedFontChoiceEn === 'custom'
+    ? ($settings['font_family_en'] ?? $themeDefaults['font_family_en'])
+    : '';
+$fontFamilyArCustomValue = $selectedFontChoiceAr === 'custom'
+    ? ($settings['font_family_ar'] ?? $themeDefaults['font_family_ar'])
+    : '';
+
 $logoValue = $settings['logo'] ?? '';
 $logoPreview = '';
 if (!empty($logoValue)) {
@@ -79,6 +148,22 @@ if (!empty($logoValue)) {
     }
 }
 ?>
+
+<style>
+    .font-preview-card {
+        border: 1px dashed #dee2e6;
+        border-radius: 8px;
+        padding: 12px;
+        background: #f8f9fa;
+        min-height: 72px;
+    }
+    .font-preview-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+        display: block;
+    }
+</style>
 
 <div class="content-card">
     <?php if ($success): ?>
@@ -129,36 +214,51 @@ if (!empty($logoValue)) {
 
         <h5 class="mb-3 mt-4">Theme Colors</h5>
         <div class="row">
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Secondary Color</label>
-                <input type="color" class="form-control" name="secondary_color" value="<?php echo htmlspecialchars($settings['secondary_color'] ?? $themeDefaults['secondary_color']); ?>">
-            </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-6 mb-3">
                 <label class="form-label">Text Color (Dark)</label>
                 <input type="color" class="form-control" name="text_dark" value="<?php echo htmlspecialchars($settings['text_dark'] ?? $themeDefaults['text_dark']); ?>">
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-6 mb-3">
                 <label class="form-label">Text Color (Muted)</label>
                 <input type="color" class="form-control" name="text_light" value="<?php echo htmlspecialchars($settings['text_light'] ?? $themeDefaults['text_light']); ?>">
-            </div>
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Overlay Opacity (%)</label>
-                <input type="range" class="form-range" name="primary_opacity" id="primaryOpacityRange" min="0" max="100" value="<?php echo htmlspecialchars($settings['primary_opacity'] ?? $themeDefaults['primary_opacity']); ?>" oninput="document.getElementById('primaryOpacityValue').textContent = this.value;">
-                <div class="form-text">Current: <span id="primaryOpacityValue"><?php echo htmlspecialchars($settings['primary_opacity'] ?? $themeDefaults['primary_opacity']); ?></span>%</div>
             </div>
         </div>
 
         <h5 class="mb-3 mt-4">Typography</h5>
         <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Primary Font Stack (English)</label>
-                <input type="text" class="form-control" name="font_family_en" value="<?php echo htmlspecialchars($settings['font_family_en'] ?? $themeDefaults['font_family_en']); ?>">
-                <div class="form-text">Enter a CSS font-family stack. Example: 'Poppins', sans-serif</div>
+            <div class="col-md-6 mb-4">
+                <label class="form-label">Primary Font (English)</label>
+                <select class="form-select font-select" name="font_family_en_choice" data-custom-input="fontFamilyEnCustom" data-preview="fontPreviewEn">
+                    <?php foreach ($fontOptionsEn as $key => $option): ?>
+                        <option value="<?php echo htmlspecialchars($key); ?>" data-font-stack="<?php echo htmlspecialchars($option['stack']); ?>" <?php echo $selectedFontChoiceEn === $key ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($option['label']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                    <option value="custom" <?php echo $selectedFontChoiceEn === 'custom' ? 'selected' : ''; ?>>Custom</option>
+                </select>
+                <input type="text" class="form-control mt-2 font-custom-input <?php echo $selectedFontChoiceEn === 'custom' ? '' : 'd-none'; ?>" id="fontFamilyEnCustom" name="font_family_en_custom" value="<?php echo htmlspecialchars($fontFamilyEnCustomValue); ?>" placeholder="e.g. 'Poppins', sans-serif">
+                <small class="text-muted">Select from the list or choose "Custom" to enter your own CSS font stack.</small>
+                <span class="font-preview-label mt-3">Live preview</span>
+                <div class="font-preview-card" id="fontPreviewEn">
+                    The quick brown fox jumps over the lazy dog.
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Primary Font Stack (Arabic)</label>
-                <input type="text" class="form-control" name="font_family_ar" value="<?php echo htmlspecialchars($settings['font_family_ar'] ?? $themeDefaults['font_family_ar']); ?>">
-                <div class="form-text">Include fonts that support Arabic characters. Example: 'Tajawal', 'Cairo', sans-serif</div>
+            <div class="col-md-6 mb-4">
+                <label class="form-label">Primary Font (Arabic)</label>
+                <select class="form-select font-select" name="font_family_ar_choice" data-custom-input="fontFamilyArCustom" data-preview="fontPreviewAr">
+                    <?php foreach ($fontOptionsAr as $key => $option): ?>
+                        <option value="<?php echo htmlspecialchars($key); ?>" data-font-stack="<?php echo htmlspecialchars($option['stack']); ?>" <?php echo $selectedFontChoiceAr === $key ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($option['label']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                    <option value="custom" <?php echo $selectedFontChoiceAr === 'custom' ? 'selected' : ''; ?>>مخصص</option>
+                </select>
+                <input type="text" class="form-control mt-2 font-custom-input <?php echo $selectedFontChoiceAr === 'custom' ? '' : 'd-none'; ?>" id="fontFamilyArCustom" name="font_family_ar_custom" value="<?php echo htmlspecialchars($fontFamilyArCustomValue); ?>" placeholder="مثال: 'Tajawal', 'Cairo', sans-serif" dir="rtl">
+                <small class="text-muted">اختر من القائمة أو استخدم خيار "مخصص" لكتابة خط CSS خاص بك.</small>
+                <span class="font-preview-label mt-3">معاينة مباشرة</span>
+                <div class="font-preview-card" id="fontPreviewAr" dir="rtl">
+                    هذا نص تجريبي للمعاينة الفورية باللغة العربية.
+                </div>
             </div>
         </div>
 
@@ -187,5 +287,55 @@ if (!empty($logoValue)) {
         </button>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.font-select').forEach(function (select) {
+        var customInputId = select.getAttribute('data-custom-input');
+        var previewId = select.getAttribute('data-preview');
+        var customInput = customInputId ? document.getElementById(customInputId) : null;
+        var preview = previewId ? document.getElementById(previewId) : null;
+
+        function updateCustomVisibility() {
+            if (!customInput) {
+                return;
+            }
+            if (select.value === 'custom') {
+                customInput.classList.remove('d-none');
+            } else {
+                customInput.classList.add('d-none');
+            }
+        }
+
+        function getSelectedFontStack() {
+            if (select.value === 'custom') {
+                return customInput ? customInput.value : '';
+            }
+            var option = select.options[select.selectedIndex];
+            return option ? option.getAttribute('data-font-stack') || '' : '';
+        }
+
+        function updatePreview() {
+            if (!preview) {
+                return;
+            }
+            var fontStack = getSelectedFontStack();
+            preview.style.fontFamily = fontStack || 'inherit';
+        }
+
+        select.addEventListener('change', function () {
+            updateCustomVisibility();
+            updatePreview();
+        });
+
+        if (customInput) {
+            customInput.addEventListener('input', updatePreview);
+        }
+
+        updateCustomVisibility();
+        updatePreview();
+    });
+});
+</script>
 
 <?php require_once 'includes/footer.php'; ?>

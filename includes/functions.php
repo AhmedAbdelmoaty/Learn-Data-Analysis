@@ -185,6 +185,25 @@ function hexColorToRgb(string $color): array {
     ];
 }
 
+function adjustColorLightness(string $hexColor, float $ratio): string {
+    $ratio = max(-1.0, min(1.0, $ratio));
+    $rgb = hexColorToRgb($hexColor);
+
+    $adjust = function (int $component) use ($ratio): int {
+        if ($ratio >= 0) {
+            return (int)round($component + (255 - $component) * $ratio);
+        }
+
+        return (int)round($component * (1 + $ratio));
+    };
+
+    $r = max(0, min(255, $adjust($rgb['r'])));
+    $g = max(0, min(255, $adjust($rgb['g'])));
+    $b = max(0, min(255, $adjust($rgb['b'])));
+
+    return sprintf('#%02X%02X%02X', $r, $g, $b);
+}
+
 function clampOpacityValue($value, int $fallback): int {
     if (!is_numeric($value)) {
         return $fallback;
@@ -228,8 +247,6 @@ function sanitizeFontStack(?string $value, string $fallback): string {
 function getThemeConfiguration(array $settings): array {
     $defaults = [
         'primary_color' => '#A8324E',
-        'secondary_color' => '#6C1E35',
-        'primary_opacity' => 90,
         'text_dark' => '#333333',
         'text_light' => '#666666',
         'font_family_en' => "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
@@ -241,10 +258,8 @@ function getThemeConfiguration(array $settings): array {
     $theme = [];
 
     $theme['primary_color'] = normalizeHexColor($settings['primary_color'] ?? null, $defaults['primary_color']);
-    $theme['secondary_color'] = normalizeHexColor($settings['secondary_color'] ?? null, $defaults['secondary_color']);
     $theme['text_dark'] = normalizeHexColor($settings['text_dark'] ?? null, $defaults['text_dark']);
     $theme['text_light'] = normalizeHexColor($settings['text_light'] ?? null, $defaults['text_light']);
-    $theme['primary_opacity'] = clampOpacityValue($settings['primary_opacity'] ?? $defaults['primary_opacity'], $defaults['primary_opacity']);
     $theme['font_family_en'] = sanitizeFontStack($settings['font_family_en'] ?? null, $defaults['font_family_en']);
     $theme['font_family_ar'] = sanitizeFontStack($settings['font_family_ar'] ?? null, $defaults['font_family_ar']);
     $theme['font_link_en'] = filter_var($settings['font_link_en'] ?? '', FILTER_VALIDATE_URL) ?: '';
@@ -255,22 +270,18 @@ function getThemeConfiguration(array $settings): array {
 
 function buildThemeCssVariables(array $themeConfig): array {
     $primaryRgb = hexColorToRgb($themeConfig['primary_color']);
-    $secondaryRgb = hexColorToRgb($themeConfig['secondary_color']);
-
-    $primaryOpacityDecimal = max(0, min(100, $themeConfig['primary_opacity'])) / 100;
-    $opacityFormatted = rtrim(rtrim(number_format($primaryOpacityDecimal, 2, '.', ''), '0'), '.');
-
-    $gradientStart = rgbaFromHex($themeConfig['primary_color'], $themeConfig['primary_opacity']);
-    $gradientEnd = rgbaFromHex($themeConfig['secondary_color'], $themeConfig['primary_opacity']);
+    $primaryLight = adjustColorLightness($themeConfig['primary_color'], 0.12);
+    $primaryDark = adjustColorLightness($themeConfig['primary_color'], -0.18);
+    $gradientStart = $primaryLight;
+    $gradientEnd = $primaryDark;
 
     return [
         '--primary-color' => $themeConfig['primary_color'],
-        '--secondary-color' => $themeConfig['secondary_color'],
         '--text-dark' => $themeConfig['text_dark'],
         '--text-light' => $themeConfig['text_light'],
         '--primary-color-rgb' => sprintf('%d, %d, %d', $primaryRgb['r'], $primaryRgb['g'], $primaryRgb['b']),
-        '--secondary-color-rgb' => sprintf('%d, %d, %d', $secondaryRgb['r'], $secondaryRgb['g'], $secondaryRgb['b']),
-        '--primary-opacity' => $opacityFormatted === '' ? '0' : $opacityFormatted,
+        '--primary-color-light' => $primaryLight,
+        '--primary-color-dark' => $primaryDark,
         '--primary-gradient-start' => $gradientStart,
         '--primary-gradient-end' => $gradientEnd,
         '--primary-hero-gradient' => 'linear-gradient(' . $gradientStart . ', ' . $gradientEnd . ')',

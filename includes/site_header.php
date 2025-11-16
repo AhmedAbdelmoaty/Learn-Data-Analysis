@@ -46,7 +46,7 @@ $currentPage = getCurrentPage();
             --bs-primary: <?php echo $themeCssVariables['--primary-color']; ?>;
             --bs-primary-rgb: <?php echo $themeCssVariables['--primary-color-rgb']; ?>;
             --bs-link-color: var(--primary-color);
-            --bs-link-hover-color: var(--secondary-color);
+            --bs-link-hover-color: var(--primary-color-dark, var(--primary-color));
             --bs-body-font-family: var(--font-family-base, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
             --bs-body-color: var(--text-dark);
         }
