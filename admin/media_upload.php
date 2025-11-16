@@ -221,9 +221,7 @@ if ($isAjaxRequest) {
     <form method="POST" enctype="multipart/form-data" id="media-upload-form">
         <div class="row g-3 align-items-start">
             <div class="col-lg-9 form-file-col">
-                <label class="form-label">Select Images or Videos</label>
                 <input type="file" class="form-control" name="files[]" accept="image/*,video/*" multiple required>
-                <small class="text-muted">You can upload multiple files (images: JPG, PNG, GIF, WEBP — videos: MP4, WEBM, MOV). Max 50MB per file.</small>
             </div>
             <div class="col-lg-3 upload-action-col">
                 <button type="submit" class="btn btn-primary w-100">
