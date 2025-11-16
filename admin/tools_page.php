@@ -84,10 +84,17 @@ foreach ($section_configs as $key => $config) {
 }
 ?>
 
-<div class="content-card">
-    <?php if ($success_message): ?>
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success_message; ?></div>
-    <?php endif; ?>
+<div class="container-fluid mt-4">
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-toolbox',
+        'title' => 'Tools Page Management',
+        'description' => 'Adjust the hero banner and intro copy without submitting each tab separately.',
+        'tip' => 'Jump between the hero and intro tabs freely, then push one Save All when you are done.'
+    ]); ?>
+    <div class="content-card">
+        <?php if ($success_message): ?>
+            <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success_message; ?></div>
+        <?php endif; ?>
     <?php if ($error_message): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?></div>
     <?php endif; ?>
@@ -113,7 +120,7 @@ foreach ($section_configs as $key => $config) {
                     <p class="text-muted small mb-4"><?php echo htmlspecialchars($config['description']); ?></p>
                 </div>
 
-                <form method="POST">
+                <form method="POST" data-bulk-save="true" data-section-name="<?php echo htmlspecialchars($config['label']); ?>">
                     <input type="hidden" name="action" value="update_tools_section">
                     <input type="hidden" name="section_key" value="<?php echo $key; ?>">
 
@@ -182,13 +189,14 @@ foreach ($section_configs as $key => $config) {
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary bulk-save-hidden">
                         <i class="fas fa-save"></i> Save Section
                     </button>
                 </form>
             </div>
         <?php endforeach; ?>
     </div>
+</div>
 </div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

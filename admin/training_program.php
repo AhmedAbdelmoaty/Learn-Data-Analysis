@@ -200,6 +200,12 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container-fluid mt-4">
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-flag',
+        'title' => 'Training Program Management',
+        'description' => 'Coordinate hero, learn, journey, and FAQ content without triggering multiple reloads.',
+        'tip' => 'Visit each tab, adjust the sections you need, then commit everything with one Save All.'
+    ]); ?>
     <div class="row mb-4">
         <div class="col-12">
             <h2><i class="fas fa-flag"></i> Training Program Management</h2>
@@ -259,7 +265,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Hero Tab -->
         <div class="tab-pane fade <?php echo $active_tab === 'hero' ? 'show active' : ''; ?>" id="hero" role="tabpanel">
             <h4 class="mb-4">Hero Section</h4>
-            <form method="POST" action="?tab=hero">
+            <form method="POST" action="?tab=hero" data-bulk-save="true" data-section-name="Training Hero">
                 <input type="hidden" name="action" value="update_hero">
                 
                 <div class="row">
@@ -326,7 +332,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary bulk-save-hidden">
                     <i class="fas fa-save"></i> Save Hero Section
                 </button>
             </form>
@@ -341,7 +347,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h5 class="mb-0">Section Details</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="?tab=learn">
+                    <form method="POST" action="?tab=learn" data-bulk-save="true" data-section-name="Learn Section">
                         <input type="hidden" name="action" value="update_learn_section">
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -371,7 +377,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-sm">
+                        <button type="submit" class="btn btn-primary btn-sm bulk-save-hidden">
                             <i class="fas fa-save"></i> Save Section Details
                         </button>
                     </form>
@@ -526,7 +532,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h5 class="mb-0"><i class="fas fa-video"></i> Journey Video</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="?tab=journey">
+                    <form method="POST" action="?tab=journey" data-bulk-save="true" data-section-name="Journey Video">
                         <input type="hidden" name="action" value="update_journey_video">
                         <div class="mb-3">
                             <label class="form-label">Video URL</label>
@@ -546,7 +552,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-sm">
+                        <button type="submit" class="btn btn-primary btn-sm bulk-save-hidden">
                             <i class="fas fa-save"></i> Save Video Settings
                         </button>
                     </form>

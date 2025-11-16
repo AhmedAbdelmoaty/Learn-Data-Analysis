@@ -190,12 +190,12 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container-fluid mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2><i class="fas fa-home"></i> Home Page Management</h2>
-            <p class="text-muted mb-0">Manage every section of the public home page from one place.</p>
-        </div>
-    </div>
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-home',
+        'title' => 'Home Page Management',
+        'description' => 'Manage every section of the public home page from one place.',
+        'tip' => 'Scroll through the hero, benefits, testimonials, and FAQ tabs, then store everything with one click.'
+    ]); ?>
 
     <?php if ($success_message): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -242,7 +242,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="tab-content border border-top-0 bg-white p-4">
         <div class="tab-pane fade <?php echo $active_tab === 'hero' ? 'show active' : ''; ?>" id="hero" role="tabpanel">
             <h4 class="mb-4">Hero Banner</h4>
-            <form method="POST" action="?tab=hero">
+            <form method="POST" action="?tab=hero" data-bulk-save="true" data-section-name="Hero Banner">
                 <input type="hidden" name="action" value="update_home_hero">
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -291,13 +291,13 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Hero Section</button>
+                <button type="submit" class="btn btn-primary bulk-save-hidden"><i class="fas fa-save"></i> Save Hero Section</button>
             </form>
         </div>
 
         <div class="tab-pane fade <?php echo $active_tab === 'why_data' ? 'show active' : ''; ?>" id="why-data" role="tabpanel">
             <h4 class="mb-4">Why Data Analysis Section</h4>
-            <form method="POST" action="?tab=why_data">
+            <form method="POST" action="?tab=why_data" data-bulk-save="true" data-section-name="Why Data Analysis">
                 <input type="hidden" name="action" value="update_why_data">
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -334,7 +334,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Section</button>
+                <button type="submit" class="btn btn-primary bulk-save-hidden"><i class="fas fa-save"></i> Save Section</button>
             </form>
         </div>
 
@@ -392,7 +392,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($benefits as $benefit): ?>
                         <div class="card mb-3">
                             <div class="card-body">
-                                <form method="POST" action="?tab=benefits" class="row g-3 align-items-end">
+                                <form method="POST" action="?tab=benefits" class="row g-3 align-items-end" data-bulk-save="true" data-section-name="Benefit #<?php echo (int)$benefit['id']; ?>">
                                     <input type="hidden" name="action" value="update_benefit">
                                     <input type="hidden" name="id" value="<?php echo (int)$benefit['id']; ?>">
                                     <div class="col-md-2">
@@ -418,7 +418,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <input type="number" class="form-control form-control-sm" name="display_order" value="<?php echo htmlspecialchars($benefit['display_order']); ?>" required>
                                     </div>
                                     <div class="col-md-2 d-flex gap-2">
-                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Save</button>
+                                        <button type="submit" class="btn btn-primary btn-sm bulk-save-hidden"><i class="fas fa-save"></i> Save</button>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="submitDeleteForm('delete-benefit-<?php echo (int)$benefit['id']; ?>')">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -489,7 +489,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($testimonials as $testimonial): ?>
                         <div class="card mb-3">
                             <div class="card-body">
-                                <form method="POST" action="?tab=testimonials" class="row g-3">
+                                <form method="POST" action="?tab=testimonials" class="row g-3" data-bulk-save="true" data-section-name="Testimonial #<?php echo (int)$testimonial['id']; ?>">
                                     <input type="hidden" name="action" value="update_testimonial">
                                     <input type="hidden" name="id" value="<?php echo (int)$testimonial['id']; ?>">
                                     <div class="col-md-4">
@@ -505,7 +505,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <input type="number" class="form-control form-control-sm" name="display_order" value="<?php echo htmlspecialchars($testimonial['display_order']); ?>" required>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-end gap-2">
-                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Save</button>
+                                        <button type="submit" class="btn btn-primary btn-sm bulk-save-hidden"><i class="fas fa-save"></i> Save</button>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="submitDeleteForm('delete-testimonial-<?php echo (int)$testimonial['id']; ?>')">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -578,7 +578,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($faqs as $faq): ?>
                         <div class="card mb-3">
                             <div class="card-body">
-                                <form method="POST" action="?tab=faq" class="row g-3">
+                                <form method="POST" action="?tab=faq" class="row g-3" data-bulk-save="true" data-section-name="FAQ #<?php echo (int)$faq['id']; ?>">
                                     <input type="hidden" name="action" value="update_faq">
                                     <input type="hidden" name="id" value="<?php echo (int)$faq['id']; ?>">
                                     <div class="col-md-5">
@@ -602,7 +602,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <textarea class="form-control form-control-sm" name="answer_ar" rows="3" dir="rtl" required><?php echo htmlspecialchars($faq['answer_ar']); ?></textarea>
                                     </div>
                                     <div class="col-12 d-flex justify-content-between">
-                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Save Changes</button>
+                                        <button type="submit" class="btn btn-primary btn-sm bulk-save-hidden"><i class="fas fa-save"></i> Save Changes</button>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="submitDeleteForm('delete-faq-<?php echo (int)$faq['id']; ?>')">
                                             <i class="fas fa-trash"></i>
                                         </button>
