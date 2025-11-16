@@ -19,9 +19,9 @@
                     <div id="mediaPickerGrid" class="row g-3"></div>
                     <div id="mediaPickerEmpty" class="text-center py-5" style="display: none;">
                         <i class="fas fa-image fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">No media in your library yet.</p>
+                        <p class="text-muted">No images in your media library yet.</p>
                         <a href="media_upload.php" class="btn btn-primary btn-sm">
-                            <i class="fas fa-upload"></i> Upload Media
+                            <i class="fas fa-upload"></i> Upload Images
                         </a>
                     </div>
                 </div>
@@ -47,14 +47,12 @@
         box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
     }
     
-    .media-picker-item img,
-    .media-picker-item video {
+    .media-picker-item img {
         width: 100%;
         height: 150px;
         object-fit: cover;
-        display: block;
     }
-
+    
     .media-picker-item .overlay {
         position: absolute;
         bottom: 0;
@@ -125,49 +123,24 @@ function loadMediaLibrary() {
         .then(data => {
             loading.style.display = 'none';
             content.style.display = 'block';
-
-            const mediaItems = Array.isArray(data.media) ? data.media : (Array.isArray(data.images) ? data.images : []);
-
-            if (data.success && mediaItems.length > 0) {
+            
+            if (data.success && data.images.length > 0) {
                 grid.innerHTML = '';
                 empty.style.display = 'none';
-
-                mediaItems.forEach(item => {
+                
+                data.images.forEach(image => {
                     const col = document.createElement('div');
                     col.className = 'col-md-3 col-sm-4 col-6';
-
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'media-picker-item';
-                    wrapper.addEventListener('click', () => selectMedia(item.filepath, item.filename));
-
-                    const preview = document.createElement(item.file_type === 'video' ? 'video' : 'img');
-                    preview.src = item.url || `../${item.filepath}`;
-                    preview.alt = item.filename;
-                    if (item.file_type === 'video') {
-                        preview.muted = true;
-                        preview.preload = 'metadata';
-                    } else {
-                        preview.loading = 'lazy';
-                    }
-
-                    const overlay = document.createElement('div');
-                    overlay.className = 'overlay d-flex justify-content-between align-items-center gap-2';
-
-                    const name = document.createElement('div');
-                    name.className = 'text-truncate';
-                    name.textContent = item.filename;
-                    overlay.appendChild(name);
-
-                    if (item.file_type === 'video') {
-                        const badge = document.createElement('span');
-                        badge.className = 'badge bg-dark';
-                        badge.textContent = 'Video';
-                        overlay.appendChild(badge);
-                    }
-
-                    wrapper.appendChild(preview);
-                    wrapper.appendChild(overlay);
-                    col.appendChild(wrapper);
+                    
+                    col.innerHTML = `
+                        <div class="media-picker-item" onclick="selectMedia('${image.filepath}', '${image.filename}')">
+                            <img src="../${image.filepath}" alt="${image.filename}">
+                            <div class="overlay">
+                                <div class="text-truncate">${image.filename}</div>
+                            </div>
+                        </div>
+                    `;
+                    
                     grid.appendChild(col);
                 });
             } else {

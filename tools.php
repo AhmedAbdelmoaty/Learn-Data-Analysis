@@ -96,4 +96,6 @@ $tool_topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </section>
 
+<?php include 'includes/contact_form_component.php'; ?>
+
 <?php require_once 'includes/site_footer.php'; ?>

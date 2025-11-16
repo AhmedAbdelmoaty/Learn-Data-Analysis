@@ -34,7 +34,7 @@ $topics = $stmt->fetchAll();
             <div class="col-lg-8 text-white">
                 <h1 class="display-3 fw-bold mb-4"><?php echo htmlspecialchars($hero['title_' . $lang] ?? ''); ?></h1>
                 <p class="lead mb-4 fs-4"><?php echo htmlspecialchars($hero['subtitle_' . $lang] ?? ''); ?></p>
-                <a href="<?php echo preserveLang('training-program.php', $lang); ?>" class="btn btn-light btn-lg px-5">
+                <a href="#contact-form" class="btn btn-light btn-lg px-5">
                     <i class="fas fa-user-plus"></i> <?php echo t('enroll_now', $lang); ?>
                 </a>
             </div>
@@ -176,5 +176,8 @@ $topics = $stmt->fetchAll();
     </div>
 </section>
 <?php endif; ?>
+
+<!-- Contact Form at Bottom -->
+<?php include 'includes/contact_form_component.php'; ?>
 
 <?php require_once 'includes/site_footer.php'; ?>

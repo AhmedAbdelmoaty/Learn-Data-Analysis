@@ -51,13 +51,7 @@ $faqs = $stmt->fetchAll();
                     <p class="lead mb-4 text-muted"><?php echo htmlspecialchars($hero['subtitle_' . $lang]); ?></p>
                 <?php endif; ?>
                 <?php if ($hero['cta_label_' . $lang]): ?>
-                    <?php
-                        $ctaLink = trim($hero['cta_link'] ?? '');
-                        if ($ctaLink === '' || $ctaLink === '#contact') {
-                            $ctaLink = preserveLang('training-program.php', $lang);
-                        }
-                    ?>
-                    <a href="<?php echo htmlspecialchars($ctaLink); ?>" class="btn btn-primary btn-lg px-5 <?php echo (strpos($ctaLink, '#') === 0) ? 'smooth-scroll' : ''; ?>">
+                    <a href="<?php echo htmlspecialchars($hero['cta_link'] ?? '#contact'); ?>" class="btn btn-primary btn-lg px-5 <?php echo (strpos($hero['cta_link'] ?? '#contact', '#') === 0) ? 'smooth-scroll' : ''; ?>">
                         <?php echo htmlspecialchars($hero['cta_label_' . $lang]); ?>
                     </a>
                 <?php endif; ?>
@@ -301,6 +295,9 @@ $faqs = $stmt->fetchAll();
     </div>
 </section>
 <?php endif; ?>
+
+<!-- Contact Form at Bottom -->
+<?php include 'includes/contact_form_component.php'; ?>
 
 <!-- Smooth Scroll Script -->
 <script>

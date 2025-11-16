@@ -96,13 +96,9 @@ require_once 'includes/site_header.php';
                       </div>
                     
                     <hr class="my-5">
-
-                    <div class="content-cta-wrapper text-center">
-                        <?php $ctaNote = trim($content['cta_note_' . $lang] ?? ''); ?>
-                        <?php if ($ctaNote !== ''): ?>
-                            <p class="content-cta-note mb-3"><?php echo nl2br(htmlspecialchars($ctaNote)); ?></p>
-                        <?php endif; ?>
-                        <a href="<?php echo preserveLang('training-program.php', $lang); ?>" class="btn btn-primary btn-lg px-5">
+                    
+                    <div class="text-center">
+                        <a href="#contact-form" class="btn btn-primary btn-lg px-5">
                             <i class="fas fa-user-plus"></i> <?php echo t('enroll_now', $lang); ?>
                         </a>
                     </div>
@@ -143,5 +139,8 @@ require_once 'includes/site_header.php';
     </section>
     <?php endif; ?>
 <?php endif; ?>
+
+<!-- Contact Form at Bottom -->
+<?php include 'includes/contact_form_component.php'; ?>
 
 <?php require_once 'includes/site_footer.php'; ?>

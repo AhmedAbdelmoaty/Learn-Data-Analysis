@@ -123,6 +123,9 @@ $is_rtl = ($lang === 'ar');
 </section>
 <?php endif; ?>
 
+<!-- Contact Form -->
+<?php include 'includes/contact_form_component.php'; ?>
+
 <style>
 /* Custom styling for FAQ page */
 
