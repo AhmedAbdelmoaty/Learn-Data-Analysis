@@ -90,6 +90,12 @@ $all_questions = $stmt->fetchAll();
 ?>
 
 <div class="container-fluid mt-4">
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-question-circle',
+        'title' => 'FAQ Page Management',
+        'description' => 'Control the hero section and question banks without constant reloads.',
+        'tip' => 'Tweak the hero copy, then move on to question banks knowing you can save everything together.'
+    ]); ?>
     <div class="row mb-4">
         <div class="col-12">
             <h2><i class="fas fa-question-circle"></i> FAQ Page Management</h2>
@@ -134,7 +140,7 @@ $all_questions = $stmt->fetchAll();
         <!-- Hero Tab -->
         <div class="tab-pane fade <?php echo $active_tab === 'hero' ? 'show active' : ''; ?>" id="hero" role="tabpanel">
             <h4 class="mb-4">Hero Section</h4>
-            <form method="POST" action="?tab=hero">
+            <form method="POST" action="?tab=hero" data-bulk-save="true" data-section-name="FAQ Hero">
                 <input type="hidden" name="action" value="update_hero">
                 
                 <div class="row">
@@ -200,7 +206,7 @@ $all_questions = $stmt->fetchAll();
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary bulk-save-hidden">
                     <i class="fas fa-save"></i> Save Hero Section
                 </button>
             </form>

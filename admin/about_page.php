@@ -92,6 +92,12 @@ foreach ($section_configs as $key => $config) {
 ?>
 
 <div class="container-fluid mt-4">
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-info-circle',
+        'title' => 'About Page Management',
+        'description' => 'Edit every block of the About page from one screen.',
+        'tip' => 'Move between the Introduction, Mission, and Approach tabs, then store all updates together.'
+    ]); ?>
     <div class="row mb-4">
         <div class="col-12">
             <h2><i class="fas fa-info-circle"></i> About Page Management</h2>
@@ -136,7 +142,7 @@ foreach ($section_configs as $key => $config) {
                     <span class="badge bg-light text-dark">Section Key: <?php echo htmlspecialchars($key); ?></span>
                 </div>
 
-                <form method="POST" action="?tab=<?php echo htmlspecialchars($key); ?>">
+                <form method="POST" action="?tab=<?php echo htmlspecialchars($key); ?>" data-bulk-save="true" data-section-name="<?php echo htmlspecialchars($config['label']); ?>">
                     <input type="hidden" name="action" value="update_about_section">
                     <input type="hidden" name="section_key" value="<?php echo htmlspecialchars($key); ?>">
 
@@ -205,7 +211,7 @@ foreach ($section_configs as $key => $config) {
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                    <button type="submit" class="btn btn-primary bulk-save-hidden"><i class="fas fa-save"></i> Save Changes</button>
                 </form>
             </div>
         <?php endforeach; ?>

@@ -165,15 +165,22 @@ if (!empty($logoValue)) {
     }
 </style>
 
-<div class="content-card">
-    <?php if ($success): ?>
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
-    <?php endif; ?>
+<div class="container-fluid mt-4">
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-cog',
+        'title' => 'Site Settings',
+        'description' => 'Update identity, colors, and typography in one flow.',
+        'tip' => 'Work through the entire form and save from the toolbar when you are ready.'
+    ]); ?>
+    <div class="content-card">
+        <?php if ($success): ?>
+            <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
+        <?php endif; ?>
     <?php if ($error): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></div>
     <?php endif; ?>
     
-    <form method="POST">
+    <form method="POST" data-bulk-save="true" data-section-name="Site Settings">
         <h5 class="mb-3">Site Identity</h5>
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -282,10 +289,11 @@ if (!empty($logoValue)) {
             </div>
         </div>
         
-        <button type="submit" class="btn btn-primary" name="submit">
+        <button type="submit" class="btn btn-primary bulk-save-hidden" name="submit">
             <i class="fas fa-save"></i> Save Settings
         </button>
     </form>
+</div>
 </div>
 
 <script>

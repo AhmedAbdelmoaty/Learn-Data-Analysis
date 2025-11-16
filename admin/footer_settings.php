@@ -53,10 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="content-card">
-    <?php if ($success): ?>
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
-    <?php endif; ?>
+<div class="container-fluid mt-4">
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-grip-horizontal',
+        'title' => 'Footer Settings',
+        'description' => 'Control footer about text, office details, and social links in a single workflow.',
+        'tip' => 'Fill out each section below, then click Save All Changes once at the top.'
+    ]); ?>
+    <div class="content-card">
+        <?php if ($success): ?>
+            <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
+        <?php endif; ?>
     <?php if ($error): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></div>
     <?php endif; ?>
@@ -64,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h5 class="mb-4">Footer & Contact Settings</h5>
     <p class="text-muted">Control all footer content and the contact information card displayed next to the contact form.</p>
 
-    <form method="POST">
+    <form method="POST" data-bulk-save="true" data-section-name="Footer Settings">
         <!-- About Section -->
         <h6 class="mb-3 text-primary"><i class="fas fa-info-circle"></i> About IMP Section</h6>
         <div class="row">
@@ -178,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
         <div class="mt-4">
-            <button type="submit" name="submit" class="btn btn-primary btn-lg">
+            <button type="submit" name="submit" class="btn btn-primary btn-lg bulk-save-hidden">
                 <i class="fas fa-save"></i> Save Footer Settings
             </button>
             <a href="dashboard.php" class="btn btn-secondary btn-lg ms-2">
@@ -186,6 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </a>
         </div>
     </form>
+    </div>
 </div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

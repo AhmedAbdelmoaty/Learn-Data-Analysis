@@ -141,10 +141,17 @@ $stmt = $pdo->query("SELECT * FROM uploads ORDER BY uploaded_at DESC");
 $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="content-card">
-    <?php if ($success): ?>
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
-    <?php endif; ?>
+<div class="container-fluid mt-4">
+    <?php renderBulkSaveToolbar([
+        'icon' => 'fas fa-layer-group',
+        'title' => 'Manage Topics & Tools',
+        'description' => 'Update hero details for multiple topics before committing changes.',
+        'tip' => 'Edit the cards below back-to-back, then click Save All Changes once.'
+    ]); ?>
+    <div class="content-card">
+        <?php if ($success): ?>
+            <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
+        <?php endif; ?>
     <?php if ($error): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></div>
     <?php endif; ?>
@@ -241,7 +248,8 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </button>
             </form>
         </div>
-    </div>
+
+</div>
 
     <?php foreach ($topics as $topic): ?>
         <div class="card mb-4">
@@ -266,7 +274,7 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endif; ?>
             </div>
             <div class="card-body">
-                <form method="POST">
+                <form method="POST" data-bulk-save="true" data-section-name="Topic: <?php echo htmlspecialchars($topic['title_en']); ?>">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="id" value="<?php echo $topic['id']; ?>">
 
@@ -351,13 +359,14 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary bulk-save-hidden">
                         <i class="fas fa-save"></i> Update Topic
                     </button>
                 </form>
             </div>
         </div>
     <?php endforeach; ?>
+</div>
 </div>
 
 <script>

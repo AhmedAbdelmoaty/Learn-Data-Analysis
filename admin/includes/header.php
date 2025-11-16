@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/bulk_save.php';
 requireLogin();
 checkSessionTimeout();
 
@@ -107,6 +108,18 @@ $themeCssVariables = buildThemeCssVariables($themeConfig);
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 30px;
+        }
+
+        .bulk-save-toolbar {
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1.25rem;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .bulk-save-active .bulk-save-hidden {
+            display: none !important;
         }
         
         @media (max-width: 768px) {
