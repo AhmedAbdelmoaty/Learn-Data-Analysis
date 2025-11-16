@@ -164,6 +164,41 @@ if ($isAjaxRequest) {
 }
 ?>
 
+<style>
+    #media-upload-form .row.align-items-start {
+        align-items: flex-start !important;
+    }
+
+    #media-upload-form .form-file-col {
+        min-width: 0;
+    }
+
+    #media-upload-form .upload-action-col {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .media-card .media-info {
+        min-width: 0;
+        flex: 1 1 auto;
+        padding-right: 0.5rem;
+    }
+
+    .media-card .media-filename {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        max-height: 2.75em;
+    }
+
+    .media-card .form-check {
+        flex-shrink: 0;
+    }
+</style>
+
 <div class="content-card mb-4">
     <h5 class="mb-3">Upload Media</h5>
     <?php if (!empty($successMessages)): ?>
@@ -184,15 +219,15 @@ if ($isAjaxRequest) {
     <?php endif; ?>
 
     <form method="POST" enctype="multipart/form-data" id="media-upload-form">
-        <div class="row g-3 align-items-end">
-            <div class="col-lg-9">
+        <div class="row g-3 align-items-start">
+            <div class="col-lg-9 form-file-col">
                 <label class="form-label">Select Images or Videos</label>
                 <input type="file" class="form-control" name="files[]" accept="image/*,video/*" multiple required>
                 <small class="text-muted">You can upload multiple files (images: JPG, PNG, GIF, WEBP — videos: MP4, WEBM, MOV). Max 50MB per file.</small>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 upload-action-col">
                 <button type="submit" class="btn btn-primary w-100">
-                    <i class="fas fa-upload"></i> Upload Selected
+                    <i class="fas fa-upload"></i> Upload Media
                 </button>
             </div>
         </div>
@@ -224,8 +259,8 @@ if ($isAjaxRequest) {
                         </div>
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <div>
-                                    <p class="mb-0 small fw-semibold text-truncate" title="<?php echo htmlspecialchars($upload['filename'], ENT_QUOTES); ?>"><?php echo htmlspecialchars($upload['filename'], ENT_QUOTES); ?></p>
+                                <div class="media-info">
+                                    <p class="mb-0 small fw-semibold media-filename" title="<?php echo htmlspecialchars($upload['filename'], ENT_QUOTES); ?>"><?php echo htmlspecialchars($upload['filename'], ENT_QUOTES); ?></p>
                                     <small class="text-muted"><?php echo htmlspecialchars($upload['uploaded_at_human']); ?></small>
                                 </div>
                                 <div class="form-check">
@@ -303,8 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="ratio ratio-4x3 bg-light rounded-top overflow-hidden">${preview}</div>
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <p class="mb-0 small fw-semibold text-truncate" title="${escapeHtml(item.filename)}">${escapeHtml(item.filename)}</p>
+                            <div class="media-info">
+                                <p class="mb-0 small fw-semibold media-filename" title="${escapeHtml(item.filename)}">${escapeHtml(item.filename)}</p>
                                 <small class="text-muted">${escapeHtml(item.uploaded_at_human)}</small>
                             </div>
                             <div class="form-check">
