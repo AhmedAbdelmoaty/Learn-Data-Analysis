@@ -70,7 +70,4 @@ $heroGradient = getTopicHeroGradient($topic);
 </section>
 <?php endif; ?>
 
-<!-- Contact Form at Bottom -->
-<?php include 'includes/contact_form_component.php'; ?>
-
 <?php require_once 'includes/site_footer.php'; ?>

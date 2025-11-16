@@ -42,6 +42,8 @@ try {
         summary_ar TEXT,
         body_en TEXT,
         body_ar TEXT,
+        cta_note_en TEXT,
+        cta_note_ar TEXT,
         hero_image VARCHAR(500),
         status VARCHAR(20) DEFAULT 'published',
         display_order INT DEFAULT 0,

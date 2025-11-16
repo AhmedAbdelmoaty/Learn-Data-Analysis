@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $hero_image_alt = trim($_POST['hero_image_alt'] ?? '');
     $cta_label_en = $_POST['cta_label_en'] ?? '';
     $cta_label_ar = $_POST['cta_label_ar'] ?? '';
-    $cta_link = $_POST['cta_link'] ?? '#contact';
+    $cta_link = trim($_POST['cta_link'] ?? '');
     $is_enabled = isset($_POST['is_enabled']) ? 1 : 0;
     
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM training_hero");
@@ -313,8 +313,8 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="mb-3">
                     <label class="form-label">CTA Button Link</label>
-                    <input type="text" class="form-control" name="cta_link" value="<?php echo htmlspecialchars($hero['cta_link'] ?? '#contact'); ?>" placeholder="#contact">
-                    <small class="form-text text-muted">Use #contact to scroll to contact form, or enter a full URL</small>
+                    <input type="text" class="form-control" name="cta_link" value="<?php echo htmlspecialchars($hero['cta_link'] ?? ''); ?>" placeholder="https://example.com/apply">
+                    <small class="form-text text-muted">Enter the full URL for the CTA button (leave empty to keep visitors on the Training Program page).</small>
                 </div>
 
                 <div class="mb-3">

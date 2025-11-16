@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'add') {
             try {
-                $stmt = $pdo->prepare("INSERT INTO content_items (topic_id, slug, title_en, title_ar, summary_en, summary_ar, body_en, body_ar, hero_image, status, display_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $pdo->prepare("INSERT INTO content_items (topic_id, slug, title_en, title_ar, summary_en, summary_ar, body_en, body_ar, cta_note_en, cta_note_ar, hero_image, status, display_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([
                     $_POST['topic_id'],
                     $_POST['slug'],
@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_POST['summary_ar'],
                     $_POST['body_en'],
                     $_POST['body_ar'],
+                    $_POST['cta_note_en'],
+                    $_POST['cta_note_ar'],
                     $_POST['hero_image'],
                     $_POST['status'],
                     $_POST['display_order']
@@ -29,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($_POST['action'] === 'update') {
             try {
-                $stmt = $pdo->prepare("UPDATE content_items SET topic_id = ?, slug = ?, title_en = ?, title_ar = ?, summary_en = ?, summary_ar = ?, body_en = ?, body_ar = ?, hero_image = ?, status = ?, display_order = ? WHERE id = ?");
+                $stmt = $pdo->prepare("UPDATE content_items SET topic_id = ?, slug = ?, title_en = ?, title_ar = ?, summary_en = ?, summary_ar = ?, body_en = ?, body_ar = ?, cta_note_en = ?, cta_note_ar = ?, hero_image = ?, status = ?, display_order = ? WHERE id = ?");
                 $stmt->execute([
                     $_POST['topic_id'],
                     $_POST['slug'],
@@ -39,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_POST['summary_ar'],
                     $_POST['body_en'],
                     $_POST['body_ar'],
+                    $_POST['cta_note_en'],
+                    $_POST['cta_note_ar'],
                     $_POST['hero_image'],
                     $_POST['status'],
                     $_POST['display_order'],
@@ -190,6 +194,17 @@ $content_items = $stmt->fetchAll();
                             <textarea class="form-control rich-text" name="body_ar" id="add_body_ar" rows="5"></textarea>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CTA Helper Text (English)</label>
+                            <textarea class="form-control" name="cta_note_en" rows="2" placeholder="This line appears above the Enroll button."></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CTA Helper Text (Arabic)</label>
+                            <textarea class="form-control" name="cta_note_ar" rows="2" placeholder="يظهر هذا السطر فوق زر التسجيل."></textarea>
+                        </div>
+                    </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Hero Image URL</label>
@@ -286,6 +301,17 @@ $content_items = $stmt->fetchAll();
                             <textarea class="form-control rich-text" name="body_ar" id="edit_body_ar" rows="5"></textarea>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CTA Helper Text (English)</label>
+                            <textarea class="form-control" name="cta_note_en" id="edit_cta_note_en" rows="2"></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CTA Helper Text (Arabic)</label>
+                            <textarea class="form-control" name="cta_note_ar" id="edit_cta_note_ar" rows="2"></textarea>
+                        </div>
+                    </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Hero Image URL</label>
@@ -363,6 +389,8 @@ function editItem(item) {
     document.getElementById('edit_summary_ar').value = item.summary_ar || '';
     setEditorContent('edit_body_en', item.body_en || '');
     setEditorContent('edit_body_ar', item.body_ar || '');
+    document.getElementById('edit_cta_note_en').value = item.cta_note_en || '';
+    document.getElementById('edit_cta_note_ar').value = item.cta_note_ar || '';
     document.getElementById('edit_hero_image').value = item.hero_image || '';
     document.getElementById('edit_status').value = item.status;
     document.getElementById('edit_display_order').value = item.display_order;
