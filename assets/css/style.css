@@ -590,50 +590,20 @@ html {
         --bs-gutter-x: 0.5rem;
     }
 }
-.contact-form-section .form-control:focus,
-.contact-form-section .form-select:focus {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 .2rem rgba(var(--primary-color-rgb), 0.25) !important;
-  outline: 0;
+
+.content-cta-wrapper {
+    margin: 3rem auto;
+    max-width: 720px;
 }
-/* ===== Contact section brand colors (target current HTML, no .contact-info needed) ===== */
-.contact-form-section .container {
-  /* Match the g-5 horizontal gutter used inside the section so rows don't overflow */
-  --bs-gutter-x: 3rem;
-  padding-left: calc(var(--bs-gutter-x) * 0.5);
-  padding-right: calc(var(--bs-gutter-x) * 0.5);
+
+.content-cta-note {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
 }
-.contact-form-section .card-body > h2 {
-  color: var(--primary-color);
-  font-weight: 700;
-  letter-spacing: .2px;
+
+@media (max-width: 576px) {
+    .content-cta-note {
+        font-size: 1.05rem;
+    }
 }
-.contact-form-section .card-body > p.text-muted {
-  color: var(--text-dark) !important;   
-  font-weight: 600;                     
-}
-.contact-form-section i.fa-map-marker-alt,
-.contact-form-section i.fa-whatsapp,
-.contact-form-section i.fa-envelope {
-  color: var(--primary-color) !important;
-  opacity: 1;
-}
-.contact-form-section .fw-semibold {
-  color: var(--primary-color) !important;
-  font-weight: 800;
-}
-.contact-form-section .mb-4 .d-flex.mb-2 .text-muted {
-  color: var(--text-dark) !important;
-  font-weight: 500;
-}
-.contact-form-section .d-flex .fa-whatsapp + .text-muted {
-  color: var(--primary-color) !important;
-  font-weight: 700;
-}
-.contact-form-section .d-flex .fa-envelope + a,
-.contact-form-section .d-flex .fa-envelope + * a {
-  color: var(--primary-color) !important;
-  font-weight: 700;
-  text-decoration: none;
-}
-#contact-form { scroll-margin-top: 180px; }
