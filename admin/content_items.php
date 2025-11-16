@@ -183,11 +183,11 @@ $content_items = $stmt->fetchAll();
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Body (English)</label>
-                            <textarea class="form-control" name="body_en" rows="5"></textarea>
+                            <textarea class="form-control rich-text" name="body_en" id="add_body_en" rows="5"></textarea>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Body (Arabic)</label>
-                            <textarea class="form-control" name="body_ar" rows="5"></textarea>
+                            <textarea class="form-control rich-text" name="body_ar" id="add_body_ar" rows="5"></textarea>
                         </div>
                     </div>
                     
@@ -279,11 +279,11 @@ $content_items = $stmt->fetchAll();
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Body (English)</label>
-                            <textarea class="form-control" name="body_en" id="edit_body_en" rows="5"></textarea>
+                            <textarea class="form-control rich-text" name="body_en" id="edit_body_en" rows="5"></textarea>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Body (Arabic)</label>
-                            <textarea class="form-control" name="body_ar" id="edit_body_ar" rows="5"></textarea>
+                            <textarea class="form-control rich-text" name="body_ar" id="edit_body_ar" rows="5"></textarea>
                         </div>
                     </div>
                     
@@ -323,7 +323,36 @@ $content_items = $stmt->fetchAll();
     </div>
 </div>
 
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    tinymce.init({
+        selector: 'textarea.rich-text',
+        menubar: false,
+        branding: false,
+        plugins: 'autoresize link lists table code directionality',
+        toolbar: 'undo redo | blocks | bold italic underline forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link table | ltr rtl | removeformat code',
+        block_formats: 'Paragraph=p; Heading 2=h2; Heading 3=h3; Heading 4=h4',
+        min_height: 250,
+        setup: function(editor) {
+            editor.on('change keyup', function() {
+                editor.save();
+            });
+        }
+    });
+});
+
+function setEditorContent(id, content) {
+    if (window.tinymce && tinymce.get(id)) {
+        tinymce.get(id).setContent(content || '');
+    } else {
+        var textarea = document.getElementById(id);
+        if (textarea) {
+            textarea.value = content || '';
+        }
+    }
+}
+
 function editItem(item) {
     document.getElementById('edit_id').value = item.id;
     document.getElementById('edit_topic_id').value = item.topic_id;
@@ -332,12 +361,12 @@ function editItem(item) {
     document.getElementById('edit_slug').value = item.slug;
     document.getElementById('edit_summary_en').value = item.summary_en || '';
     document.getElementById('edit_summary_ar').value = item.summary_ar || '';
-    document.getElementById('edit_body_en').value = item.body_en || '';
-    document.getElementById('edit_body_ar').value = item.body_ar || '';
+    setEditorContent('edit_body_en', item.body_en || '');
+    setEditorContent('edit_body_ar', item.body_ar || '');
     document.getElementById('edit_hero_image').value = item.hero_image || '';
     document.getElementById('edit_status').value = item.status;
     document.getElementById('edit_display_order').value = item.display_order;
-    
+
     new bootstrap.Modal(document.getElementById('editModal')).show();
 }
 </script>
