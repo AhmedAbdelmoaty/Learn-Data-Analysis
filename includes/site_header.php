@@ -13,6 +13,8 @@ $stmt = $pdo->query("SELECT slug, title_en, title_ar FROM topics WHERE is_tool =
 $nav_tools = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $currentPage = getCurrentPage();
+$switchToLang = $lang === 'en' ? 'ar' : 'en';
+$languageSwitchUrl = preserveLang($_SERVER['REQUEST_URI'] ?? basename($_SERVER['PHP_SELF'] ?? 'index.php'), $switchToLang);
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $lang; ?>" dir="<?php echo $lang === 'ar' ? 'rtl' : 'ltr'; ?>">
@@ -134,7 +136,7 @@ $currentPage = getCurrentPage();
                     </li>
                     <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
                         <a class="nav-link language-switch text-nowrap"
-                           href="<?php echo basename($_SERVER['PHP_SELF']) . '?lang=' . ($lang === 'en' ? 'ar' : 'en'); ?>">
+                           href="<?php echo htmlspecialchars($languageSwitchUrl); ?>">
                             <i class="fa-solid fa-globe"></i>
                             <span><?php echo $lang === 'en' ? 'العربية' : 'English'; ?></span>
                         </a>

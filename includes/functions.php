@@ -114,8 +114,27 @@ function getCurrentPage() {
 
 // Preserve language parameter in URLs
 function preserveLang($url, $lang) {
-    $separator = (strpos($url, '?') !== false) ? '&' : '?';
-    return $url . $separator . 'lang=' . $lang;
+    if (!is_string($url) || $url === '') {
+        $url = 'index.php';
+    }
+
+    $parsed = parse_url($url);
+
+    $path = $parsed['path'] ?? '';
+    $queryArray = [];
+    if (isset($parsed['query'])) {
+        parse_str($parsed['query'], $queryArray);
+    }
+
+    $queryArray['lang'] = $lang;
+    $queryString = http_build_query($queryArray);
+    $fragment = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
+
+    if ($queryString !== '') {
+        return $path . '?' . $queryString . $fragment;
+    }
+
+    return $path . $fragment;
 }
 function getCardSummaryText(array $item, string $lang, ?int $maxChars = null): string {
     $preferredOrder = [
