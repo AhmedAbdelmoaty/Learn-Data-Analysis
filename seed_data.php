@@ -61,6 +61,48 @@ try {
             'hero_overlay_opacity_end' => 90,
             'display_order' => 4,
             'is_tool' => true
+        ],
+        [
+            'slug' => 'tableau',
+            'title_en' => 'Tableau',
+            'title_ar' => 'تابلو',
+            'intro_en' => 'Transform complex datasets into engaging visuals with Tableau dashboards and stories.',
+            'intro_ar' => 'حوّل مجموعات البيانات المعقدة إلى تصورات جذابة من خلال لوحات تابلو وقصص البيانات.',
+            'hero_image' => 'https://via.placeholder.com/1200x400/FF6F00/ffffff?text=Tableau',
+            'hero_overlay_color_start' => '#E97627',
+            'hero_overlay_color_end' => '#00567A',
+            'hero_overlay_opacity_start' => 92,
+            'hero_overlay_opacity_end' => 90,
+            'display_order' => 5,
+            'is_tool' => true
+        ],
+        [
+            'slug' => 'looker-studio',
+            'title_en' => 'Looker Studio',
+            'title_ar' => 'لوكر ستوديو',
+            'intro_en' => 'Build lightweight, shareable dashboards powered by Google marketing and analytics data.',
+            'intro_ar' => 'أنشئ لوحات معلومات خفيفة الوزن وسهلة المشاركة تعتمد على بيانات التسويق والتحليلات من Google.',
+            'hero_image' => 'https://via.placeholder.com/1200x400/1A73E8/ffffff?text=Looker+Studio',
+            'hero_overlay_color_start' => '#1A73E8',
+            'hero_overlay_color_end' => '#0D47A1',
+            'hero_overlay_opacity_start' => 92,
+            'hero_overlay_opacity_end' => 90,
+            'display_order' => 6,
+            'is_tool' => true
+        ],
+        [
+            'slug' => 'ibm-cognos',
+            'title_en' => 'IBM Cognos Analytics',
+            'title_ar' => 'آي بي إم كوجنوس أناليتكس',
+            'intro_en' => 'Deliver governed BI, AI-assisted insights, and enterprise reporting with IBM Cognos.',
+            'intro_ar' => 'قدّم ذكاءً أعمالياً مضبوطاً ورؤى مدعومة بالذكاء الاصطناعي وتقارير مؤسسية باستخدام IBM Cognos.',
+            'hero_image' => 'https://via.placeholder.com/1200x400/0F62FE/ffffff?text=IBM+Cognos',
+            'hero_overlay_color_start' => '#0F62FE',
+            'hero_overlay_color_end' => '#0043CE',
+            'hero_overlay_opacity_start' => 92,
+            'hero_overlay_opacity_end' => 90,
+            'display_order' => 7,
+            'is_tool' => true
         ]
     ];
 
@@ -226,6 +268,99 @@ try {
             'cta_note_en' => 'Want to go deeper? Continue your journey inside our full Training Program.',
             'cta_note_ar' => 'عايز تكمل رحلتك؟ انضم إلى برنامجنا التدريبي الكامل.',
             'hero_image' => 'https://via.placeholder.com/800x400/9C27B0/ffffff?text=SQL+Joins',
+            'status' => 'published',
+            'display_order' => 2
+        ],
+        // Tableau
+        [
+            'topic_id' => $topic_ids['tableau'],
+            'slug' => 'visual-analytics',
+            'title_en' => 'Tableau Visual Analytics Foundations',
+            'title_ar' => 'أساسيات التحليلات المرئية في تابلو',
+            'summary_en' => 'Learn how to design worksheets, dashboards, and stories that communicate insights instantly.',
+            'summary_ar' => 'تعلم كيفية تصميم أوراق العمل واللوحات والقصص التي تنقل الرؤى فورًا.',
+            'body_en' => '<h2>Design Immersive Dashboards</h2><p>Discover best practices for choosing chart types, applying the Marks card, and building responsive layouts that keep executives focused on the KPIs that matter.</p><p>You will also learn how to publish dashboards to Tableau Cloud and share governed data sources with your stakeholders.</p>',
+            'body_ar' => '<h2>صمّم لوحات تفاعلية مبهرة</h2><p>اكتشف أفضل الممارسات لاختيار أنواع الرسوم وتطبيق بطاقة Marks وبناء تخطيطات متجاوبة تُبقي المديرين التنفيذيين مركّزين على مؤشرات الأداء المهمة.</p><p>ستتعلم أيضًا كيفية نشر اللوحات على Tableau Cloud ومشاركة مصادر البيانات المضبوطة مع أصحاب المصلحة.</p>',
+            'cta_note_en' => 'Want to go deeper? Continue your journey inside our full Training Program.',
+            'cta_note_ar' => 'عايز تكمل رحلتك؟ انضم إلى برنامجنا التدريبي الكامل.',
+            'hero_image' => 'https://via.placeholder.com/800x400/FF6F00/ffffff?text=Tableau+Dashboards',
+            'status' => 'published',
+            'display_order' => 1
+        ],
+        [
+            'topic_id' => $topic_ids['tableau'],
+            'slug' => 'data-prep',
+            'title_en' => 'Preparing Data with Tableau Prep Builder',
+            'title_ar' => 'تحضير البيانات باستخدام Tableau Prep',
+            'summary_en' => 'Clean, join, and reshape messy data sources before they reach your dashboards.',
+            'summary_ar' => 'قم بتنظيف وربط وإعادة تشكيل مصادر البيانات غير المرتبة قبل أن تصل إلى لوحاتك.',
+            'body_en' => '<h2>Reliable Data Pipelines</h2><p>Use flows, steps, and smart sampling in Tableau Prep to automate repeatable cleaning tasks, generate calculations, and document data lineage.</p><p>The lesson includes tips for publishing flows to Tableau Server so refresh schedules remain under centralized control.</p>',
+            'body_ar' => '<h2>خطوط بيانات موثوقة</h2><p>استخدم التدفقات والخطوات وأخذ العينات الذكي في Tableau Prep لأتمتة مهام التنظيف المتكررة، وإنشاء الحسابات، وتوثيق نسب البيانات.</p><p>يتضمن الشرح نصائح لنشر التدفقات على Tableau Server لضمان بقاء جداول التحديث تحت السيطرة المركزية.</p>',
+            'cta_note_en' => 'Want to go deeper? Continue your journey inside our full Training Program.',
+            'cta_note_ar' => 'عايز تكمل رحلتك؟ انضم إلى برنامجنا التدريبي الكامل.',
+            'hero_image' => 'https://via.placeholder.com/800x400/00567A/ffffff?text=Tableau+Prep',
+            'status' => 'published',
+            'display_order' => 2
+        ],
+        // Looker Studio
+        [
+            'topic_id' => $topic_ids['looker-studio'],
+            'slug' => 'marketing-performance',
+            'title_en' => 'Looker Studio Marketing Performance Dashboard',
+            'title_ar' => 'لوحة أداء التسويق في لوكر ستوديو',
+            'summary_en' => 'Blend Google Ads, Analytics, and social data into a single shareable report.',
+            'summary_ar' => 'ادمج بيانات Google Ads و Analytics ووسائل التواصل في تقرير واحد قابل للمشاركة.',
+            'body_en' => '<h2>Tell the Full Funnel Story</h2><p>Connect native Google connectors, create calculated fields, and apply community visualizations to highlight campaign ROI.</p><p>We also cover best practices for scheduled email delivery and parameter controls so stakeholders can filter KPIs by region or audience.</p>',
+            'body_ar' => '<h2>احكِ قصة القمع التسويقي بالكامل</h2><p>قم بتوصيل موصلات Google الأصلية، وأنشئ حقولاً محسوبة، وطبق التصورات المجتمعية لإبراز العائد على الاستثمار للحملات.</p><p>نستعرض أيضًا أفضل الممارسات لإرسال التقارير عبر البريد الإلكتروني مجدولاً واستخدام أدوات المعلمات حتى يتمكن أصحاب المصلحة من تصفية مؤشرات الأداء حسب المنطقة أو الجمهور.</p>',
+            'cta_note_en' => 'Want to go deeper? Continue your journey inside our full Training Program.',
+            'cta_note_ar' => 'عايز تكمل رحلتك؟ انضم إلى برنامجنا التدريبي الكامل.',
+            'hero_image' => 'https://via.placeholder.com/800x400/1A73E8/ffffff?text=Looker+Studio+Marketing',
+            'status' => 'published',
+            'display_order' => 1
+        ],
+        [
+            'topic_id' => $topic_ids['looker-studio'],
+            'slug' => 'data-blending',
+            'title_en' => 'Advanced Data Blending Techniques',
+            'title_ar' => 'تقنيات الدمج المتقدم للبيانات',
+            'summary_en' => 'Unlock multi-source insights with blended charts, CASE expressions, and filters.',
+            'summary_ar' => 'افتح رؤى متعددة المصادر باستخدام المخططات المدمجة وتعبيرات CASE والفلاتر.',
+            'body_en' => '<h2>Confidently Combine Sources</h2><p>Learn how join keys, relationship configurations, and data freshness settings impact blended results in Looker Studio.</p><p>We share troubleshooting tips for mismatched date ranges and how to optimize reports for executive-ready PDF exports.</p>',
+            'body_ar' => '<h2>ادمج المصادر بثقة</h2><p>تعلم كيف تؤثر مفاتيح الربط وإعدادات العلاقات وتحديث البيانات على نتائج الدمج في لوكر ستوديو.</p><p>نقدم نصائح لحل المشكلات المتعلقة بعدم تطابق النطاقات الزمنية وكيفية تحسين التقارير لتصدير ملفات PDF جاهزة للمديرين.</p>',
+            'cta_note_en' => 'Want to go deeper? Continue your journey inside our full Training Program.',
+            'cta_note_ar' => 'عايز تكمل رحلتك؟ انضم إلى برنامجنا التدريبي الكامل.',
+            'hero_image' => 'https://via.placeholder.com/800x400/0D47A1/ffffff?text=Looker+Studio+Blending',
+            'status' => 'published',
+            'display_order' => 2
+        ],
+        // IBM Cognos
+        [
+            'topic_id' => $topic_ids['ibm-cognos'],
+            'slug' => 'report-authoring',
+            'title_en' => 'Authoring Pixel-Perfect Reports',
+            'title_ar' => 'إنشاء تقارير دقيقة في كوجنوس',
+            'summary_en' => 'Use Cognos Report Authoring to build governed statements, burst schedules, and multilingual layouts.',
+            'summary_ar' => 'استخدم أداة إنشاء التقارير في كوجنوس لبناء تقارير مضبوطة وجدولة الإرسال وإنشاء تخطيطات بلغات متعددة.',
+            'body_en' => '<h2>Enterprise Reporting Discipline</h2><p>Walk through queries, data items, and reusable templates that ensure finance, compliance, and operations consume the same trusted KPIs.</p><p>We demonstrate bursting, prompt pages, and subscriptions so distribution stays automated and auditable.</p>',
+            'body_ar' => '<h2>انضباط التقارير المؤسسية</h2><p>استعرض الاستعلامات وعناصر البيانات والقوالب القابلة لإعادة الاستخدام التي تضمن اعتماد المالية والامتثال والعمليات على نفس مؤشرات الأداء الموثوقة.</p><p>نوضح خاصية الإرسال المجدول وصفحات المطالبات والاشتراكات بحيث يظل التوزيع آليًا وقابلاً للتدقيق.</p>',
+            'cta_note_en' => 'Want to go deeper? Continue your journey inside our full Training Program.',
+            'cta_note_ar' => 'عايز تكمل رحلتك؟ انضم إلى برنامجنا التدريبي الكامل.',
+            'hero_image' => 'https://via.placeholder.com/800x400/0F62FE/ffffff?text=IBM+Cognos+Reports',
+            'status' => 'published',
+            'display_order' => 1
+        ],
+        [
+            'topic_id' => $topic_ids['ibm-cognos'],
+            'slug' => 'data-modules',
+            'title_en' => 'Modeling Data Modules with AI Assistance',
+            'title_ar' => 'نمذجة وحدات البيانات بمساعدة الذكاء الاصطناعي',
+            'summary_en' => 'Shape curated datasets, relationships, and intent-based suggestions inside Cognos.',
+            'summary_ar' => 'شكّل مجموعات بيانات منسقة وعلاقات واقتراحات قائمة على النوايا داخل كوجنوس.',
+            'body_en' => '<h2>Trustworthy Semantic Layers</h2><p>Use intent-driven modeling, relative time filters, and data sets to standardize KPIs for your analytics community.</p><p>You will build calculations, custom groups, and navigation paths that make Cognos Dashboards more intuitive for self-service users.</p>',
+            'body_ar' => '<h2>طبقات دلالية موثوقة</h2><p>استخدم النمذجة الموجّهة بالنوايا وفلاتر الوقت النسبي ومجموعات البيانات لتوحيد مؤشرات الأداء لمجتمع التحليلات لديك.</p><p>ستبني حسابات ومجموعات مخصصة ومسارات تنقل تجعل لوحات كوجنوس أكثر سهولة للمستخدمين المعتمدين على الخدمة الذاتية.</p>',
+            'cta_note_en' => 'Want to go deeper? Continue your journey inside our full Training Program.',
+            'cta_note_ar' => 'عايز تكمل رحلتك؟ انضم إلى برنامجنا التدريبي الكامل.',
+            'hero_image' => 'https://via.placeholder.com/800x400/0043CE/ffffff?text=IBM+Cognos+Modeling',
             'status' => 'published',
             'display_order' => 2
         ]

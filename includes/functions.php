@@ -317,6 +317,9 @@ function getTopicHeroGradient(array $topic): string {
         'power-bi' => ['start' => '#FFC400', 'end' => '#CC7800', 'start_opacity' => 92, 'end_opacity' => 90],
         'sql' => ['start' => '#3F51B5', 'end' => '#21358C', 'start_opacity' => 90, 'end_opacity' => 90],
         'statistics' => ['start' => '#009688', 'end' => '#00695C', 'start_opacity' => 90, 'end_opacity' => 90],
+        'tableau' => ['start' => '#E97627', 'end' => '#00567A', 'start_opacity' => 92, 'end_opacity' => 90],
+        'looker-studio' => ['start' => '#1A73E8', 'end' => '#0D47A1', 'start_opacity' => 92, 'end_opacity' => 90],
+        'ibm-cognos' => ['start' => '#0F62FE', 'end' => '#0043CE', 'start_opacity' => 92, 'end_opacity' => 90],
         'default' => ['start' => '#A8324E', 'end' => '#6C1E35', 'start_opacity' => 90, 'end_opacity' => 90],
     ];
 
