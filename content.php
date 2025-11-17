@@ -67,12 +67,13 @@ require_once 'includes/site_header.php';
         ? $content['hero_image_ar'] 
         : $content['hero_image'];
     
-    // Fallback to default image if hero_image is empty
-    if (empty($hero_img)) {
-        $hero_img = 'https://via.placeholder.com/1200x400/a8324e/ffffff?text=Learn+Data+Analysis';
-    }
+    $hero_has_image = !empty($hero_img);
+    $hero_section_classes = 'content-hero-section' . ($hero_has_image ? '' : ' no-image');
+    $hero_background_style = $hero_has_image
+        ? "style=\"background-image: url('" . htmlspecialchars($hero_img) . "');\""
+        : '';
     ?>
-    <section class="content-hero-section" style="background-image: url('<?php echo htmlspecialchars($hero_img); ?>');">
+    <section class="<?php echo $hero_section_classes; ?>" <?php echo $hero_background_style; ?>>
         <div class="content-hero-overlay"></div>
         <div class="container position-relative">
             <div class="row gx-0">

@@ -437,6 +437,9 @@ html {
     align-items: center;
     padding: 2.5rem 0;
 }
+.content-hero-section.no-image {
+    background-image: var(--primary-hero-gradient);
+}
 
 .content-hero-overlay {
     position: absolute;
