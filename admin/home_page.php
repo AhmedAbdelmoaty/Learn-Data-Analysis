@@ -190,12 +190,10 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-home',
-        'title' => 'Home Page Management',
-        'description' => 'Manage every section of the public home page from one place.',
-        'tip' => 'Scroll through the hero, benefits, testimonials, and FAQ tabs, then store everything with one click.'
-    ]); ?>
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+        <h2 class="mb-0"><i class="fas fa-home"></i> Home Page Management</h2>
+        <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
+    </div>
 
     <?php if ($success_message): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">

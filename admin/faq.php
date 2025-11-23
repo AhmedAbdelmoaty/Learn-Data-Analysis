@@ -90,17 +90,12 @@ $all_questions = $stmt->fetchAll();
 ?>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-question-circle',
-        'title' => 'FAQ Page Management',
-        'description' => 'Control the hero section and question banks without constant reloads.',
-        'tip' => 'Tweak the hero copy, then move on to question banks knowing you can save everything together.'
-    ]); ?>
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2><i class="fas fa-question-circle"></i> FAQ Page Management</h2>
-            <p class="text-muted">Manage all sections of your FAQ page from one place</p>
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+        <div>
+            <h2 class="mb-2"><i class="fas fa-question-circle"></i> FAQ Page Management</h2>
+            <p class="text-muted mb-0">Manage all sections of your FAQ page from one place</p>
         </div>
+        <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
     </div>
 
     <?php if ($success_message): ?>

@@ -85,22 +85,20 @@ foreach ($section_configs as $key => $config) {
 ?>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-toolbox',
-        'title' => 'Tools Page Management',
-        'description' => 'Adjust the hero banner and intro copy without submitting each tab separately.',
-        'tip' => 'Jump between the hero and intro tabs freely, then push one Save All when you are done.'
-    ]); ?>
     <div class="content-card">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3">
+            <div>
+                <h5 class="mb-1">Tools Landing Page</h5>
+                <p class="text-muted mb-0">Control the content that appears on the Tools page before the dynamic tool cards.</p>
+            </div>
+            <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
+        </div>
         <?php if ($success_message): ?>
             <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success_message; ?></div>
         <?php endif; ?>
     <?php if ($error_message): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?></div>
     <?php endif; ?>
-
-    <h5 class="mb-3">Tools Landing Page</h5>
-    <p class="text-muted">Control the content that appears on the Tools page before the dynamic tool cards.</p>
 
     <ul class="nav nav-tabs" role="tablist">
         <?php foreach ($section_configs as $key => $config): ?>

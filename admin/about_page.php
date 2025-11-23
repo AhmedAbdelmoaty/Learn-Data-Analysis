@@ -92,17 +92,12 @@ foreach ($section_configs as $key => $config) {
 ?>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-info-circle',
-        'title' => 'About Page Management',
-        'description' => 'Edit every block of the About page from one screen.',
-        'tip' => 'Move between the Introduction, Mission, and Approach tabs, then store all updates together.'
-    ]); ?>
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2><i class="fas fa-info-circle"></i> About Page Management</h2>
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+        <div>
+            <h2 class="mb-2"><i class="fas fa-info-circle"></i> About Page Management</h2>
             <p class="text-muted mb-0">Edit every block of the About Us page with tailored forms for each section.</p>
         </div>
+        <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
     </div>
 
     <?php if ($success_message): ?>

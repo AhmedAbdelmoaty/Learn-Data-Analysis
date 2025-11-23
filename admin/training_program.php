@@ -200,17 +200,12 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-flag',
-        'title' => 'Training Program Management',
-        'description' => 'Coordinate hero, learn, journey, and FAQ content without triggering multiple reloads.',
-        'tip' => 'Visit each tab, adjust the sections you need, then commit everything with one Save All.'
-    ]); ?>
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2><i class="fas fa-flag"></i> Training Program Management</h2>
-            <p class="text-muted">Manage all sections of your Training Program page from one place</p>
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+        <div>
+            <h2 class="mb-2"><i class="fas fa-flag"></i> Training Program Management</h2>
+            <p class="text-muted mb-0">Manage all sections of your Training Program page from one place</p>
         </div>
+        <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
     </div>
 
     <?php if ($success_message): ?>
