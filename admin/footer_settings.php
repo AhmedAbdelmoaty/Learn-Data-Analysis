@@ -54,22 +54,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-grip-horizontal',
-        'title' => 'Footer Settings',
-        'description' => 'Control footer about text, office details, and social links in a single workflow.',
-        'tip' => 'Fill out each section below, then click Save All Changes once at the top.'
-    ]); ?>
     <div class="content-card">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3">
+            <div>
+                <h5 class="mb-1">Footer & Contact Settings</h5>
+                <p class="text-muted mb-0">Control all footer content and the contact information card displayed next to the contact form.</p>
+            </div>
+            <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
+        </div>
         <?php if ($success): ?>
             <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
         <?php endif; ?>
     <?php if ($error): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></div>
     <?php endif; ?>
-
-    <h5 class="mb-4">Footer & Contact Settings</h5>
-    <p class="text-muted">Control all footer content and the contact information card displayed next to the contact form.</p>
 
     <form method="POST" data-bulk-save="true" data-section-name="Footer Settings">
         <!-- About Section -->

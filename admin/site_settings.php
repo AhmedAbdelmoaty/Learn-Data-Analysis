@@ -166,13 +166,11 @@ if (!empty($logoValue)) {
 </style>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-cog',
-        'title' => 'Site Settings',
-        'description' => 'Update identity, colors, and typography in one flow.',
-        'tip' => 'Work through the entire form and save from the toolbar when you are ready.'
-    ]); ?>
     <div class="content-card">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3">
+            <h5 class="mb-0">Site Settings</h5>
+            <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
+        </div>
         <?php if ($success): ?>
             <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
         <?php endif; ?>

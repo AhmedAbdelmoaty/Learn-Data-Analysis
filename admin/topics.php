@@ -142,26 +142,20 @@ $media_files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container-fluid mt-4">
-    <?php renderBulkSaveToolbar([
-        'icon' => 'fas fa-layer-group',
-        'title' => 'Manage Topics & Tools',
-        'description' => 'Update hero details for multiple topics before committing changes.',
-        'tip' => 'Edit the cards below back-to-back, then click Save All Changes once.'
-    ]); ?>
     <div class="content-card">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3">
+            <div>
+                <h5 class="mb-1">Topics & Tool Pages</h5>
+                <p class="text-muted mb-0">Use this area to add new tools, edit existing topics, and control their order and hero imagery.</p>
+            </div>
+            <?php renderBulkSaveToolbar(['wrapper_class' => 'mt-3 mt-md-0']); ?>
+        </div>
         <?php if ($success): ?>
             <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
         <?php endif; ?>
     <?php if ($error): ?>
         <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></div>
     <?php endif; ?>
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h5 class="mb-1">Topics & Tool Pages</h5>
-            <p class="text-muted mb-0">Use this area to add new tools, edit existing topics, and control their order and hero imagery.</p>
-        </div>
-    </div>
 
     <div class="card mb-5">
         <div class="card-header bg-light">
