@@ -50,17 +50,6 @@ $faqs = $stmt->fetchAll();
                 <?php if ($hero['subtitle_' . $lang]): ?>
                     <p class="lead mb-4 text-muted"><?php echo htmlspecialchars($hero['subtitle_' . $lang]); ?></p>
                 <?php endif; ?>
-                <?php if ($hero['cta_label_' . $lang]): ?>
-                    <?php
-                        $ctaLink = trim($hero['cta_link'] ?? '');
-                        if ($ctaLink === '' || $ctaLink === '#contact') {
-                            $ctaLink = preserveLang('training-program.php', $lang);
-                        }
-                    ?>
-                    <a href="<?php echo htmlspecialchars($ctaLink); ?>" class="btn btn-primary btn-lg px-5 <?php echo (strpos($ctaLink, '#') === 0) ? 'smooth-scroll' : ''; ?>">
-                        <?php echo htmlspecialchars($hero['cta_label_' . $lang]); ?>
-                    </a>
-                <?php endif; ?>
             </div>
             <?php if ($img): ?>
                 <div class="col-lg-6">
