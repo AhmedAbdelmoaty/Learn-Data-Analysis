@@ -1,17 +1,23 @@
 <?php
+require_once __DIR__ . '/../includes/auth.php';
+requireLogin();
+requireRole(['admin']);
+
 $page_title = 'Manage Admins';
 require_once __DIR__ . '/includes/header.php';
 
 $success = '';
 $error = '';
+$allowedRoles = ['admin', 'editor'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'add') {
             try {
+                $role = in_array($_POST['role'], $allowedRoles, true) ? $_POST['role'] : 'editor';
                 $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("INSERT INTO admin_users (name, email, password) VALUES (?, ?, ?)");
-                $stmt->execute([$_POST['name'], $_POST['email'], $hashedPassword]);
+                $stmt = $pdo->prepare("INSERT INTO admin_users (name, email, password, role) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$_POST['name'], $_POST['email'], $hashedPassword, $role]);
                 $success = 'Admin added successfully!';
             } catch(PDOException $e) {
                 $error = 'Error adding admin: ' . $e->getMessage();
@@ -69,6 +75,13 @@ $admins = $stmt->fetchAll();
                 <label class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" required>
             </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Role</label>
+                <select name="role" class="form-select" required>
+                    <option value="admin">Admin</option>
+                    <option value="editor" selected>Editor</option>
+                </select>
+            </div>
         </div>
         <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add Admin</button>
     </form>
@@ -82,6 +95,7 @@ $admins = $stmt->fetchAll();
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Created</th>
                     <th>Actions</th>
                 </tr>
@@ -91,6 +105,13 @@ $admins = $stmt->fetchAll();
                     <tr>
                         <td><?php echo htmlspecialchars($admin['name']); ?></td>
                         <td><?php echo htmlspecialchars($admin['email']); ?></td>
+                        <td>
+                            <?php if ($admin['role'] === 'admin'): ?>
+                                <span class="badge bg-primary">Admin</span>
+                            <?php else: ?>
+                                <span class="badge bg-secondary">Editor</span>
+                            <?php endif; ?>
+                        </td>
                         <td><?php echo date('M d, Y', strtotime($admin['created_at'])); ?></td>
                         <td>
                             <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#passwordModal<?php echo $admin['id']; ?>">
