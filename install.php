@@ -12,6 +12,7 @@ try {
             name VARCHAR(100) NOT NULL,
             email VARCHAR(100) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
+            role VARCHAR(20) NOT NULL DEFAULT 'super_admin',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
@@ -125,8 +126,8 @@ try {
     ");
 
     $hashedPassword = password_hash('123456', PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare("INSERT INTO admin_users (name, email, password) VALUES (?, ?, ?)");
-    $stmt->execute(['Admin', 'admin@example.com', $hashedPassword]);
+    $stmt = $pdo->prepare("INSERT INTO admin_users (name, email, password, role) VALUES (?, ?, ?, ?)");
+    $stmt->execute(['Admin', 'admin@example.com', $hashedPassword, 'super_admin']);
 
     $stmt = $pdo->prepare("INSERT INTO hero_section (title_en, title_ar, subtitle_en, subtitle_ar, button_text_en, button_text_ar, background_image) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([

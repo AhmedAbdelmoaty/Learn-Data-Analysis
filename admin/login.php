@@ -1,6 +1,6 @@
 <?php
-session_start();
 require_once '../includes/db.php';
+require_once '../includes/auth.php';
 
 $error = '';
 
@@ -15,10 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($admin && password_verify($password, $admin['password'])) {
             session_regenerate_id(true);
-            $_SESSION['admin_id'] = $admin['id'];
-            $_SESSION['admin_email'] = $admin['email'];
-            $_SESSION['admin_name'] = $admin['name'];
-            $_SESSION['last_activity'] = time();
+            $role = normalizeRole($admin['role'] ?? null);
+            login($admin['id'], $admin['email'], $admin['name'], $role);
             header('Location: dashboard.php');
             exit;
         } else {

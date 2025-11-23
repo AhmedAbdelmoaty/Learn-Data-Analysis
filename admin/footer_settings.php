@@ -1,5 +1,8 @@
 <?php
 $page_title = 'Footer Settings';
+require_once __DIR__ . '/../includes/auth.php';
+requireLogin();
+requireRole([ROLE_SUPER_ADMIN]);
 require_once __DIR__ . '/includes/header.php';
 
 $success = '';
