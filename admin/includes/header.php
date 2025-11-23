@@ -165,11 +165,8 @@ $currentRoleLabel = $currentRole && isset($roleLabels[$currentRole]) ? $roleLabe
                 <i class="fas fa-question-circle"></i> FAQ
             </a>
             <hr style="border-color: rgba(255,255,255,0.2);">
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'statistics_page.php' ? 'active' : ''; ?>" href="statistics_page.php">
-                <i class="fas fa-chart-bar"></i> Statistics Page
-            </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'topics.php' ? 'active' : ''; ?>" href="topics.php">
-                <i class="fas fa-graduation-cap"></i> Tool Topics
+                <i class="fas fa-graduation-cap"></i> Topics
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'tools_page.php' ? 'active' : ''; ?>" href="tools_page.php">
                 <i class="fas fa-toolbox"></i> Tools Page
