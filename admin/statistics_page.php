@@ -131,7 +131,6 @@ $opacityEndValue = isset($statisticsTopic['hero_overlay_opacity_end']) ? (int)$s
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3">
             <div>
                 <h5 class="mb-1">Statistics Landing Page</h5>
-                <p class="text-muted mb-0">Configure the standalone Statistics page separately from your tool cards and topics.</p>
             </div>
         </div>
 
@@ -143,13 +142,15 @@ $opacityEndValue = isset($statisticsTopic['hero_overlay_opacity_end']) ? (int)$s
         <?php endif; ?>
 
         <div class="card">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <strong><i class="fas fa-chart-bar"></i> Statistics Page Details</strong>
-                <span class="badge bg-secondary">Standalone Page</span>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    <input type="hidden" name="action" value="save_statistics">
+            <form method="POST">
+                <input type="hidden" name="action" value="save_statistics">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <strong><i class="fas fa-chart-bar"></i> Statistics Page Details</strong>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Statistics Page
+                    </button>
+                </div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Slug</label>
@@ -217,12 +218,8 @@ $opacityEndValue = isset($statisticsTopic['hero_overlay_opacity_end']) ? (int)$s
                             <div class="form-text">Opacity: <span id="statistics_opacity_end"></span></div>
                         </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save Statistics Page
-                    </button>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

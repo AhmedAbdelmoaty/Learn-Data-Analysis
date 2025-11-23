@@ -156,32 +156,31 @@ $currentRoleLabel = $currentRole && isset($roleLabels[$currentRole]) ? $roleLabe
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'home_page.php' ? 'active' : ''; ?>" href="home_page.php">
-                <i class="fas fa-home"></i> Home Page
+                <i class="fas fa-home"></i> Home
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'about_page.php' ? 'active' : ''; ?>" href="about_page.php">
-                <i class="fas fa-info-circle"></i> About Page
+                <i class="fas fa-info-circle"></i> About US
+            </a>
+            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'training_program.php' ? 'active' : ''; ?>" href="training_program.php">
+                <i class="fas fa-flag"></i> Training Program
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'faq.php' ? 'active' : ''; ?>" href="faq.php">
                 <i class="fas fa-question-circle"></i> FAQ
             </a>
-            <hr style="border-color: rgba(255,255,255,0.2);">
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'statistics_page.php' ? 'active' : ''; ?>" href="statistics_page.php">
-                <i class="fas fa-chart-bar"></i> Statistics Page
-            </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'topics.php' ? 'active' : ''; ?>" href="topics.php">
-                <i class="fas fa-graduation-cap"></i> Tool Topics
+                <i class="fas fa-graduation-cap"></i> Tools
+            </a>
+            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'statistics_page.php' ? 'active' : ''; ?>" href="statistics_page.php">
+                <i class="fas fa-chart-bar"></i> Statistics
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'tools_page.php' ? 'active' : ''; ?>" href="tools_page.php">
-                <i class="fas fa-toolbox"></i> Tools Page
+                <i class="fas fa-toolbox"></i> Tool Pages
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'content_items.php' ? 'active' : ''; ?>" href="content_items.php">
                 <i class="fas fa-file-alt"></i> Content Items
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'course_rounds.php' ? 'active' : ''; ?>" href="course_rounds.php">
                 <i class="fas fa-calendar-alt"></i> Course Rounds
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'training_program.php' ? 'active' : ''; ?>" href="training_program.php">
-                <i class="fas fa-flag"></i> Training Program
             </a>
             <hr style="border-color: rgba(255,255,255,0.2);">
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'media_upload.php' ? 'active' : ''; ?>" href="media_upload.php">
