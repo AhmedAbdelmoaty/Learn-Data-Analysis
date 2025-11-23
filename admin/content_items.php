@@ -4,11 +4,14 @@ require_once __DIR__ . '/includes/header.php';
 
 $success = '';
 $error = '';
+$canPublish = hasRole([ROLE_SUPER_ADMIN, ROLE_CONTENT_ADMIN]);
+$allowedStatuses = ['draft', 'published'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'add') {
             try {
+                $status = ($canPublish && in_array($_POST['status'], $allowedStatuses, true)) ? $_POST['status'] : 'draft';
                 $stmt = $pdo->prepare("INSERT INTO content_items (topic_id, slug, title_en, title_ar, summary_en, summary_ar, body_en, body_ar, cta_note_en, cta_note_ar, hero_image, status, display_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([
                     $_POST['topic_id'],
@@ -22,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_POST['cta_note_en'],
                     $_POST['cta_note_ar'],
                     $_POST['hero_image'],
-                    $_POST['status'],
+                    $status,
                     $_POST['display_order']
                 ]);
                 $success = 'Content item added successfully!';
@@ -31,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($_POST['action'] === 'update') {
             try {
+                $status = ($canPublish && in_array($_POST['status'], $allowedStatuses, true)) ? $_POST['status'] : 'draft';
                 $stmt = $pdo->prepare("UPDATE content_items SET topic_id = ?, slug = ?, title_en = ?, title_ar = ?, summary_en = ?, summary_ar = ?, body_en = ?, body_ar = ?, cta_note_en = ?, cta_note_ar = ?, hero_image = ?, status = ?, display_order = ? WHERE id = ?");
                 $stmt->execute([
                     $_POST['topic_id'],
@@ -44,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_POST['cta_note_en'],
                     $_POST['cta_note_ar'],
                     $_POST['hero_image'],
-                    $_POST['status'],
+                    $status,
                     $_POST['display_order'],
                     $_POST['id']
                 ]);
@@ -222,10 +226,15 @@ $content_items = $stmt->fetchAll();
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-select" name="status">
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
+                            <?php if ($canPublish): ?>
+                                <select class="form-select" name="status">
+                                    <option value="published">Published</option>
+                                    <option value="draft">Draft</option>
+                                </select>
+                            <?php else: ?>
+                                <div class="form-control bg-light">Draft (publish requires Content Admin)</div>
+                                <input type="hidden" name="status" value="draft">
+                            <?php endif; ?>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Display Order</label>
@@ -329,10 +338,15 @@ $content_items = $stmt->fetchAll();
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-select" name="status" id="edit_status">
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
+                            <?php if ($canPublish): ?>
+                                <select class="form-select" name="status" id="edit_status">
+                                    <option value="published">Published</option>
+                                    <option value="draft">Draft</option>
+                                </select>
+                            <?php else: ?>
+                                <div class="form-control bg-light">Draft (publish requires Content Admin)</div>
+                                <input type="hidden" name="status" id="edit_status" value="draft">
+                            <?php endif; ?>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Display Order</label>
@@ -351,6 +365,8 @@ $content_items = $stmt->fetchAll();
 
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
+const canPublish = <?php echo $canPublish ? 'true' : 'false'; ?>;
+
 document.addEventListener('DOMContentLoaded', function() {
     tinymce.init({
         selector: 'textarea.rich-text',
@@ -392,7 +408,7 @@ function editItem(item) {
     document.getElementById('edit_cta_note_en').value = item.cta_note_en || '';
     document.getElementById('edit_cta_note_ar').value = item.cta_note_ar || '';
     document.getElementById('edit_hero_image').value = item.hero_image || '';
-    document.getElementById('edit_status').value = item.status;
+    document.getElementById('edit_status').value = canPublish ? item.status : 'draft';
     document.getElementById('edit_display_order').value = item.display_order;
 
     new bootstrap.Modal(document.getElementById('editModal')).show();

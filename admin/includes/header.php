@@ -9,6 +9,14 @@ checkSessionTimeout();
 $settings = loadSiteSettings($pdo);
 $themeConfig = getThemeConfiguration($settings);
 $themeCssVariables = buildThemeCssVariables($themeConfig);
+
+$roleLabels = [
+    ROLE_SUPER_ADMIN => 'Super Admin',
+    ROLE_CONTENT_ADMIN => 'Content Admin',
+    ROLE_EDITOR => 'Editor (Draft)',
+];
+$currentRole = currentUserRole();
+$currentRoleLabel = $currentRole && isset($roleLabels[$currentRole]) ? $roleLabels[$currentRole] : 'Admin';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -141,7 +149,7 @@ $themeCssVariables = buildThemeCssVariables($themeConfig);
     <div class="sidebar">
         <div class="logo">
             <h4><i class="fas fa-cog"></i> CMS Admin</h4>
-            <small>Welcome, <?php echo htmlspecialchars($_SESSION['admin_name']); ?></small>
+            <small>Welcome, <?php echo htmlspecialchars($_SESSION['admin_name']); ?> (<?php echo htmlspecialchars($currentRoleLabel); ?>)</small>
         </div>
         <nav class="nav flex-column">
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>" href="dashboard.php">
@@ -176,15 +184,17 @@ $themeCssVariables = buildThemeCssVariables($themeConfig);
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'media_upload.php' ? 'active' : ''; ?>" href="media_upload.php">
                 <i class="fas fa-upload"></i> Media Upload
             </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'site_settings.php' ? 'active' : ''; ?>" href="site_settings.php">
-                <i class="fas fa-cog"></i> Site Settings
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'footer_settings.php' ? 'active' : ''; ?>" href="footer_settings.php">
-                <i class="fas fa-grip-horizontal"></i> Footer Settings
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'manage_admins.php' ? 'active' : ''; ?>" href="manage_admins.php">
-                <i class="fas fa-users-cog"></i> Manage Admins
-            </a>
+            <?php if (hasRole([ROLE_SUPER_ADMIN])): ?>
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'site_settings.php' ? 'active' : ''; ?>" href="site_settings.php">
+                    <i class="fas fa-cog"></i> Site Settings
+                </a>
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'footer_settings.php' ? 'active' : ''; ?>" href="footer_settings.php">
+                    <i class="fas fa-grip-horizontal"></i> Footer Settings
+                </a>
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'manage_admins.php' ? 'active' : ''; ?>" href="manage_admins.php">
+                    <i class="fas fa-users-cog"></i> Manage Admins
+                </a>
+            <?php endif; ?>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'messages.php' ? 'active' : ''; ?>" href="messages.php">
                 <i class="fas fa-envelope"></i> Contact Messages
             </a>
