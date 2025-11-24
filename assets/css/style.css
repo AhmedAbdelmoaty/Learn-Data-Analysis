@@ -205,7 +205,7 @@ body {
 .topic-slide {
     flex: 0 0 100%;
     max-width: 100%;
-    scroll-snap-align: center;
+    scroll-snap-align: start;
 }
 
 @media (min-width: 768px) {
