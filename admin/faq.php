@@ -2,6 +2,7 @@
 $page_title = 'FAQ Page Management';
 require_once __DIR__ . '/includes/header.php';
 
+$canPublish = canPublishContent();
 $success_message = '';
 $error_message = '';
 $active_tab = $_GET['tab'] ?? 'hero';
@@ -16,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $hero_image_alt_en = trim($_POST['hero_image_alt'] ?? '');
     $hero_image_ar = trim($_POST['hero_image_ar'] ?? '');
     $hero_image_alt_ar = trim($_POST['hero_image_alt_ar'] ?? '');
-    $is_published = isset($_POST['is_published']) ? 1 : 0;
+    $is_published = resolvePublishFlag($_POST['is_published'] ?? null);
     
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM faq_hero");
     $stmt->execute();
@@ -36,15 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // Top Questions Handlers
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_top_question') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("INSERT INTO faq_top_questions (question_en, question_ar, answer_en, answer_ar, sort_order, published) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0]);
+    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), $published]);
     $success_message = 'Top question added successfully!';
     $active_tab = 'top_questions';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_top_question') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("UPDATE faq_top_questions SET question_en = ?, question_ar = ?, answer_en = ?, answer_ar = ?, sort_order = ?, published = ? WHERE id = ?");
-    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0, intval($_POST['id'])]);
+    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), $published, intval($_POST['id'])]);
     $success_message = 'Top question updated successfully!';
     $active_tab = 'top_questions';
 }
@@ -58,15 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // All Questions Handlers
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_all_question') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("INSERT INTO faq_all_questions (question_en, question_ar, answer_en, answer_ar, sort_order, published) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0]);
+    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), $published]);
     $success_message = 'Question added successfully!';
     $active_tab = 'all_questions';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_all_question') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("UPDATE faq_all_questions SET question_en = ?, question_ar = ?, answer_en = ?, answer_ar = ?, sort_order = ?, published = ? WHERE id = ?");
-    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0, intval($_POST['id'])]);
+    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), $published, intval($_POST['id'])]);
     $success_message = 'Question updated successfully!';
     $active_tab = 'all_questions';
 }
@@ -194,7 +199,7 @@ $all_questions = $stmt->fetchAll();
 
                 <div class="mb-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="is_published" id="hero_published" <?php echo (!empty($hero['is_published'])) ? 'checked' : ''; ?>>
+                        <input class="form-check-input" type="checkbox" name="is_published" id="hero_published" <?php echo ($canPublish && !empty($hero['is_published'])) ? 'checked' : ''; ?>>
                         <label class="form-check-label" for="hero_published">
                             Display Hero Section
                         </label>
@@ -358,7 +363,7 @@ $all_questions = $stmt->fetchAll();
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-check mt-4">
-                                <input class="form-check-input" type="checkbox" name="published" id="add_top_published" checked>
+                                <input class="form-check-input" type="checkbox" name="published" id="add_top_published" <?php echo $canPublish ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="add_top_published">Published</label>
                             </div>
                         </div>
@@ -457,7 +462,7 @@ $all_questions = $stmt->fetchAll();
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-check mt-4">
-                                <input class="form-check-input" type="checkbox" name="published" id="add_all_published" checked>
+                                <input class="form-check-input" type="checkbox" name="published" id="add_all_published" <?php echo $canPublish ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="add_all_published">Published</label>
                             </div>
                         </div>
@@ -523,6 +528,8 @@ $all_questions = $stmt->fetchAll();
 </div>
 
 <script>
+const canPublish = <?php echo $canPublish ? 'true' : 'false'; ?>;
+
 function editTopQuestion(data) {
     document.getElementById('edit_top_id').value = data.id;
     document.getElementById('edit_top_question_en').value = data.question_en;
@@ -530,7 +537,7 @@ function editTopQuestion(data) {
     document.getElementById('edit_top_answer_en').value = data.answer_en;
     document.getElementById('edit_top_answer_ar').value = data.answer_ar;
     document.getElementById('edit_top_sort_order').value = data.sort_order;
-    document.getElementById('edit_top_published').checked = data.published == 1;
+    document.getElementById('edit_top_published').checked = canPublish ? data.published == 1 : false;
     new bootstrap.Modal(document.getElementById('editTopQuestionModal')).show();
 }
 
@@ -541,7 +548,7 @@ function editAllQuestion(data) {
     document.getElementById('edit_all_answer_en').value = data.answer_en;
     document.getElementById('edit_all_answer_ar').value = data.answer_ar;
     document.getElementById('edit_all_sort_order').value = data.sort_order;
-    document.getElementById('edit_all_published').checked = data.published == 1;
+    document.getElementById('edit_all_published').checked = canPublish ? data.published == 1 : false;
     new bootstrap.Modal(document.getElementById('editAllQuestionModal')).show();
 }
 </script>

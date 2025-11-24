@@ -186,13 +186,15 @@ $currentRoleLabel = $currentRole && isset($roleLabels[$currentRole]) ? $roleLabe
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'media_upload.php' ? 'active' : ''; ?>" href="media_upload.php">
                 <i class="fas fa-upload"></i> Media Upload
             </a>
-            <?php if (hasRole([ROLE_SUPER_ADMIN])): ?>
+            <?php if (hasRole([ROLE_SUPER_ADMIN, ROLE_CONTENT_ADMIN])): ?>
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'site_settings.php' ? 'active' : ''; ?>" href="site_settings.php">
                     <i class="fas fa-cog"></i> Site Settings
                 </a>
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'footer_settings.php' ? 'active' : ''; ?>" href="footer_settings.php">
                     <i class="fas fa-grip-horizontal"></i> Footer Settings
                 </a>
+            <?php endif; ?>
+            <?php if (hasRole([ROLE_SUPER_ADMIN])): ?>
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'manage_admins.php' ? 'active' : ''; ?>" href="manage_admins.php">
                     <i class="fas fa-users-cog"></i> Manage Admins
                 </a>

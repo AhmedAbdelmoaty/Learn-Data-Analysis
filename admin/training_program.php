@@ -2,6 +2,7 @@
 $page_title = 'Training Program Management';
 require_once __DIR__ . '/includes/header.php';
 
+$canPublish = canPublishContent();
 $success_message = '';
 $error_message = '';
 $active_tab = $_GET['tab'] ?? 'hero';
@@ -37,22 +38,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // What You'll Learn Section Handler
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_learn_section') {
+    $isPublished = resolvePublishFlag($_POST['is_published'] ?? null);
     $stmt = $pdo->prepare("UPDATE tp_learn_section SET title_en = ?, title_ar = ?, subtitle_en = ?, subtitle_ar = ?, is_published = ? WHERE id = (SELECT MIN(id) FROM tp_learn_section)");
-    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['subtitle_en'], $_POST['subtitle_ar'], isset($_POST['is_published']) ? 1 : 0]);
+    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['subtitle_en'], $_POST['subtitle_ar'], $isPublished]);
     $success_message = 'Section details updated successfully!';
     $active_tab = 'learn';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_learn_item') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("INSERT INTO training_learn_items (title_en, title_ar, body_en, body_ar, icon_image, sort_order, published) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'], $_POST['body_ar'], $_POST['icon_image'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0]);
+    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'], $_POST['body_ar'], $_POST['icon_image'], intval($_POST['sort_order']), $published]);
     $success_message = 'Learn item added successfully!';
     $active_tab = 'learn';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_learn_item') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("UPDATE training_learn_items SET title_en = ?, title_ar = ?, body_en = ?, body_ar = ?, icon_image = ?, sort_order = ?, published = ? WHERE id = ?");
-    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'], $_POST['body_ar'], $_POST['icon_image'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0, intval($_POST['id'])]);
+    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'], $_POST['body_ar'], $_POST['icon_image'], intval($_POST['sort_order']), $published, intval($_POST['id'])]);
     $success_message = 'Learn item updated successfully!';
     $active_tab = 'learn';
 }
@@ -66,15 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // Value & Bonuses Handler
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_bonus') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("INSERT INTO training_bonuses (title_en, title_ar, subtitle_en, subtitle_ar, body_en, body_ar, image, sort_order, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['subtitle_en'] ?? '', $_POST['subtitle_ar'] ?? '', $_POST['body_en'], $_POST['body_ar'], $_POST['image'] ?? '', intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0]);
+    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['subtitle_en'] ?? '', $_POST['subtitle_ar'] ?? '', $_POST['body_en'], $_POST['body_ar'], $_POST['image'] ?? '', intval($_POST['sort_order']), $published]);
     $success_message = 'Bonus item added successfully!';
     $active_tab = 'bonuses';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_bonus') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("UPDATE training_bonuses SET title_en = ?, title_ar = ?, subtitle_en = ?, subtitle_ar = ?, body_en = ?, body_ar = ?, image = ?, sort_order = ?, published = ? WHERE id = ?");
-    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['subtitle_en'] ?? '', $_POST['subtitle_ar'] ?? '', $_POST['body_en'], $_POST['body_ar'], $_POST['image'] ?? '', intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0, intval($_POST['id'])]);
+    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['subtitle_en'] ?? '', $_POST['subtitle_ar'] ?? '', $_POST['body_en'], $_POST['body_ar'], $_POST['image'] ?? '', intval($_POST['sort_order']), $published, intval($_POST['id'])]);
     $success_message = 'Bonus item updated successfully!';
     $active_tab = 'bonuses';
 }
@@ -88,15 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // Outcomes Handler
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_outcome') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("INSERT INTO training_outcomes (title_en, title_ar, body_en, body_ar, icon_image, sort_order, published) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'] ?? '', $_POST['body_ar'] ?? '', $_POST['icon_image'] ?? '', intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0]);
+    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'] ?? '', $_POST['body_ar'] ?? '', $_POST['icon_image'] ?? '', intval($_POST['sort_order']), $published]);
     $success_message = 'Outcome added successfully!';
     $active_tab = 'outcomes';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_outcome') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("UPDATE training_outcomes SET title_en = ?, title_ar = ?, body_en = ?, body_ar = ?, icon_image = ?, sort_order = ?, published = ? WHERE id = ?");
-    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'] ?? '', $_POST['body_ar'] ?? '', $_POST['icon_image'] ?? '', intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0, intval($_POST['id'])]);
+    $stmt->execute([$_POST['title_en'], $_POST['title_ar'], $_POST['body_en'] ?? '', $_POST['body_ar'] ?? '', $_POST['icon_image'] ?? '', intval($_POST['sort_order']), $published, intval($_POST['id'])]);
     $success_message = 'Outcome updated successfully!';
     $active_tab = 'outcomes';
 }
@@ -131,15 +139,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_journey_card') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("INSERT INTO training_journey_cards (name_en, name_ar, quote_en, quote_ar, icon_image, sort_order, published) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['name_en'], $_POST['name_ar'], $_POST['quote_en'], $_POST['quote_ar'], $_POST['icon_image'] ?? '', intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0]);
+    $stmt->execute([$_POST['name_en'], $_POST['name_ar'], $_POST['quote_en'], $_POST['quote_ar'], $_POST['icon_image'] ?? '', intval($_POST['sort_order']), $published]);
     $success_message = 'Journey card added successfully!';
     $active_tab = 'journey';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_journey_card') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("UPDATE training_journey_cards SET name_en = ?, name_ar = ?, quote_en = ?, quote_ar = ?, icon_image = ?, sort_order = ?, published = ? WHERE id = ?");
-    $stmt->execute([$_POST['name_en'], $_POST['name_ar'], $_POST['quote_en'], $_POST['quote_ar'], $_POST['icon_image'] ?? '', intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0, intval($_POST['id'])]);
+    $stmt->execute([$_POST['name_en'], $_POST['name_ar'], $_POST['quote_en'], $_POST['quote_ar'], $_POST['icon_image'] ?? '', intval($_POST['sort_order']), $published, intval($_POST['id'])]);
     $success_message = 'Journey card updated successfully!';
     $active_tab = 'journey';
 }
@@ -153,15 +163,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // FAQ Handler
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_faq') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("INSERT INTO training_faq (question_en, question_ar, answer_en, answer_ar, sort_order, published) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0]);
+    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), $published]);
     $success_message = 'FAQ added successfully!';
     $active_tab = 'faq';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_faq') {
+    $published = resolvePublishFlag($_POST['published'] ?? null);
     $stmt = $pdo->prepare("UPDATE training_faq SET question_en = ?, question_ar = ?, answer_en = ?, answer_ar = ?, sort_order = ?, published = ? WHERE id = ?");
-    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), isset($_POST['published']) ? 1 : 0, intval($_POST['id'])]);
+    $stmt->execute([$_POST['question_en'], $_POST['question_ar'], $_POST['answer_en'], $_POST['answer_ar'], intval($_POST['sort_order']), $published, intval($_POST['id'])]);
     $success_message = 'FAQ updated successfully!';
     $active_tab = 'faq';
 }
@@ -366,7 +378,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="is_published" id="learn_section_published" <?php echo (!empty($learn_section['is_published'])) ? 'checked' : ''; ?>>
+                                <input class="form-check-input" type="checkbox" name="is_published" id="learn_section_published" <?php echo ($canPublish && !empty($learn_section['is_published'])) ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="learn_section_published">
                                     Display Section
                                 </label>
@@ -699,7 +711,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="published" id="add_learn_published" checked>
+                            <input class="form-check-input" type="checkbox" name="published" id="add_learn_published" <?php echo $canPublish ? 'checked' : ''; ?>>
                             <label class="form-check-label" for="add_learn_published">Published</label>
                         </div>
                     </div>
@@ -836,7 +848,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="published" id="add_bonus_published" checked>
+                            <input class="form-check-input" type="checkbox" name="published" id="add_bonus_published" <?php echo $canPublish ? 'checked' : ''; ?>>
                             <label class="form-check-label" for="add_bonus_published">Published</label>
                         </div>
                     </div>
@@ -974,7 +986,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="published" checked>
+                            <input class="form-check-input" type="checkbox" name="published" <?php echo $canPublish ? 'checked' : ''; ?>>
                             <label class="form-check-label">Published</label>
                         </div>
                     </div>
@@ -1100,7 +1112,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="published" id="add_journey_published" checked>
+                            <input class="form-check-input" type="checkbox" name="published" id="add_journey_published" <?php echo $canPublish ? 'checked' : ''; ?>>
                             <label class="form-check-label" for="add_journey_published">Published</label>
                         </div>
                     </div>
@@ -1214,7 +1226,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="published" checked>
+                            <input class="form-check-input" type="checkbox" name="published" <?php echo $canPublish ? 'checked' : ''; ?>>
                             <label class="form-check-label">Published</label>
                         </div>
                     </div>
@@ -1281,6 +1293,7 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
+const canPublish = <?php echo $canPublish ? 'true' : 'false'; ?>;
 
 // Edit Functions
 function editLearnItem(item) {
@@ -1291,7 +1304,7 @@ function editLearnItem(item) {
     document.getElementById('edit_learn_body_ar').value = item.body_ar;
     document.getElementById('edit_learn_icon').value = item.icon_image;
     document.getElementById('edit_learn_sort').value = item.sort_order;
-    document.getElementById('edit_learn_published').checked = item.published == 1;
+    document.getElementById('edit_learn_published').checked = canPublish ? item.published == 1 : false;
     new bootstrap.Modal(document.getElementById('editLearnItemModal')).show();
 }
 
@@ -1305,7 +1318,7 @@ function editBonus(item) {
     document.getElementById('edit_bonus_body_ar').value = item.body_ar;
     document.getElementById('edit_bonus_image').value = item.image;
     document.getElementById('edit_bonus_sort').value = item.sort_order;
-    document.getElementById('edit_bonus_published').checked = item.published == 1;
+    document.getElementById('edit_bonus_published').checked = canPublish ? item.published == 1 : false;
     new bootstrap.Modal(document.getElementById('editBonusModal')).show();
 }
 
@@ -1317,7 +1330,7 @@ function editOutcome(item) {
     document.getElementById('edit_outcome_body_ar').value = item.body_ar || '';
     document.getElementById('edit_outcome_icon').value = item.icon_image || '';
     document.getElementById('edit_outcome_sort').value = item.sort_order;
-    document.getElementById('edit_outcome_published').checked = item.published == 1;
+    document.getElementById('edit_outcome_published').checked = canPublish ? item.published == 1 : false;
     new bootstrap.Modal(document.getElementById('editOutcomeModal')).show();
 }
 
@@ -1329,7 +1342,7 @@ function editJourneyCard(item) {
     document.getElementById('edit_journey_quote_ar').value = item.quote_ar;
     document.getElementById('edit_journey_icon').value = item.icon_image || '';
     document.getElementById('edit_journey_sort').value = item.sort_order;
-    document.getElementById('edit_journey_published').checked = item.published == 1;
+    document.getElementById('edit_journey_published').checked = canPublish ? item.published == 1 : false;
     new bootstrap.Modal(document.getElementById('editJourneyCardModal')).show();
 }
 
@@ -1340,7 +1353,7 @@ function editFaq(item) {
     document.getElementById('edit_faq_answer_en').value = item.answer_en;
     document.getElementById('edit_faq_answer_ar').value = item.answer_ar;
     document.getElementById('edit_faq_sort').value = item.sort_order;
-    document.getElementById('edit_faq_published').checked = item.published == 1;
+    document.getElementById('edit_faq_published').checked = canPublish ? item.published == 1 : false;
     new bootstrap.Modal(document.getElementById('editFaqModal')).show();
 }
 </script>
