@@ -195,6 +195,7 @@ body {
     padding: 0 0 1rem;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
 }
 
 .topics-track::-webkit-scrollbar {
@@ -202,12 +203,22 @@ body {
 }
 
 .topic-slide {
-    flex: 0 0 260px;
+    flex: 0 0 100%;
+    max-width: 100%;
+    scroll-snap-align: center;
+}
+
+@media (min-width: 768px) {
+    .topic-slide {
+        flex-basis: calc((100% - 1rem) / 2);
+        max-width: calc((100% - 1rem) / 2);
+    }
 }
 
 @media (min-width: 992px) {
     .topic-slide {
         flex-basis: calc((100% - 3rem) / 4);
+        max-width: calc((100% - 3rem) / 4);
     }
 }
 
@@ -238,12 +249,6 @@ body {
     background: var(--primary-color);
     color: #fff;
     outline: none;
-}
-
-@media (max-width: 767.98px) {
-    .topics-nav-btn {
-        display: none;
-    }
 }
 
 .min-vh-70 {
