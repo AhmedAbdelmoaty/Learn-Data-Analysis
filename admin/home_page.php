@@ -129,40 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $active_tab = 'testimonials';
                 break;
 
-            case 'add_faq':
-                $stmt = $pdo->prepare("INSERT INTO faq (question_en, question_ar, answer_en, answer_ar, display_order) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([
-                    trim($_POST['question_en'] ?? ''),
-                    trim($_POST['question_ar'] ?? ''),
-                    trim($_POST['answer_en'] ?? ''),
-                    trim($_POST['answer_ar'] ?? ''),
-                    (int)($_POST['display_order'] ?? 0)
-                ]);
-                $success_message = 'FAQ item added successfully!';
-                $active_tab = 'faq';
-                break;
-
-            case 'update_faq':
-                $stmt = $pdo->prepare("UPDATE faq SET question_en = ?, question_ar = ?, answer_en = ?, answer_ar = ?, display_order = ? WHERE id = ?");
-                $stmt->execute([
-                    trim($_POST['question_en'] ?? ''),
-                    trim($_POST['question_ar'] ?? ''),
-                    trim($_POST['answer_en'] ?? ''),
-                    trim($_POST['answer_ar'] ?? ''),
-                    (int)($_POST['display_order'] ?? 0),
-                    (int)($_POST['id'] ?? 0)
-                ]);
-                $success_message = 'FAQ item updated successfully!';
-                $active_tab = 'faq';
-                break;
-
-            case 'delete_faq':
-                $stmt = $pdo->prepare("DELETE FROM faq WHERE id = ?");
-                $stmt->execute([(int)($_POST['id'] ?? 0)]);
-                $success_message = 'FAQ item deleted successfully!';
-                $active_tab = 'faq';
-                break;
-
             default:
                 $error_message = 'Unknown action requested.';
                 break;
@@ -185,8 +151,6 @@ $benefits = $benefits_stmt->fetchAll(PDO::FETCH_ASSOC);
 $testimonials_stmt = $pdo->query("SELECT * FROM testimonials ORDER BY display_order ASC, id ASC");
 $testimonials = $testimonials_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$faq_stmt = $pdo->query("SELECT * FROM faq ORDER BY display_order ASC, id ASC");
-$faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container-fluid mt-4">
@@ -228,11 +192,6 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
         <li class="nav-item" role="presentation">
             <button class="nav-link <?php echo $active_tab === 'testimonials' ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#testimonials" type="button" role="tab">
                 <i class="fas fa-quote-left"></i> Client Reviews
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link <?php echo $active_tab === 'faq' ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#faq" type="button" role="tab">
-                <i class="fas fa-question-circle"></i> FAQ
             </button>
         </li>
     </ul>
@@ -530,95 +489,7 @@ $faqs = $faq_stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
-        <div class="tab-pane fade <?php echo $active_tab === 'faq' ? 'show active' : ''; ?>" id="faq" role="tabpanel">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="mb-0">Home Page FAQ</h4>
-                <span class="text-muted">Displayed under the FAQ accordion on the home page.</span>
-            </div>
-
-            <div class="content-card mb-4">
-                <h5 class="mb-3">Add FAQ Item</h5>
-                <form method="POST" action="?tab=faq">
-                    <input type="hidden" name="action" value="add_faq">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Question (English)</label>
-                            <input type="text" class="form-control" name="question_en" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Question (Arabic)</label>
-                            <input type="text" class="form-control" name="question_ar" dir="rtl" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Answer (English)</label>
-                            <textarea class="form-control" name="answer_en" rows="3" required></textarea>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Answer (Arabic)</label>
-                            <textarea class="form-control" name="answer_ar" rows="3" dir="rtl" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Display Order</label>
-                            <input type="number" class="form-control" name="display_order" value="<?php echo count($faqs) + 1; ?>" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Add FAQ</button>
-                </form>
-            </div>
-
-            <div class="content-card">
-                <h5 class="mb-3">Existing FAQ Items</h5>
-                <?php if (count($faqs) > 0): ?>
-                    <?php foreach ($faqs as $faq): ?>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <form method="POST" action="?tab=faq" class="row g-3" data-bulk-save="true" data-section-name="FAQ #<?php echo (int)$faq['id']; ?>">
-                                    <input type="hidden" name="action" value="update_faq">
-                                    <input type="hidden" name="id" value="<?php echo (int)$faq['id']; ?>">
-                                    <div class="col-md-5">
-                                        <label class="form-label">Question (EN)</label>
-                                        <input type="text" class="form-control form-control-sm" name="question_en" value="<?php echo htmlspecialchars($faq['question_en']); ?>" required>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="form-label">Question (AR)</label>
-                                        <input type="text" class="form-control form-control-sm" name="question_ar" dir="rtl" value="<?php echo htmlspecialchars($faq['question_ar']); ?>" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Order</label>
-                                        <input type="number" class="form-control form-control-sm" name="display_order" value="<?php echo htmlspecialchars($faq['display_order']); ?>" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Answer (EN)</label>
-                                        <textarea class="form-control form-control-sm" name="answer_en" rows="3" required><?php echo htmlspecialchars($faq['answer_en']); ?></textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Answer (AR)</label>
-                                        <textarea class="form-control form-control-sm" name="answer_ar" rows="3" dir="rtl" required><?php echo htmlspecialchars($faq['answer_ar']); ?></textarea>
-                                    </div>
-                                    <div class="col-12 d-flex justify-content-between">
-                                        <button type="submit" class="btn btn-primary btn-sm bulk-save-hidden"><i class="fas fa-save"></i> Save Changes</button>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="submitDeleteForm('delete-faq-<?php echo (int)$faq['id']; ?>')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                                <form id="delete-faq-<?php echo (int)$faq['id']; ?>" method="POST" action="?tab=faq" class="d-none">
-                                    <input type="hidden" name="action" value="delete_faq">
-                                    <input type="hidden" name="id" value="<?php echo (int)$faq['id']; ?>">
-                                </form>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-muted">No FAQ items created yet.</p>
-                <?php endif; ?>
-            </div>
-        </div>
-</div>
+    </div>
 </div>
 
 <script>
