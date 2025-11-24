@@ -2,6 +2,7 @@
 $page_title = 'Manage Course Rounds';
 require_once __DIR__ . '/includes/header.php';
 
+$canPublish = canPublishContent();
 $success = '';
 $error = '';
 
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_POST['label_en'],
                         $_POST['label_ar'],
                         $start_at,
-                        isset($_POST['published']) ? 1 : 0,
+                        resolvePublishFlag($_POST['published'] ?? null),
                         $_POST['sort_order']
                     ]);
                     $success = 'Course round added successfully!';
@@ -46,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_POST['label_en'],
                         $_POST['label_ar'],
                         $start_at,
-                        isset($_POST['published']) ? 1 : 0,
+                        resolvePublishFlag($_POST['published'] ?? null),
                         $_POST['sort_order'],
                         $_POST['id']
                     ]);
@@ -191,7 +192,7 @@ $rounds = $stmt->fetchAll();
                                             
                                             <div class="mb-3">
                                                 <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" name="published" id="published_edit_<?php echo $round['id']; ?>" <?php echo $round['published'] ? 'checked' : ''; ?>>
+                                                    <input class="form-check-input" type="checkbox" name="published" id="published_edit_<?php echo $round['id']; ?>" <?php echo ($canPublish && $round['published']) ? 'checked' : ''; ?>>
                                                     <label class="form-check-label" for="published_edit_<?php echo $round['id']; ?>">
                                                         Published (visible on contact form)
                                                     </label>
@@ -378,7 +379,7 @@ $rounds = $stmt->fetchAll();
                     
                     <div class="mb-3">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="published" id="published_add" checked>
+                            <input class="form-check-input" type="checkbox" name="published" id="published_add" <?php echo $canPublish ? 'checked' : ''; ?>>
                             <label class="form-check-label" for="published_add">
                                 Published (visible on contact form)
                             </label>
