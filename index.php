@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const track = document.getElementById('topicsTrack');
     const prevBtn = document.querySelector('.topics-nav-prev');
     const nextBtn = document.querySelector('.topics-nav-next');
+    const AUTO_SCROLL_INTERVAL_MS = 4500;
 
     if (!track || !prevBtn || !nextBtn) return;
 
@@ -174,8 +175,47 @@ document.addEventListener('DOMContentLoaded', function () {
         track.scrollBy({ left: offset, behavior: 'smooth' });
     };
 
-    prevBtn.addEventListener('click', () => scrollTrack('prev'));
-    nextBtn.addEventListener('click', () => scrollTrack('next'));
+    let autoScrollTimer = null;
+
+    const startAutoScroll = () => {
+        if (autoScrollTimer || AUTO_SCROLL_INTERVAL_MS <= 0) return;
+        autoScrollTimer = setInterval(() => scrollTrack('next'), AUTO_SCROLL_INTERVAL_MS);
+    };
+
+    const stopAutoScroll = () => {
+        if (!autoScrollTimer) return;
+        clearInterval(autoScrollTimer);
+        autoScrollTimer = null;
+    };
+
+    prevBtn.addEventListener('click', () => {
+        stopAutoScroll();
+        scrollTrack('prev');
+        startAutoScroll();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        stopAutoScroll();
+        scrollTrack('next');
+        startAutoScroll();
+    });
+
+    const userInteractionEvents = ['mouseenter', 'touchstart', 'focusin'];
+    const userExitEvents = ['mouseleave', 'touchend', 'focusout'];
+
+    userInteractionEvents.forEach((eventName) => {
+        track.addEventListener(eventName, stopAutoScroll);
+        prevBtn.addEventListener(eventName, stopAutoScroll);
+        nextBtn.addEventListener(eventName, stopAutoScroll);
+    });
+
+    userExitEvents.forEach((eventName) => {
+        track.addEventListener(eventName, startAutoScroll);
+        prevBtn.addEventListener(eventName, startAutoScroll);
+        nextBtn.addEventListener(eventName, startAutoScroll);
+    });
+
+    startAutoScroll();
 });
 </script>
 
