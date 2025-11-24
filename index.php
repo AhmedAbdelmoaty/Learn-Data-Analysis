@@ -17,9 +17,6 @@ $benefits = $stmt->fetchAll();
 $stmt = $pdo->query("SELECT * FROM testimonials ORDER BY display_order LIMIT 3");
 $testimonials = $stmt->fetchAll();
 
-$stmt = $pdo->query("SELECT * FROM faq ORDER BY display_order LIMIT 4");
-$faqs = $stmt->fetchAll();
-
 $stmt = $pdo->query("SELECT * FROM page_sections WHERE page_name = 'home' AND section_key = 'why_data' AND is_enabled = true");
 $why_data_section = $stmt->fetch();
 
@@ -137,41 +134,6 @@ $topics = $stmt->fetchAll();
                     </div>
                 </div>
             <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
-<!-- FAQ Section -->
-<?php if (count($faqs) > 0): ?>
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <h2 class="section-title text-center mb-5"><?php echo t('faq', $lang); ?></h2>
-                <div class="accordion" id="faqAccordion">
-                    <?php foreach ($faqs as $index => $faq): ?>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading<?php echo $index; ?>">
-                                <button class="accordion-button <?php echo $index > 0 ? 'collapsed' : ''; ?>" 
-                                        type="button" 
-                                        data-bs-toggle="collapse" 
-                                        data-bs-target="#collapse<?php echo $index; ?>" 
-                                        aria-expanded="<?php echo $index === 0 ? 'true' : 'false'; ?>">
-                                    <?php echo htmlspecialchars($faq['question_' . $lang]); ?>
-                                </button>
-                            </h2>
-                            <div id="collapse<?php echo $index; ?>" 
-                                 class="accordion-collapse collapse <?php echo $index === 0 ? 'show' : ''; ?>" 
-                                 data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <?php echo htmlspecialchars($faq['answer_' . $lang]); ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
         </div>
     </div>
 </section>

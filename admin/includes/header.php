@@ -167,14 +167,14 @@ $currentRoleLabel = $currentRole && isset($roleLabels[$currentRole]) ? $roleLabe
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'faq.php' ? 'active' : ''; ?>" href="faq.php">
                 <i class="fas fa-question-circle"></i> FAQ
             </a>
+            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'tools_page.php' ? 'active' : ''; ?>" href="tools_page.php">
+                <i class="fas fa-toolbox"></i> Tools Page
+            </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'topics.php' ? 'active' : ''; ?>" href="topics.php">
                 <i class="fas fa-graduation-cap"></i> Tools
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'statistics_page.php' ? 'active' : ''; ?>" href="statistics_page.php">
                 <i class="fas fa-chart-bar"></i> Statistics
-            </a>
-            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'tools_page.php' ? 'active' : ''; ?>" href="tools_page.php">
-                <i class="fas fa-toolbox"></i> Tool Pages
             </a>
             <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'content_items.php' ? 'active' : ''; ?>" href="content_items.php">
                 <i class="fas fa-file-alt"></i> Content Items
