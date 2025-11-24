@@ -37,9 +37,9 @@ $faqs = $stmt->fetchAll();
 
 <!-- Hero Section -->
 <?php if ($hero): ?>
-<?php 
+<?php
     $img = $hero['hero_image'] ?? '';
-    $alt = $hero['hero_image_alt'] ?? '';
+    $alt = $hero['title_' . $lang] ?? '';
     $is_rtl = ($lang === 'ar');
 ?>
 <section class="py-5">
