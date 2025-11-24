@@ -87,30 +87,38 @@ $topics = $stmt->fetchAll();
 
 <!-- Explore Topics Section -->
 <section class="py-5 bg-light">
-    <div class="container">
+    <div class="container position-relative">
         <h2 class="section-title text-center mb-5"><?php echo t('explore_topics', $lang); ?></h2>
-        <div class="row g-4">
-            <?php foreach ($topics as $topic): ?>
-                <?php
-                    $topicUrl = $topic['is_tool']
-                        ? 'tool.php?slug=' . urlencode($topic['slug'])
-                        : $topic['slug'] . '.php';
-                ?>
-                <div class="col-md-6 col-lg-3">
-                    <a href="<?php echo preserveLang($topicUrl, $lang); ?>" class="text-decoration-none">
-                        <div class="topic-card h-100 p-4 text-center">
-                            <div class="topic-image mb-3" style="height: 150px; overflow: hidden; border-radius: 10px;">
-                                <img src="<?php echo htmlspecialchars($topic['hero_image']); ?>" 
-                                     alt="<?php echo htmlspecialchars($topic['title_' . $lang]); ?>" 
-                                     class="img-fluid w-100 h-100" style="object-fit: cover;">
+        <div class="topics-slider">
+            <button class="topics-nav-btn topics-nav-prev" type="button" aria-label="Scroll left">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="topics-track" id="topicsTrack">
+                <?php foreach ($topics as $topic): ?>
+                    <?php
+                        $topicUrl = $topic['is_tool']
+                            ? 'tool.php?slug=' . urlencode($topic['slug'])
+                            : $topic['slug'] . '.php';
+                    ?>
+                    <div class="topic-slide">
+                        <a href="<?php echo preserveLang($topicUrl, $lang); ?>" class="text-decoration-none">
+                            <div class="topic-card h-100 p-4 text-center">
+                                <div class="topic-image mb-3" style="height: 150px; overflow: hidden; border-radius: 10px;">
+                                    <img src="<?php echo htmlspecialchars($topic['hero_image']); ?>"
+                                         alt="<?php echo htmlspecialchars($topic['title_' . $lang]); ?>"
+                                         class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <h5 class="mb-2"><?php echo htmlspecialchars($topic['title_' . $lang]); ?></h5>
+                                <p class="text-muted small mb-3 card-text-limit"><?php echo htmlspecialchars(substr($topic['intro_' . $lang], 0, 100)); ?>...</p>
+                                <span class="btn btn-primary btn-sm"><?php echo t('read_more', $lang); ?> →</span>
                             </div>
-                            <h5 class="mb-2"><?php echo htmlspecialchars($topic['title_' . $lang]); ?></h5>
-                            <p class="text-muted small mb-3 card-text-limit"><?php echo htmlspecialchars(substr($topic['intro_' . $lang], 0, 100)); ?>...</p>
-                            <span class="btn btn-primary btn-sm"><?php echo t('read_more', $lang); ?> →</span>
-                        </div>
-                    </a>
-                </div>
-            <?php endforeach; ?>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <button class="topics-nav-btn topics-nav-next" type="button" aria-label="Scroll right">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
     </div>
 </section>
@@ -138,5 +146,28 @@ $topics = $stmt->fetchAll();
     </div>
 </section>
 <?php endif; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const track = document.getElementById('topicsTrack');
+    const prevBtn = document.querySelector('.topics-nav-prev');
+    const nextBtn = document.querySelector('.topics-nav-next');
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const isRTL = document.documentElement.getAttribute('lang') === 'ar';
+    const getScrollAmount = () => Math.max(track.clientWidth * 0.8, 250);
+
+    const scrollTrack = (direction) => {
+        const amount = getScrollAmount();
+        const delta = direction === 'next' ? amount : -amount;
+        const offset = isRTL ? -delta : delta;
+        track.scrollBy({ left: offset, behavior: 'smooth' });
+    };
+
+    prevBtn.addEventListener('click', () => scrollTrack('prev'));
+    nextBtn.addEventListener('click', () => scrollTrack('next'));
+});
+</script>
 
 <?php require_once 'includes/site_footer.php'; ?>
