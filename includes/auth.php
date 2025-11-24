@@ -7,6 +7,14 @@ const ROLE_SUPER_ADMIN = 'super_admin';
 const ROLE_CONTENT_ADMIN = 'content_admin';
 const ROLE_EDITOR = 'editor';
 
+function canPublishContent(): bool {
+    return hasRole([ROLE_SUPER_ADMIN, ROLE_CONTENT_ADMIN]);
+}
+
+function resolvePublishFlag($input): int {
+    return canPublishContent() && !empty($input) ? 1 : 0;
+}
+
 function normalizeRole($role) {
     $role = $role ?: '';
     $map = [

@@ -2,7 +2,7 @@
 $page_title = 'Site Settings';
 require_once __DIR__ . '/../includes/auth.php';
 requireLogin();
-requireRole([ROLE_SUPER_ADMIN]);
+requireRole([ROLE_SUPER_ADMIN, ROLE_CONTENT_ADMIN]);
 require_once __DIR__ . '/includes/header.php';
 
 $success = '';
