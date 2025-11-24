@@ -14,10 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $subtitle_en = $_POST['subtitle_en'] ?? '';
     $subtitle_ar = $_POST['subtitle_ar'] ?? '';
     $hero_image = trim($_POST['hero_image'] ?? '');
-    $hero_image_alt = trim($_POST['hero_image_alt'] ?? '');
-    $cta_label_en = $_POST['cta_label_en'] ?? '';
-    $cta_label_ar = $_POST['cta_label_ar'] ?? '';
-    $cta_link = trim($_POST['cta_link'] ?? '');
     $is_enabled = isset($_POST['is_enabled']) ? 1 : 0;
     
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM training_hero");
@@ -25,11 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $count = $stmt->fetchColumn();
     
     if ($count > 0) {
-        $stmt = $pdo->prepare("UPDATE training_hero SET title_en = ?, title_ar = ?, subtitle_en = ?, subtitle_ar = ?, hero_image = ?, hero_image_alt = ?, cta_label_en = ?, cta_label_ar = ?, cta_link = ?, is_enabled = ? WHERE id = (SELECT MIN(id) FROM training_hero)");
-        $stmt->execute([$title_en, $title_ar, $subtitle_en, $subtitle_ar, $hero_image, $hero_image_alt, $cta_label_en, $cta_label_ar, $cta_link, $is_enabled]);
+        $stmt = $pdo->prepare("UPDATE training_hero SET title_en = ?, title_ar = ?, subtitle_en = ?, subtitle_ar = ?, hero_image = ?, is_enabled = ? WHERE id = (SELECT MIN(id) FROM training_hero)");
+        $stmt->execute([$title_en, $title_ar, $subtitle_en, $subtitle_ar, $hero_image, $is_enabled]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO training_hero (title_en, title_ar, subtitle_en, subtitle_ar, hero_image, hero_image_alt, cta_label_en, cta_label_ar, cta_link, is_enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$title_en, $title_ar, $subtitle_en, $subtitle_ar, $hero_image, $hero_image_alt, $cta_label_en, $cta_label_ar, $cta_link, $is_enabled]);
+        $stmt = $pdo->prepare("INSERT INTO training_hero (title_en, title_ar, subtitle_en, subtitle_ar, hero_image, is_enabled) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$title_en, $title_ar, $subtitle_en, $subtitle_ar, $hero_image, $is_enabled]);
     }
     
     $success_message = 'Hero section updated successfully!';
@@ -306,28 +302,6 @@ $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </button>
                     </div>
                     <small class="form-text text-muted">Optional - Displays opposite the text content</small>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Image ALT Text (Optional)</label>
-                    <input type="text" class="form-control" name="hero_image_alt" value="<?php echo htmlspecialchars($hero['hero_image_alt'] ?? ''); ?>" placeholder="Describe the image for accessibility">
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">CTA Button Label (English)</label>
-                        <input type="text" class="form-control" name="cta_label_en" value="<?php echo htmlspecialchars($hero['cta_label_en'] ?? 'Enroll Now'); ?>">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">CTA Button Label (Arabic)</label>
-                        <input type="text" class="form-control" name="cta_label_ar" dir="rtl" value="<?php echo htmlspecialchars($hero['cta_label_ar'] ?? 'سجل الآن'); ?>">
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">CTA Button Link</label>
-                    <input type="text" class="form-control" name="cta_link" value="<?php echo htmlspecialchars($hero['cta_link'] ?? ''); ?>" placeholder="https://example.com/apply">
-                    <small class="form-text text-muted">Enter the full URL for the CTA button (leave empty to keep visitors on the Training Program page).</small>
                 </div>
 
                 <div class="mb-3">
