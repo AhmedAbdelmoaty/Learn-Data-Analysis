@@ -90,27 +90,27 @@ $topics = $stmt->fetchAll();
     <div class="container position-relative">
         <h2 class="section-title text-center mb-5"><?php echo t('explore_topics', $lang); ?></h2>
         <div class="topics-slider">
-        <div class="topics-track" id="topicsTrack">
-            <?php foreach ($topics as $topic): ?>
-                <?php
-                    $topicUrl = $topic['is_tool']
-                        ? 'tool.php?slug=' . urlencode($topic['slug'])
-                        : $topic['slug'] . '.php';
-                ?>
-                <div class="topic-slide">
-                    <a href="<?php echo preserveLang($topicUrl, $lang); ?>" class="text-decoration-none">
-                        <div class="topic-card h-100 p-4 text-center">
-                            <div class="topic-image mb-3" style="height: 150px; overflow: hidden; border-radius: 10px;">
-                                <img src="<?php echo htmlspecialchars($topic['hero_image']); ?>"
-                                     alt="<?php echo htmlspecialchars($topic['title_' . $lang]); ?>"
-                                     class="img-fluid w-100 h-100" style="object-fit: cover;">
+            <div class="topics-track" id="topicsTrack">
+                <?php foreach ($topics as $topic): ?>
+                    <?php
+                        $topicUrl = $topic['is_tool']
+                            ? 'tool.php?slug=' . urlencode($topic['slug'])
+                            : $topic['slug'] . '.php';
+                    ?>
+                    <div class="topic-slide">
+                        <a href="<?php echo preserveLang($topicUrl, $lang); ?>" class="text-decoration-none">
+                            <div class="topic-card h-100 p-4 text-center">
+                                <div class="topic-image mb-3" style="height: 150px; overflow: hidden; border-radius: 10px;">
+                                    <img src="<?php echo htmlspecialchars($topic['hero_image']); ?>"
+                                         alt="<?php echo htmlspecialchars($topic['title_' . $lang]); ?>"
+                                         class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <h5 class="mb-2"><?php echo htmlspecialchars($topic['title_' . $lang]); ?></h5>
+                                <p class="text-muted small mb-3 card-text-limit"><?php echo htmlspecialchars(substr($topic['intro_' . $lang], 0, 100)); ?>...</p>
+                                <span class="btn btn-primary btn-sm"><?php echo t('read_more', $lang); ?> →</span>
                             </div>
-                            <h5 class="mb-2"><?php echo htmlspecialchars($topic['title_' . $lang]); ?></h5>
-                            <p class="text-muted small mb-3 card-text-limit"><?php echo htmlspecialchars(substr($topic['intro_' . $lang], 0, 100)); ?>...</p>
-                            <span class="btn btn-primary btn-sm"><?php echo t('read_more', $lang); ?> →</span>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 <?php endforeach; ?>
             </div>
             <div class="topics-nav-wrapper">
@@ -158,7 +158,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!track || !prevBtn || !nextBtn) return;
 
     const isRTL = document.documentElement.getAttribute('lang') === 'ar';
-    const getScrollAmount = () => Math.max(track.clientWidth * 0.8, 250);
+    const getScrollAmount = () => {
+        const slide = track.querySelector('.topic-slide');
+        const slideWidth = slide ? slide.getBoundingClientRect().width : 280;
+        const styles = window.getComputedStyle(track);
+        const gapValue = styles.columnGap || styles.gap || '0';
+        const gap = parseFloat(gapValue) || 0;
+        return slideWidth + gap;
+    };
 
     const scrollTrack = (direction) => {
         const amount = getScrollAmount();

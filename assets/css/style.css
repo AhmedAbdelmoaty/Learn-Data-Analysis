@@ -188,11 +188,11 @@ body {
 
 .topics-track {
     display: flex;
-    gap: 1.25rem;
+    gap: 1rem;
     overflow-x: auto;
     scroll-behavior: smooth;
     direction: ltr;
-    padding: 0.25rem 0.5rem 1rem;
+    padding: 0 0 1rem;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -202,18 +202,12 @@ body {
 }
 
 .topic-slide {
-    flex: 0 0 270px;
+    flex: 0 0 260px;
 }
 
 @media (min-width: 992px) {
     .topic-slide {
-        flex-basis: 300px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .topic-slide {
-        flex-basis: 320px;
+        flex-basis: calc((100% - 3rem) / 4);
     }
 }
 
